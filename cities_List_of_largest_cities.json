@@ -1,0 +1,407 @@
+[
+  {
+    "city": "Tokyo",
+    "country": "Japan",
+    "population": "13,515,271"
+  },
+  {
+    "city": "Delhi",
+    "country": "India",
+    "population": "16,753,235"
+  },
+  {
+    "city": "Shanghai",
+    "country": "China",
+    "population": "24,870,895"
+  },
+  {
+    "city": "São Paulo",
+    "country": "Brazil",
+    "population": "12,252,023"
+  },
+  {
+    "city": "Mexico City",
+    "country": "Mexico",
+    "population": "9,209,944"
+  },
+  {
+    "city": "Cairo",
+    "country": "Egypt",
+    "population": "10,044,894"
+  },
+  {
+    "city": "Mumbai",
+    "country": "India",
+    "population": "12,478,447"
+  },
+  {
+    "city": "Beijing",
+    "country": "China",
+    "population": "21,893,095"
+  },
+  {
+    "city": "Dhaka",
+    "country": "Bangladesh",
+    "population": "10,295,407"
+  },
+  {
+    "city": "Osaka",
+    "country": "Japan",
+    "population": "2,725,006"
+  },
+  {
+    "city": "New York City",
+    "country": "United States",
+    "population": "8,804,190"
+  },
+  {
+    "city": "Tehran",
+    "country": "Iran",
+    "population": "9,033,003"
+  },
+  {
+    "city": "Karachi",
+    "country": "Pakistan",
+    "population": "20,382,881"
+  },
+  {
+    "city": "Buenos Aires",
+    "country": "Argentina",
+    "population": "3,054,300"
+  },
+  {
+    "city": "Chongqing",
+    "country": "China",
+    "population": "32,054,159"
+  },
+  {
+    "city": "Istanbul",
+    "country": "Turkey",
+    "population": "15,519,267"
+  },
+  {
+    "city": "Kolkata",
+    "country": "India",
+    "population": "4,496,694"
+  },
+  {
+    "city": "Manila",
+    "country": "Philippines",
+    "population": "1,780,148"
+  },
+  {
+    "city": "Lagos",
+    "country": "Nigeria",
+    "population": "—"
+  },
+  {
+    "city": "Rio de Janeiro",
+    "country": "Brazil",
+    "population": "6,520,000"
+  },
+  {
+    "city": "Tianjin",
+    "country": "China",
+    "population": "13,866,009"
+  },
+  {
+    "city": "Kinshasa",
+    "country": "DR Congo",
+    "population": "17,071,000"
+  },
+  {
+    "city": "Guangzhou",
+    "country": "China",
+    "population": "18,676,605"
+  },
+  {
+    "city": "Los Angeles",
+    "country": "United States",
+    "population": "3,990,456"
+  },
+  {
+    "city": "Moscow",
+    "country": "Russia",
+    "population": "13,200,000"
+  },
+  {
+    "city": "Shenzhen",
+    "country": "China",
+    "population": "17,494,398"
+  },
+  {
+    "city": "Lahore",
+    "country": "Pakistan",
+    "population": "13,004,135"
+  },
+  {
+    "city": "Bangalore",
+    "country": "India",
+    "population": "8,443,675"
+  },
+  {
+    "city": "Paris",
+    "country": "France",
+    "population": "2,148,271"
+  },
+  {
+    "city": "Bogotá",
+    "country": "Colombia",
+    "population": "7,963,000"
+  },
+  {
+    "city": "Jakarta",
+    "country": "Indonesia",
+    "population": "10,154,134"
+  },
+  {
+    "city": "Chennai",
+    "country": "India",
+    "population": "6,727,000"
+  },
+  {
+    "city": "Lima",
+    "country": "Peru",
+    "population": "8,894,000"
+  },
+  {
+    "city": "Bangkok",
+    "country": "Thailand",
+    "population": "8,305,218"
+  },
+  {
+    "city": "Seoul",
+    "country": "South Korea",
+    "population": "10,013,781"
+  },
+  {
+    "city": "Nagoya",
+    "country": "Japan",
+    "population": "2,320,361"
+  },
+  {
+    "city": "Hyderabad",
+    "country": "India",
+    "population": "6,993,262"
+  },
+  {
+    "city": "London",
+    "country": "United Kingdom",
+    "population": "8,825,001"
+  },
+  {
+    "city": "Chicago",
+    "country": "United States",
+    "population": "2,746,388"
+  },
+  {
+    "city": "Chengdu",
+    "country": "China",
+    "population": "20,937,757"
+  },
+  {
+    "city": "Nanjing",
+    "country": "China",
+    "population": "9,314,685"
+  },
+  {
+    "city": "Wuhan",
+    "country": "China",
+    "population": "12,447,718"
+  },
+  {
+    "city": "Ho Chi Minh City",
+    "country": "Vietnam",
+    "population": "7,431,000"
+  },
+  {
+    "city": "Luanda",
+    "country": "Angola",
+    "population": "2,165,867"
+  },
+  {
+    "city": "Ahmedabad",
+    "country": "India",
+    "population": "5,570,585"
+  },
+  {
+    "city": "Kuala Lumpur",
+    "country": "Malaysia",
+    "population": "1,768,000"
+  },
+  {
+    "city": "Xi'an",
+    "country": "China",
+    "population": "12,183,280"
+  },
+  {
+    "city": "Hong Kong",
+    "country": "Hong Kong",
+    "population": "7,298,600"
+  },
+  {
+    "city": "Dongguan",
+    "country": "China",
+    "population": "10,466,625"
+  },
+  {
+    "city": "Hangzhou",
+    "country": "China",
+    "population": "11,936,010"
+  },
+  {
+    "city": "Foshan",
+    "country": "China",
+    "population": "9,498,863"
+  },
+  {
+    "city": "Shenyang",
+    "country": "China",
+    "population": "8,294,000"
+  },
+  {
+    "city": "Riyadh",
+    "country": "Saudi Arabia",
+    "population": "6,694,000"
+  },
+  {
+    "city": "Baghdad",
+    "country": "Iraq",
+    "population": "8,126,755"
+  },
+  {
+    "city": "Santiago",
+    "country": "Chile",
+    "population": "236,453"
+  },
+  {
+    "city": "Surat",
+    "country": "India",
+    "population": "4,466,826"
+  },
+  {
+    "city": "Madrid",
+    "country": "Spain",
+    "population": "3,266,126"
+  },
+  {
+    "city": "Suzhou",
+    "country": "China",
+    "population": "12,748,262"
+  },
+  {
+    "city": "Pune",
+    "country": "India",
+    "population": "3,124,458"
+  },
+  {
+    "city": "Harbin",
+    "country": "China",
+    "population": "10,635,971"
+  },
+  {
+    "city": "Houston",
+    "country": "United States",
+    "population": "2,325,502"
+  },
+  {
+    "city": "Dallas",
+    "country": "United States",
+    "population": "1,345,047"
+  },
+  {
+    "city": "Toronto",
+    "country": "Canada",
+    "population": "2,731,571"
+  },
+  {
+    "city": "Dar es Salaam",
+    "country": "Tanzania",
+    "population": "5,383,728"
+  },
+  {
+    "city": "Miami",
+    "country": "United States",
+    "population": "470,914"
+  },
+  {
+    "city": "Belo Horizonte",
+    "country": "Brazil",
+    "population": "2,502,557"
+  },
+  {
+    "city": "Singapore",
+    "country": "Singapore",
+    "population": "5,638,700"
+  },
+  {
+    "city": "Philadelphia",
+    "country": "United States",
+    "population": "1,526,006"
+  },
+  {
+    "city": "Atlanta",
+    "country": "United States",
+    "population": "498,715"
+  },
+  {
+    "city": "Fukuoka",
+    "country": "Japan",
+    "population": "1,588,924"
+  },
+  {
+    "city": "Khartoum",
+    "country": "Sudan",
+    "population": "1,410,858[94]"
+  },
+  {
+    "city": "Barcelona",
+    "country": "Spain",
+    "population": "1,620,343"
+  },
+  {
+    "city": "Johannesburg",
+    "country": "South Africa",
+    "population": "4,803,262"
+  },
+  {
+    "city": "Saint Petersburg",
+    "country": "Russia",
+    "population": "5,601,911"
+  },
+  {
+    "city": "Qingdao",
+    "country": "China",
+    "population": "10,071,722"
+  },
+  {
+    "city": "Dalian",
+    "country": "China",
+    "population": "7,450,785"
+  },
+  {
+    "city": "Washington",
+    "country": "United States",
+    "population": "702,455"
+  },
+  {
+    "city": "Yangon",
+    "country": "Myanmar",
+    "population": "4,728,524[102]"
+  },
+  {
+    "city": "Alexandria",
+    "country": "Egypt",
+    "population": "5,441,866"
+  },
+  {
+    "city": "Jinan",
+    "country": "China",
+    "population": "9,202,432"
+  },
+  {
+    "city": "Guadalajara",
+    "country": "Mexico",
+    "population": "1,385,621"
+  }
+]

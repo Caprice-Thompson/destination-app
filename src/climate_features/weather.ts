@@ -1,4 +1,5 @@
 import axios from "axios";
+import { ApiError, ApiResponse, Weather } from "../types";
 
 export const fetchWeatherData = async () => {
   try {
