@@ -7,7 +7,7 @@ const urls = [
 ];
 
 const delay = (ms: any) => new Promise(resolve => setTimeout(resolve, ms));
-
+// TODO: put in a db, Run a cron job
 // Function to scrape data from a single URL
 async function scrapeData(url: string) {
   try {
@@ -18,47 +18,78 @@ async function scrapeData(url: string) {
     const allItems: string[] = [];
     const mergedData: { country: string; listItems: string[] }[] = [];
 
-    // Get all countries and their item counts
-    $("div.paragraph span span font").each((index: any, element: any) => {
-      const country = $(element).text().trim();
-      console.log(`country: ${country}`);
-      const match = country.match(/(.*) \((\d+)\)$/); // Matches "Country (X)"
-      if (match) {
-        allCountries.push({ name: match[1], itemCount: parseInt(match[2], 10) }); // Add country and item count
-      }
-    });
+    const results: CountryDescription[] = [];
+    interface CountryDescription {
+      country: string;
+      descriptions: string[];
+  }
+// Iterate through each <span> containing the country
+$('div.paragraph span > span > font').each((index, element) => {
+  // Check for a hyperlink and get the country text
+  const anchor = $(element).find('a');
+  const anchorText = anchor.length > 0 ? anchor.text().trim() : '';
+  
+  // Get the remaining text and concatenate
+  const remainingText = $(element).contents().not(anchor).text().trim();
+  
+  // Combine both parts to form the full country text
+  const countryText = `${anchorText} ${remainingText}`.trim();
 
-    // Get all list items, starting from index 16 (combine spans within each <li>)
-    $("ul li").each((index: any, element: any) => {
-      if (index >= 25) {
-        let item = '';
-        // Concatenate all text inside the <li>
-        $(element).find("span span").each((i, el) => {
-          item = $(el).text().trim();
-          // console.log(`trim: ${JSON.stringify(item, null, 2)}`);
-          if (item && !allItems.includes(item)) {
-            allItems.push(item);
+  const match = countryText.match(/(.*) \((\d+)\)$/); // Matches "Country (X)"
+
+  // Proceed only if it's a valid country entry
+  if (match) {
+      const country = match[1].trim();
+      const descriptions: string[] = [];
+
+      // Move out to find the next <ul> element
+      const nextUl = $(element).closest('span').parent().next('ul');
+
+      // Ensure the next element is an <ul> before proceeding
+      if (nextUl.length > 0) {
+          nextUl.find('li').each((i, liElement) => {
+              // Try to get the description from span > font
+              let description = $(liElement).find('span > font > span').text();
+              if (!description) {
+                  description = $(liElement).find('span > span > font').text();
+              }
+
+              if (description) {
+                  const trimmedDescription = description.trim();
+                  // Check for duplicates before pushing
+                  if (!descriptions.includes(trimmedDescription)) {
+                      descriptions.push(trimmedDescription);
+                  }
+              }
+          });
+      }
+
+      // Only add to results if the country isn't already included
+      if (!results.some(item => item.country === country)) {
+          results.push({ country, descriptions });
+      }
+
+  } else {
+      // Handle cases where the current text is a description (not a country)
+      const lastResult = results[results.length - 1];
+      if (lastResult) {
+          let description = $(element).closest('li').find('span > font > span').text();
+          if (!description) {
+              description = $(element).closest('li').find('span > span > font').text();
           }
-        });
 
-        // Clean up any excessive spaces
-        item = item.trim();
-
+          if (description) {
+              const trimmedDescription = description.trim();
+              // Check for duplicates before pushing
+              if (!lastResult.descriptions.includes(trimmedDescription)) {
+                  lastResult.descriptions.push(trimmedDescription);
+              }
+          }
       }
-    });
+  }
+});
 
-    // Merge countries 
-    let currentIndex = 0;
-    for (const { name, itemCount } of allCountries) {
-      const itemsPerCountry = allItems.slice(currentIndex, currentIndex + itemCount);
-      mergedData.push({
-        country: name,
-        listItems: itemsPerCountry
-      });
-      currentIndex += itemCount;
-    }
-
-    fs.writeFileSync(`merged_${url.split("/").pop()}.json`, JSON.stringify(mergedData, null, 2));
+    fs.writeFileSync(`merged_${url.split("/").pop()}.json`, JSON.stringify(results, null, 2));
 
     console.log(`Successfully merged data for ${url} and written to file`);
 
@@ -74,30 +105,3 @@ export async function scrapeDataWithRateLimits() {
     await delay(2000); // 2 seconds between each request
   }
 }
-
-// Invoke the function
-// $("ul li").each((index, element) => {
-//     const listItem = $(element).text().trim();
-//     const tds = $(element).find("span span font");
-
-
-
-//     const country = $(tds[0]).text().trim();
-//     // $("ul li")[10]; - alaska
-//     // Check if the listItem starts with a country (we'll assume it contains a number in parentheses)
-//     const countryMatch = listItem.match(/^(.*)\s\(\d+\)$/);
-//     console.log(countryMatch);
-//     if (countryMatch) {
-//         // New country found
-//         currentCountry = countryMatch[1].trim(); // Get the country name
-//         countries.push({
-//             country: currentCountry,
-//             list_items: []
-//         });
-//     } else if (currentCountry) {
-//         // Add to the last country found in the array
-//         countries[countries.length - 1].list_items.push({
-//             description: listItem
-//         });
-//     }
-// });
