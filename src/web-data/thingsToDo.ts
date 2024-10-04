@@ -5,89 +5,88 @@ import fs from "fs";
 const urls = [
   "https://orionrose.weebly.com/bucket-list.html",
 ];
-
+interface CountryDescription {
+  country: string;
+  descriptions: string[];
+}
 const delay = (ms: any) => new Promise(resolve => setTimeout(resolve, ms));
 // TODO: put in a db, Run a cron job
 // Function to scrape data from a single URL
 async function scrapeData(url: string) {
   try {
-    const { data } = await axios.get(url);
-    const $ = cheerio.load(data);
+      const { data } = await axios.get(url);
+      const $ = cheerio.load(data);
 
-    const allCountries: { name: string; itemCount: number }[] = [];
-    const allItems: string[] = [];
-    const mergedData: { country: string; listItems: string[] }[] = [];
+      const results: CountryDescription[] = [];
 
-    const results: CountryDescription[] = [];
-    interface CountryDescription {
-      country: string;
-      descriptions: string[];
-  }
-// Iterate through each <span> containing the country
-$('div.paragraph span > span > font').each((index, element) => {
-  // Check for a hyperlink and get the country text
-  const anchor = $(element).find('a');
-  const anchorText = anchor.length > 0 ? anchor.text().trim() : '';
-  
-  // Get the remaining text and concatenate
-  const remainingText = $(element).contents().not(anchor).text().trim();
-  
-  // Combine both parts to form the full country text
-  const countryText = `${anchorText} ${remainingText}`.trim();
+      // Iterate through each <span> containing the country
+      $('div.paragraph span > span > font').each((index, element) => {
+        // Check for a hyperlink and get the country text
+        const anchor = $(element).find('a');
+        const anchorText = anchor.length > 0 ? anchor.text().trim() : '';
+        const remainingText = $(element).contents().not(anchor).text().trim();
+    
+        // Debugging output for anchor and remaining text
+        console.log(`Anchor Text: ${anchorText}, Remaining Text: ${remainingText}`);
+    
+        // Navigate to find extraCountry
+        const extraCountry = $(element).parent().parent().find('font > span').eq(1).text().trim();
+        console.log(`Extra Country: ${extraCountry}`); // Debugging line
+    
+        // Combine both parts to form the full country text
+        const countryText = `${anchorText} ${remainingText}`.trim();
+        
+        // Use regex matches for both cases
+        const matchCountryText = countryText.match(/(.*?)\s*\((\d+)\)$/);
+        const matchExtraCountry = extraCountry.match(/(.*?)\s*\((\d+)\)$/);
+    
+        // Debugging output for matches
+        console.log(`Country Text: ${countryText}, Match Country: ${matchCountryText}, Match Extra: ${matchExtraCountry}`);
+    
+        // Determine which country to use based on matches
+        const country = (matchCountryText ? matchCountryText[1].trim() : (matchExtraCountry ? matchExtraCountry[1].trim() : null));
+        
+        // Debugging output to see which country is being processed
+        console.log(`Processing country: ${country}`);
+    
+        // Proceed only if a valid country entry was found
+        if (country) {
+            const descriptions: string[] = [];
+            const nextUl = $(element).closest('span').parent().next('ul');
+    
+            if (nextUl.length > 0) {
+                nextUl.find('li').each((i, liElement) => {
+                    // Get description from various span structures
+                    const description = $(liElement).find('span > font > span').text() ||
+                                        $(liElement).find('span > span > font').text() ||
+                                        $(liElement).find('font > span').text() ||
+                                        $(liElement).find('span > font > span').eq(1).text().trim() || // Check for additional spans
+                                        $(liElement).find('span > font > span').eq(0).text().trim();
+    
+                    if (description) {
+                        const trimmedDescription = description.trim();
+                        // Check for duplicates before pushing
+                        if (!descriptions.includes(trimmedDescription)) {
+                            descriptions.push(trimmedDescription);
+                        }
+                    }
+                });
+            }
+    
+            // Only add to results if the country isn't already included
+            const countryExists = results.some(item => item.country === country);
+            if (!countryExists) {
+                console.log(`Adding country: ${country}`); // Debugging line
+                results.push({ country, descriptions });
+            } else {
+                console.log(`Country already exists: ${country}`); // Debugging line
+            }
+        }
+    });
+    
 
-  const match = countryText.match(/(.*) \((\d+)\)$/); // Matches "Country (X)"
 
-  // Proceed only if it's a valid country entry
-  if (match) {
-      const country = match[1].trim();
-      const descriptions: string[] = [];
 
-      // Move out to find the next <ul> element
-      const nextUl = $(element).closest('span').parent().next('ul');
-
-      // Ensure the next element is an <ul> before proceeding
-      if (nextUl.length > 0) {
-          nextUl.find('li').each((i, liElement) => {
-              // Try to get the description from span > font
-              let description = $(liElement).find('span > font > span').text();
-              if (!description) {
-                  description = $(liElement).find('span > span > font').text();
-              }
-
-              if (description) {
-                  const trimmedDescription = description.trim();
-                  // Check for duplicates before pushing
-                  if (!descriptions.includes(trimmedDescription)) {
-                      descriptions.push(trimmedDescription);
-                  }
-              }
-          });
-      }
-
-      // Only add to results if the country isn't already included
-      if (!results.some(item => item.country === country)) {
-          results.push({ country, descriptions });
-      }
-
-  } else {
-      // Handle cases where the current text is a description (not a country)
-      const lastResult = results[results.length - 1];
-      if (lastResult) {
-          let description = $(element).closest('li').find('span > font > span').text();
-          if (!description) {
-              description = $(element).closest('li').find('span > span > font').text();
-          }
-
-          if (description) {
-              const trimmedDescription = description.trim();
-              // Check for duplicates before pushing
-              if (!lastResult.descriptions.includes(trimmedDescription)) {
-                  lastResult.descriptions.push(trimmedDescription);
-              }
-          }
-      }
-  }
-});
 
     fs.writeFileSync(`merged_${url.split("/").pop()}.json`, JSON.stringify(results, null, 2));
 
