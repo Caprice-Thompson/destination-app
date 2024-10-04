@@ -49,4 +49,3 @@ export async function scrapeDataWithRateLimit() {
   }
 }
 
-// Invoke the function

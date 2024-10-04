@@ -33,3 +33,7 @@ export interface ApiError {
     message: string
     status: number
 }
+export interface ThingsToDo {
+    location: string;
+    item: string[];
+}
