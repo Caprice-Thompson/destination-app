@@ -1,13 +1,9 @@
-import { fetchWeatherData } from "./climate_features/weather";
-import { scrapeDataWithRateLimit } from "./web-data/largestCities";
-import { scrapeDataWithRateLimits } from "./web-data/thingsToDo";
-import { scrapeAllData } from "./web-data/unescoSites";
+import { scrapeDataForLargestCities } from "./destination_data/web_data/largestCities";
+import { getWorldHeritageSites } from "./destination_data/web_data/unescoSites";
+import {
+  URLSForLargestCities,
+  URLSForWorldHeritageSites,
+} from "./destination_data/web_data/utils/constants";
+import { scrapeDataWithRateLimits } from "./destination_data/web_data/utils/scrapeData";
 
-const world = 'world';
-
-export function hello(who: string = world): string {
-  return `Hello ${who}! `;
-}
-//scrapeAllData();
-//scrapeDataWithRateLimit();
-scrapeDataWithRateLimits();
+scrapeDataWithRateLimits(URLSForWorldHeritageSites, getWorldHeritageSites);

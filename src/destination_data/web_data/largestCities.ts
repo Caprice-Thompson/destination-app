@@ -2,14 +2,7 @@ import axios from "axios";
 import * as cheerio from "cheerio";
 import fs from "fs";
 
-
-const urls = [
-  "https://en.wikipedia.org/wiki/List_of_largest_cities",
-];
-
-const delay = (ms: any) => new Promise(resolve => setTimeout(resolve, ms));
-
-async function scrapeData(url: string) {
+export async function scrapeDataForLargestCities(url: string) {
   try {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -40,12 +33,3 @@ async function scrapeData(url: string) {
     console.error(`Error scraping ${url}:`, error);
   }
 }
-
-// Function to scrape all URLs with rate limiting
-export async function scrapeDataWithRateLimit() {
-  for (let i = 0; i < urls.length; i++) {
-    await scrapeData(urls[i]);
-    await delay(2000); // 2 seconds between each request
-  }
-}
-

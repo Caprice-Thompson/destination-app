@@ -1,39 +1,54 @@
-
 export interface Weather {
-    id: number
-    location: string
-    temperature: number
+  id: number;
+  location: string;
+  temperature: number;
 }
 
+type Name = {
+  common: string; // common name of the country
+};
+
+type Currency = {
+  [key: string]: CurrencyDetail; // mapped to CurrencyDetail
+};
+
+type CurrencyDetail = {
+  name: string;
+  symbol: string;
+};
+type LanguageDetail = {
+  name: string;
+};
 export interface Country {
-    capitalCity: string
-    language: string
-    currency: number
-    flag: string
+  name: Name;
+  capitalCity: string[];
+  languages: LanguageDetail;
+  currencies: Currency;
+  flag: string;
 }
 
-export interface City {
-    city: string
-    country: string
-    population: number
+export interface Population {
+  city: string;
+  country: string;
+  population: string;
 }
 
-export interface SiteData {
-    site: string;
-    location: string;
-    description: string;
+export interface WorldHeritageSiteData {
+  site: string;
+  location: string;
+  description: string;
 }
 
 export interface ApiResponse<T> {
-    data: T
-    status: number
+  data: T;
+  status: number;
 }
 
 export interface ApiError {
-    message: string
-    status: number
+  message: string;
+  status: number;
 }
 export interface ThingsToDo {
-    location: string;
-    item: string[];
+  location: string;
+  item: string[];
 }

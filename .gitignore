@@ -2,3 +2,5 @@ node_modules
 
 merged_bucket-list.html.json
 things-to-do.json
+constants.ts
+fixtures.ts
