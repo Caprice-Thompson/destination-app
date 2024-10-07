@@ -52,3 +52,25 @@ export interface ThingsToDo {
   location: string;
   item: string[];
 }
+
+export type Earthquake = {
+  name: string;
+  magnitude: string;
+  date: string;
+  type: string;
+  tsunami: number;
+};
+
+export type Coordinates = {
+  latitude: string;
+  longitude: string;
+};
+
+//axios has own type - change to use export interface AxiosResponse<T = any, D = any> {
+//   data: T;
+//   status: number;
+//   statusText: string;
+//   headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
+//   config: InternalAxiosRequestConfig<D>;
+//   request?: any;
+// }

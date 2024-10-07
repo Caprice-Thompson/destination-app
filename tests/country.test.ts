@@ -1,7 +1,7 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { fetchCountryData } from "../src/destination_data/country";
 import { Country } from "../src/types";
+import { getCountryDetails } from "../src/destination_data/country";
 
 describe("Country Data API", () => {
   let mock: MockAdapter;
@@ -31,7 +31,7 @@ describe("Country Data API", () => {
       .onGet(`https://restcountries.com/v3.1/name/${location}`)
       .reply(200, mockResponse);
 
-    const data = await fetchCountryData(location);
+    const data = await getCountryDetails(location);
     expect(data).toEqual(mockResponse);
   });
 
@@ -42,8 +42,8 @@ describe("Country Data API", () => {
 
     mock.onGet(`https://restcountries.com/v3.1/name/${location}`).reply(404);
 
-    const data = await fetchCountryData(location);
+    const data = await getCountryDetails(location);
 
-    expect(data?.status).toBe(404);
+    expect(data).toBe(404);
   });
 });

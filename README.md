@@ -61,62 +61,16 @@ Destination-App is an intelligent data aggregation tool designed for travelers a
 
 ## Usage
 
-### Scraping Data
-
-The application includes several scripts to scrape data from various sources. Here's how you can run them:
-
-1. **Scrape Things To Do**
-
-   ```bash
-   npm run scrape:things-to-do
-   ```
-
-   This command scrapes activities and things to do in different countries.
-
-2. **Scrape Largest Cities**
-
-   ```bash
-   npm run scrape:largest-cities
-   ```
-
-   This command compiles a list of the largest cities worldwide along with their populations.
-
-3. **Scrape UNESCO World Heritage Sites**
-
-   ```bash
-   npm run scrape:unesco-sites
-   ```
-
-   This command gathers information about UNESCO World Heritage Sites across different regions.
-
-4. **Run All Scrapers**
-
-   ```bash
-   npm run scrape:all
-   ```
-
-   This command executes all available scraping scripts sequentially.
-
-### Fetching Weather and Country Data
-
-The application can also fetch real-time weather and country-specific data using APIs.
-
-1. **Fetch Weather Data**
-
-   ```bash
-   npm run fetch:weather
-   ```
-
-   Retrieves weather information from the configured API.
-
-2. **Fetch Country Data**
-
-   ```bash
-   npm run fetch:country -- Spain
-   ```
-
-   Replace `Spain` with any country name to get specific information about that country.
-
 ### Running the Application
 
 To start the main application script:
+
+   ```bash
+   npm start
+   ```
+### Run unit tests
+To start the main application script:
+
+   ```bash
+   npm test
+   ```
