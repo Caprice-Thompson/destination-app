@@ -1,14 +1,17 @@
 import { apiClient } from "../api/apiClient";
 import { Coordinates } from "../types";
 
-
-export interface GeoApiResponse {
-  latt: string;
-  longt: string;
-}
-
-export const getGeoCoordinates = async (location: string, token: string) => {
+export const getGeoCoordinates = async (
+  location: string,
+  token: string
+): Promise<Coordinates> => {
   const url = `https://geocode.xyz/${location}?json=1&auth=${token}`;
-  const coordinates = await apiClient<Coordinates>(url);
-  console.log(coordinates);
+  const response = await apiClient<any>(url);
+
+  const coordinates: Coordinates = {
+    latitude: response.data.latt,
+    longitude: response.data.longt,
+  };
+
+  return coordinates;
 };

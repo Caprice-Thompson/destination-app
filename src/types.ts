@@ -66,6 +66,11 @@ export type Coordinates = {
   longitude: string;
 };
 
+export type Volcano = {
+  country: string;
+  list: string[];
+};
+
 //axios has own type - change to use export interface AxiosResponse<T = any, D = any> {
 //   data: T;
 //   status: number;
