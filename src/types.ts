@@ -55,10 +55,17 @@ export interface ThingsToDo {
 
 export type Earthquake = {
   name: string;
-  magnitude: string;
+  magnitude: number;
   date: string;
   type: string;
   tsunami: number;
+};
+
+export type EarthquakeDataAverages = {
+  totalNumberOfEqs: number;
+  avgNumberOfEqsInAMonth: number;
+  avgNumberOfTsunamis: number;
+  avgMagnitude: number;
 };
 
 export type Coordinates = {
@@ -67,8 +74,10 @@ export type Coordinates = {
 };
 
 export type Volcano = {
+  id: string;
+  name: string;
+  location: string;
   country: string;
-  list: string[];
 };
 
 //axios has own type - change to use export interface AxiosResponse<T = any, D = any> {

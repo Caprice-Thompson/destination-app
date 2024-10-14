@@ -1,0 +1,94 @@
+{
+  "features": [
+    {
+      "properties": {
+        "mag": 4.5,
+        "place": "Devynland",
+        "time": 1722087463995,
+        "type": "earthquake",
+        "tsunami": 3
+      }
+    },
+    {
+      "properties": {
+        "mag": 4.3,
+        "place": "East Modestaside",
+        "time": 1704644770940,
+        "type": "earthquake",
+        "tsunami": 2
+      }
+    },
+    {
+      "properties": {
+        "mag": 2.8,
+        "place": "West Jaquelineland",
+        "time": 1698867075136,
+        "type": "earthquake",
+        "tsunami": 5
+      }
+    },
+    {
+      "properties": {
+        "mag": 2.8,
+        "place": "Deltona",
+        "time": 1711572801405,
+        "type": "earthquake",
+        "tsunami": 3
+      }
+    },
+    {
+      "properties": {
+        "mag": 3.5,
+        "place": "Lake Skylar",
+        "time": 1711348001115,
+        "type": "earthquake",
+        "tsunami": 3
+      }
+    },
+    {
+      "properties": {
+        "mag": 6.6,
+        "place": "New Marleyshire",
+        "time": 1724207663131,
+        "type": "earthquake",
+        "tsunami": 2
+      }
+    },
+    {
+      "properties": {
+        "mag": 6.1,
+        "place": "Oberbrunnerland",
+        "time": 1722469642680,
+        "type": "earthquake",
+        "tsunami": 2
+      }
+    },
+    {
+      "properties": {
+        "mag": 7,
+        "place": "Fort Leonora",
+        "time": 1727144234153,
+        "type": "earthquake",
+        "tsunami": 0
+      }
+    },
+    {
+      "properties": {
+        "mag": 6.7,
+        "place": "Port Collin",
+        "time": 1727642224714,
+        "type": "earthquake",
+        "tsunami": 3
+      }
+    },
+    {
+      "properties": {
+        "mag": 5.1,
+        "place": "East Araland",
+        "time": 1720123749033,
+        "type": "earthquake",
+        "tsunami": 2
+      }
+    }
+  ]
+}
