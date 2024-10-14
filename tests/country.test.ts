@@ -3,18 +3,19 @@ import MockAdapter from "axios-mock-adapter";
 import { Country } from "../src/types";
 import { getCountryDetails } from "../src/destination_data/country";
 
+let mock: MockAdapter;
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mock = new MockAdapter(axios);
+});
+
+afterEach(() => {
+  mock.restore();
+  jest.restoreAllMocks();
+});
+
 describe("Country Data API", () => {
-  let mock: MockAdapter;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mock = new MockAdapter(axios);
-  });
-
-  afterEach(() => {
-    mock.restore();
-    jest.restoreAllMocks();
-  });
 
   it("should return country data for a valid location", async () => {
     const location = "Spain";
@@ -34,9 +35,11 @@ describe("Country Data API", () => {
     const data = await getCountryDetails(location);
     expect(data).toEqual(mockResponse);
   });
+});
 
+describe("Handle errors", () => {
   it("should handle errors if the API call fails", async () => {
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    jest.spyOn(console, "error").mockImplementation(() => { });
 
     const location = "NonExistentCountry";
 
@@ -47,3 +50,4 @@ describe("Country Data API", () => {
     expect(data).toBe(404);
   });
 });
+

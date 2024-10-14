@@ -5,7 +5,7 @@ import { ApiResponse } from "../src/types";
 jest.mock("../src/api/apiClient");
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 
-describe("getGeoCoordinates", () => {
+describe("Getting Geo Coordinates", () => {
   it("should return coordinates when API call is successful", async () => {
     const mockApiResponse: ApiResponse<any> = {
       data: {
@@ -25,7 +25,9 @@ describe("getGeoCoordinates", () => {
       longitude: mockApiResponse.data.longt,
     });
   });
+});
 
+describe("Handle errors", () => {
   it("should handle API errors gracefully", async () => {
     mockedApiClient.mockRejectedValue(new Error("API Error"));
 

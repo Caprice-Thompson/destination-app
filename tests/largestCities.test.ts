@@ -9,7 +9,7 @@ import { Population } from "../src/types";
 
 jest.mock("fs");
 
-describe("scrapeDataWithRateLimit", () => {
+describe("Getting Population Data", () => {
   const mock = new MockAdapter(axios);
 
   beforeEach(() => {
@@ -49,5 +49,6 @@ describe("scrapeDataWithRateLimit", () => {
       "cities_List_of_largest_cities.json",
       JSON.stringify(expectedData, null, 2)
     );
+    // expect(JSON.parse(fs.readFileSync("cities_List_of_largest_cities.json", "utf-8"))).toStrictEqual(expectedData);
   });
 });
