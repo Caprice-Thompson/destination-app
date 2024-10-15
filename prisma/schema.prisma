@@ -1,0 +1,31 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model WorldHeritageSite {
+  id          Int      @id @default(autoincrement())
+  site        String
+  location    String
+  description String
+  createdAt   DateTime @default(now())
+}
+
+model ThingToDo {
+  id        Int      @id @default(autoincrement())
+  location  String
+  item      String[]
+  createdAt DateTime @default(now())
+}
+
+model LargestCity {
+  id         Int      @id @default(autoincrement())
+  city       String
+  country    String
+  population String
+  createdAt  DateTime @default(now())
+}

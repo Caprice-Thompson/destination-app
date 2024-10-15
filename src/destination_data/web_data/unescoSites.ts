@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import fs from "fs";
 import { WorldHeritageSiteData } from "../../types";
+import prisma from "../../../prisma/prismaClient";
 
 export async function getWorldHeritageSites(url: string) {
   try {
@@ -31,11 +31,19 @@ export async function getWorldHeritageSites(url: string) {
       }
     });
 
-    fs.writeFileSync(
-      "world_heritage_sites.json",
-      JSON.stringify(sites, null, 2)
+    // Insert data into the database
+    const createPromises = sites.map((site) =>
+      prisma.worldHeritageSite.create({
+        data: {
+          site: site.site,
+          location: site.location,
+          description: site.description,
+        },
+      })
     );
-    console.log("All data successfully written to world_heritage_sites.json");
+
+    await Promise.all(createPromises);
+    console.log("All World Heritage Sites successfully written to the database.");
   } catch (error) {
     console.error(`Error scraping ${url}:`, error);
   }
