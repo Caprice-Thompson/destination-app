@@ -19,7 +19,7 @@ export const getPopulation = async (country: string) => {
 export const getWorldHeritageSites = async (country: string) => {
   await prisma.worldHeritageSite.findMany({
     where: {
-      location: country,
+      country: country,
     },
   });
 };

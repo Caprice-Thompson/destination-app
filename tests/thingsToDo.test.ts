@@ -2,8 +2,8 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import fs from "fs";
 import { mockThingsToDoHtml } from "./mock_data/fixtures";
-import { URLSForThingsToDo } from "../src/web/utils/constants";
-import { scrapeDataWithRateLimits } from "../src/web/utils/scrapeData";
+import { URLSForThingsToDo } from "../src/web/constants";
+import { scrapeDataWithRateLimits } from "../src/web/scrapeData";
 import { getThingsToDoData } from "../src/web/thingsToDo";
 import { ThingsToDo } from "../src/types";
 
@@ -26,8 +26,8 @@ describe("scrapeDataWithRateLimit", () => {
     mock
       .onGet("https://orionrose.weebly.com/bucket-list.html")
       .reply(200, mockThingsToDoHtml);
-
-    await scrapeDataWithRateLimits(URLSForThingsToDo, getThingsToDoData);
+    const URL_BUCKET_LIST = process.env;
+    await scrapeDataWithRateLimits(URL_BUCKET_LIST, getThingsToDoData);
 
     const expectedData: ThingsToDo[] = [
       {

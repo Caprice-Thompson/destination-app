@@ -1,19 +1,9 @@
-import { LargestCity, PrismaClient } from "@prisma/client";
-import {
-  URLSForLargestCities,
-  URLSForThingsToDo,
-  URLSForWorldHeritageSites,
-} from "./web/utils/constants";
-import { scrapeDataWithRateLimits } from "./web/utils/scrapeData";
+import prisma from "../prisma/prismaClient";
 import { getVolcanoList } from "./climate/volcanoes";
-import { getWorldHeritageSites } from "./web/unescoSites";
-const prisma = new PrismaClient();
+
 async function main() {
-  const test = await scrapeDataWithRateLimits(
-    URLSForWorldHeritageSites,
-    getWorldHeritageSites
-  );
-  console.log(test);
+  const test = await getVolcanoList();
+  console.log(JSON.stringify(test, null, 2));
 }
 
 main()

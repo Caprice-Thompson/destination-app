@@ -22,8 +22,8 @@ export async function getWorldHeritageSites(url: string) {
         const area = $(tableData[1]).find("a").eq(0).text().trim();
         const country = $(tableData[1]).children("a").last().text().trim();
         const description = $(tableData[5]).text().trim();
-        const match = !site.match(/\d/);
-        const matchDesc = !description.match(/\[\d+\]\[\d+\]|\[\d+\]/);
+        const siteMatch = !site.match(/\d/);
+        const descMatch = !description.match(/\[\d+\]\[\d+\]|\[\d+\]/);
 
         const normalisedDescription = description
           .replace(/\n/g, " ")
@@ -31,10 +31,10 @@ export async function getWorldHeritageSites(url: string) {
           .trim();
         console.log(country);
         sites.push({
-          site: match ? site : "",
+          site: siteMatch ? site : "",
           area: area,
           country: country,
-          description: matchDesc ? normalisedDescription : "",
+          description: descMatch ? normalisedDescription : "",
         });
       }
     });

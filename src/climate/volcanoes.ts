@@ -1,14 +1,52 @@
 import { apiClient } from "../api/apiClient";
 import { Volcano } from "../types";
 
-export const getVolcanoList = async (): Promise<Volcano> => {
-  const url = `www.ngdc.noaa.gov/hazel/hazard-service/api/v1/volcanoes`;
-  const response = await apiClient<any>(url);
-  const volcanoList: Volcano = {
-    name: response.items.name,
-    location: response.items.location,
-    country: response.items.country,
+export const getVolcanoList = async (): Promise<Volcano[]> => {
+  const options = {
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
   };
+  const VOLCANO_ENDPOINT = process.env;
 
-  return volcanoList;
+  const uniqueVolcanoNames = new Set<string>();
+  const allVolcanoes: Volcano[] = [];
+
+  try {
+    const firstResponse = await apiClient<any>(
+      `${VOLCANO_ENDPOINT}?page=1`,
+      options
+    );
+
+    if (!firstResponse || !firstResponse.totalPages) {
+      console.error("No valid response from the API or totalPages not found.");
+      return [];
+    }
+
+    for (let page = 1; page <= firstResponse.totalPages; page++) {
+      const response = await apiClient<any>(
+        `${VOLCANO_ENDPOINT}?page=${page}`,
+        options
+      );
+
+      if (response && response.items) {
+        response.items.forEach((item: any) => {
+          if (!uniqueVolcanoNames.has(item.name)) {
+            uniqueVolcanoNames.add(item.name);
+            allVolcanoes.push({
+              name: item.name,
+              region: item.location,
+              country: item.country,
+            });
+          }
+        });
+      }
+    }
+
+    return allVolcanoes;
+  } catch (error) {
+    console.error("Error fetching volcano data:", error);
+    return [];
+  }
 };

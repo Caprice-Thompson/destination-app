@@ -2,7 +2,7 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import fs from "fs";
 import { mockWorldHeritageSitesHtml } from "./mock_data/fixtures";
-import { scrapeDataWithRateLimits } from "../src/web/utils/scrapeData";
+import { scrapeDataWithRateLimits } from "../src/web/scrapeData";
 import { getWorldHeritageSites } from "../src/web/web_data/unescoSites";
 import { WorldHeritageSiteData } from "../src/types";
 

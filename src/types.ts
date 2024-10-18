@@ -16,6 +16,7 @@ type CurrencyDetail = {
   name: string;
   symbol: string;
 };
+
 type LanguageDetail = {
   name: string;
 };
@@ -66,7 +67,7 @@ export type Coordinates = {
 
 export type Volcano = {
   name: string;
-  location: string;
+  region: string;
   country: string;
 };
 

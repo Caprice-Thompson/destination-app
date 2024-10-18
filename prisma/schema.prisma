@@ -36,3 +36,13 @@ model LargestCity {
 
   @@map("population")
 }
+
+model Volcano {
+  id         Int      @id @default(autoincrement())
+  name       String
+  region     String
+  country    String
+  createdAt  DateTime @default(now())
+
+  @@map("volcano_list")
+}

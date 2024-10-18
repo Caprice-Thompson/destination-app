@@ -14,6 +14,7 @@ export async function apiClient<T>(
       url,
       ...options,
     });
+    console.log(response);
     return response.data;
   } catch (err) {
     if (axios.isAxiosError(err)) {
@@ -24,5 +25,3 @@ export async function apiClient<T>(
     }
   }
 }
-
-

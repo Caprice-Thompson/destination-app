@@ -1,14 +1,47 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import {
-  getCountryText,
-  getDescription,
-  validateLocation,
-} from "./utils/helper";
 import { ThingsToDo } from "../types";
 import prisma from "../../prisma/prismaClient";
 
 // TODO: Run a cron job
+const getDescription = (
+  element: cheerio.Cheerio,
+  item: string[],
+  $: cheerio.Root
+) => {
+  if (!element || !element.length) return;
+
+  element.find("li").each((_, liElement) => {
+    const description = $(liElement)
+      .find("span > font > span, span > span > font, font > span")
+      .first()
+      .text()
+      .trim();
+
+    if (description && !item.includes(description)) {
+      item.push(description);
+    }
+  });
+};
+
+const validateLocation = (location: string): string | null => {
+  const match = location.match(/(.*?)\s*\(\d+\)$/);
+  return match ? match[1].trim() : null;
+};
+
+function getCountryText(element: cheerio.Cheerio): string | null {
+  if (!element || !element.length) {
+    console.warn("Invalid element provided");
+    return null;
+  }
+
+  const countryText = element.text().trim();
+  const nextText = element.next().text().trim();
+
+  return /^\(\d+\)$/.test(nextText)
+    ? `${countryText} ${nextText}`.trim()
+    : countryText || null;
+}
 
 export async function getThingsToDoData(url: string) {
   try {

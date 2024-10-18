@@ -1,6 +1,5 @@
 import { getGeoCoordinates } from "../src/climate/getGeoCoordinates";
 import { apiClient } from "../src/api/apiClient";
-import { ApiResponse } from "../src/types";
 import { AxiosResponse } from "axios";
 
 jest.mock("../src/api/apiClient");
