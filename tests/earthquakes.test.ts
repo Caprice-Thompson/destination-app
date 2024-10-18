@@ -1,11 +1,16 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import { Earthquake, EarthquakeDataAverages } from "../src/types";
+import {
+  Earthquake,
+  EarthquakeDataAverages,
+  EarthquakeDataParams,
+} from "../src/types";
 import {
   getEarthquakeData,
-  EarthquakeDataParams,
   averageEarthquakeData,
-} from "../src/climate_features/getEarthquakes";
+} from "../src/climate/getEarthquakes";
+
+const EQ_ENDPOINT = process.env;
 
 describe("Earthquake data", () => {
   let mock: MockAdapter;
@@ -53,8 +58,9 @@ describe("Earthquake data", () => {
           tsunami: feature.properties.tsunami,
         })
       );
+      const EQ_ENDPOINT = process.env;
       const { startDate, endDate, latitude, longitude, limit } = params;
-      const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
+      const url = `${EQ_ENDPOINT}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
 
       mock.onGet(url).reply(200, mockResponse);
 
@@ -74,11 +80,11 @@ describe("Earthquake data", () => {
       };
 
       const { startDate, endDate, latitude, longitude, limit } = params;
-      const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
+      const url = `${EQ_ENDPOINT}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
 
       mock.onGet(url).reply(400);
 
-      jest.spyOn(console, "error").mockImplementation(() => { });
+      jest.spyOn(console, "error").mockImplementation(() => {});
 
       await expect(getEarthquakeData(params)).rejects.toThrow();
       expect(console.error).toHaveBeenCalled();
@@ -118,8 +124,7 @@ describe("Earthquake data", () => {
         },
       ];
 
-      const expectedData: EarthquakeDataAverages =
-      {
+      const expectedData: EarthquakeDataAverages = {
         totalNumberOfEqs: 4,
         avgNumberOfEqsInAMonth: 0.75,
         avgNumberOfTsunamis: 0.5,

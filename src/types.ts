@@ -35,18 +35,9 @@ export interface Population {
 
 export interface WorldHeritageSiteData {
   site: string;
-  location: string;
+  area: string;
+  country: string;
   description: string;
-}
-
-export interface ApiResponse<T> {
-  data: T;
-  status: number;
-}
-
-export interface ApiError {
-  message: string;
-  status: number;
 }
 export interface ThingsToDo {
   location: string;
@@ -74,17 +65,21 @@ export type Coordinates = {
 };
 
 export type Volcano = {
-  id: string;
   name: string;
   location: string;
   country: string;
 };
 
-//axios has own type - change to use export interface AxiosResponse<T = any, D = any> {
-//   data: T;
-//   status: number;
-//   statusText: string;
-//   headers: RawAxiosResponseHeaders | AxiosResponseHeaders;
-//   config: InternalAxiosRequestConfig<D>;
-//   request?: any;
-// }
+interface ClimateService {
+  volcano: Volcano[];
+  earthquake: Earthquake[];
+  earthquakeAverages: EarthquakeDataAverages[];
+}
+
+export type EarthquakeDataParams = {
+  longitude: string;
+  latitude: string;
+  startDate: string;
+  endDate: string;
+  limit?: number;
+};

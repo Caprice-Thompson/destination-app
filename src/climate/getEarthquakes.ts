@@ -1,24 +1,22 @@
 import { apiClient } from "../api/apiClient";
-import { Earthquake, EarthquakeDataAverages } from "../types";
+import {
+  Earthquake,
+  EarthquakeDataAverages,
+  EarthquakeDataParams,
+} from "../types";
 
-export interface EarthquakeDataParams {
-  longitude: string;
-  latitude: string;
-  startDate: string;
-  endDate: string;
-  limit?: number;
-}
+const EQ_ENDPOINT = process.env;
 // api
 // orderby
 // alert level
-// minmagnitude
 // 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
 // 5.5 to 6.0	Slight damage to buildings and other structures.
 export const getEarthquakeData = async (
   params: EarthquakeDataParams
 ): Promise<Earthquake[]> => {
   const { startDate, endDate, latitude, longitude, limit = 9000 } = params;
-  const url = `https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
+
+  const url = `${EQ_ENDPOINT}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
 
   const eqData = await apiClient<any>(url);
   const earthquakeData: Earthquake[] = eqData.features.map((feature: any) => ({
@@ -68,8 +66,7 @@ export const averageEarthquakeData = (
     totalEqs > 0 ? (tsunamiCount / totalEqs).toFixed(1).toString() : 0;
   const avgMagnitude = eqCount > 0 ? (sumMagnitude / eqCount).toFixed(1) : 0;
 
-  const results: EarthquakeDataAverages =
-  {
+  const results: EarthquakeDataAverages = {
     totalNumberOfEqs: totalEqs,
     avgNumberOfEqsInAMonth: Number(numberOfEqsInAMonth),
     avgNumberOfTsunamis: Number(avgNumberOfTsunamis),

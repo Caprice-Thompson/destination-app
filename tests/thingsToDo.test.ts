@@ -2,9 +2,9 @@ import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import fs from "fs";
 import { mockThingsToDoHtml } from "./mock_data/fixtures";
-import { URLSForThingsToDo } from "../src/destination_data/web_data/utils/constants";
-import { scrapeDataWithRateLimits } from "../src/destination_data/web_data/utils/scrapeData";
-import { getThingsToDoData } from "../src/destination_data/web_data/thingsToDo";
+import { URLSForThingsToDo } from "../src/web/utils/constants";
+import { scrapeDataWithRateLimits } from "../src/web/utils/scrapeData";
+import { getThingsToDoData } from "../src/web/thingsToDo";
 import { ThingsToDo } from "../src/types";
 
 jest.mock("fs");

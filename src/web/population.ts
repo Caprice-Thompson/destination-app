@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import fs from "fs";
+import prisma from "../../prisma/prismaClient";
 
-export async function scrapeDataForLargestCities(url: string) {
+export async function scrapeDataForPopulation(url: string) {
   try {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
@@ -21,15 +21,24 @@ export async function scrapeDataForLargestCities(url: string) {
         cities.push({
           city: city,
           country: country,
-          population: population
+          population: population,
         });
       }
     });
 
-    fs.writeFileSync(`cities_${url.split("/").pop()}.json`, JSON.stringify(cities, null, 2));
+    const populationData = cities.map((result) =>
+      prisma.largestCity.create({
+        data: {
+          city: result.city,
+          country: result.country,
+          population: result.population,
+        },
+      })
+    );
+
+    await Promise.all(populationData);
     console.log(`Successfully written data for ${url} to file`);
-  }
-  catch (error) {
+  } catch (error) {
     console.error(`Error scraping ${url}:`, error);
   }
 }

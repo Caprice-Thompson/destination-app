@@ -1,13 +1,14 @@
-import { getGeoCoordinates } from "../src/climate_features/getGeoCoordinates";
+import { getGeoCoordinates } from "../src/climate/getGeoCoordinates";
 import { apiClient } from "../src/api/apiClient";
 import { ApiResponse } from "../src/types";
+import { AxiosResponse } from "axios";
 
 jest.mock("../src/api/apiClient");
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 
 describe("Getting Geo Coordinates", () => {
   it("should return coordinates when API call is successful", async () => {
-    const mockApiResponse: ApiResponse<any> = {
+    const mockApiResponse: AxiosResponse<any> = {
       data: {
         latt: "51.51415",
         longt: "-0.11473",

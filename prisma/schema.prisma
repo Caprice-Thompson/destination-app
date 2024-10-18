@@ -10,9 +10,12 @@ generator client {
 model WorldHeritageSite {
   id          Int      @id @default(autoincrement())
   site        String
-  location    String
+  area        String
+  country     String
   description String
   createdAt   DateTime @default(now())
+
+  @@map("world_heritage_site")
 }
 
 model ThingToDo {
@@ -20,6 +23,8 @@ model ThingToDo {
   location  String
   item      String[]
   createdAt DateTime @default(now())
+
+  @@map("things_to_do")
 }
 
 model LargestCity {
@@ -28,4 +33,6 @@ model LargestCity {
   country    String
   population String
   createdAt  DateTime @default(now())
+
+  @@map("population")
 }

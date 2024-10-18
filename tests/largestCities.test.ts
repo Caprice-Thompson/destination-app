@@ -1,9 +1,9 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import fs from "fs";
-import { scrapeDataWithRateLimits } from "../src/destination_data/web_data/utils/scrapeData";
-import { scrapeDataForLargestCities } from "../src/destination_data/web_data/largestCities";
-import { URLSForLargestCities } from "../src/destination_data/web_data/utils/constants";
+import { scrapeDataWithRateLimits } from "../src/web/utils/scrapeData";
+import { scrapeDataForPopulation } from "../src/web/population";
+import { URLSForLargestCities } from "../src/web/utils/constants";
 import { mockLargestCitiesHtml } from "./mock_data/fixtures";
 import { Population } from "../src/types";
 
@@ -29,7 +29,7 @@ describe("Getting Population Data", () => {
 
     await scrapeDataWithRateLimits(
       URLSForLargestCities,
-      scrapeDataForLargestCities
+      scrapeDataForPopulation
     );
 
     const expectedData: Population[] = [

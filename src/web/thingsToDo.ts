@@ -1,14 +1,14 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import fs from "fs";
 import {
   getCountryText,
   getDescription,
   validateLocation,
 } from "./utils/helper";
-import { ThingsToDo } from "../../types";
+import { ThingsToDo } from "../types";
+import prisma from "../../prisma/prismaClient";
 
-// TODO: put in a db, Run a cron job
+// TODO: Run a cron job
 
 export async function getThingsToDoData(url: string) {
   try {
@@ -38,7 +38,7 @@ export async function getThingsToDoData(url: string) {
     });
 
     $("div.paragraph span > font > span").each((_, element) => {
-      const fullCountryText = getCountryText($(element), $);
+      const fullCountryText = getCountryText($(element));
       const validatedCountry = fullCountryText
         ? validateLocation(fullCountryText)
         : null;
@@ -54,9 +54,16 @@ export async function getThingsToDoData(url: string) {
       }
     });
 
-    fs.writeFileSync("things-to-do.json", JSON.stringify(results, null, 2));
-
-    console.log(`Successfully merged data for ${url} and written to file`);
+    const thingsToDoData = results.map((result) =>
+      prisma.thingToDo.create({
+        data: {
+          location: result.location,
+          item: result.item,
+        },
+      })
+    );
+    await Promise.all(thingsToDoData);
+    console.log(`Successfully merged data for things to do and written to db`);
   } catch (error) {
     console.error(`Error scraping ${url}:`, error);
   }

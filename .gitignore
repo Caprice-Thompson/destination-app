@@ -5,3 +5,4 @@ things-to-do.json
 constants.ts
 fixtures.ts
 .env
+/prisma/migrations

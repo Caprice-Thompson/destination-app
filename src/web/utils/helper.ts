@@ -1,4 +1,4 @@
-import { ThingsToDo } from "../../../types";
+import { ThingsToDo } from "../../types";
 
 export const getDescription = (
   element: cheerio.Cheerio,
@@ -50,10 +50,7 @@ export const duplicateResultsChecker = (
   }
 };
 
-export function getCountryText(
-  element: cheerio.Cheerio,
-  $: cheerio.Root
-): string | null {
+export function getCountryText(element: cheerio.Cheerio): string | null {
   if (!element || !element.length) {
     console.warn("Invalid element provided");
     return null;
