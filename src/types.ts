@@ -71,11 +71,14 @@ export type Volcano = {
   country: string;
 };
 
-interface ClimateService {
+export interface Service<T> {
+  data: T;
+}
+export type NaturalHazard = {
   volcano: Volcano[];
   earthquake: Earthquake[];
-  earthquakeAverages: EarthquakeDataAverages[];
-}
+  earthquakeAverages: EarthquakeDataAverages;
+};
 
 export type EarthquakeDataParams = {
   longitude: string;

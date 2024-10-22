@@ -8,7 +8,7 @@ export const getVolcanoList = async (): Promise<Volcano[]> => {
       "Content-Type": "application/json",
     },
   };
-  const VOLCANO_ENDPOINT = process.env;
+  const VOLCANO_ENDPOINT = process.env.VOLCANO_ENDPOINT;
 
   const uniqueVolcanoNames = new Set<string>();
   const allVolcanoes: Volcano[] = [];
@@ -49,4 +49,9 @@ export const getVolcanoList = async (): Promise<Volcano[]> => {
     console.error("Error fetching volcano data:", error);
     return [];
   }
+};
+
+export const getVolcanoByCountry = async (country: string): Promise<Volcano[]> => {
+  const volcanoList = await getVolcanoList();
+  return volcanoList.filter((volcano) => volcano.country === country);
 };

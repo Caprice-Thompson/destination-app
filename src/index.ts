@@ -1,8 +1,9 @@
 import prisma from "../prisma/prismaClient";
-import { getVolcanoList } from "./climate/volcanoes";
+import { NaturalHazardService } from "./natural_hazards/NaturalHazardService";
+import { getGeoCoordinates } from "./natural_hazards/getGeoCoordinates";
 
 async function main() {
-  const test = await getVolcanoList();
+  const test = await NaturalHazardService("Spain", 1);
   console.log(JSON.stringify(test, null, 2));
 }
 

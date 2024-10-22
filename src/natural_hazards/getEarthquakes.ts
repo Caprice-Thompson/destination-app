@@ -5,18 +5,15 @@ import {
   EarthquakeDataParams,
 } from "../types";
 
-const EQ_ENDPOINT = process.env;
-// api
-// orderby
-// alert level
+const EQ_BASE_URL = process.env.EQ_BASE_URL;
+
 // 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
 // 5.5 to 6.0	Slight damage to buildings and other structures.
 export const getEarthquakeData = async (
   params: EarthquakeDataParams
 ): Promise<Earthquake[]> => {
   const { startDate, endDate, latitude, longitude, limit = 9000 } = params;
-
-  const url = `${EQ_ENDPOINT}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
+  const url = `${EQ_BASE_URL}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
 
   const eqData = await apiClient<any>(url);
   const earthquakeData: Earthquake[] = eqData.features.map((feature: any) => ({
@@ -30,12 +27,6 @@ export const getEarthquakeData = async (
   return earthquakeData;
 };
 
-// get average number of earthquakes for a month
-// get avg number of eqs + mag +tsunamis
-// output:
-// Average number of eqs
-// average mag of eqs
-// avg number of tsunamis
 export const averageEarthquakeData = (
   data: Earthquake[],
   month: number
@@ -44,8 +35,6 @@ export const averageEarthquakeData = (
   let sumMagnitude = 0;
   let tsunamiCount = 0;
   data.map((earthquake) => {
-    // 0 = jan
-    //11 == dec
     const getMonth = new Date(earthquake.date).getMonth() + 1;
     if (getMonth === month) {
       if (earthquake.tsunami > 0) {

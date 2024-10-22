@@ -1,4 +1,4 @@
-import { getGeoCoordinates } from "../src/climate/getGeoCoordinates";
+import { getGeoCoordinates } from "../src/natural_hazards/getGeoCoordinates";
 import { apiClient } from "../src/api/apiClient";
 import { AxiosResponse } from "axios";
 

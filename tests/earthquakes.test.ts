@@ -8,7 +8,7 @@ import {
 import {
   getEarthquakeData,
   averageEarthquakeData,
-} from "../src/climate/getEarthquakes";
+} from "../src/natural_hazards/getEarthquakes";
 
 const EQ_ENDPOINT = process.env;
 
