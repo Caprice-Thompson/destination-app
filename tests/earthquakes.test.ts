@@ -84,7 +84,7 @@ describe("Earthquake data", () => {
 
       mock.onGet(url).reply(400);
 
-      jest.spyOn(console, "error").mockImplementation(() => {});
+      jest.spyOn(console, "error").mockImplementation(() => { });
 
       await expect(getEarthquakeData(params)).rejects.toThrow();
       expect(console.error).toHaveBeenCalled();

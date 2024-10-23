@@ -1,27 +1,24 @@
 import { getGeoCoordinates } from "../src/natural_hazards/getGeoCoordinates";
 import { apiClient } from "../src/api/apiClient";
-import { AxiosResponse } from "axios";
+import { Coordinates } from "../src/types";
 
 jest.mock("../src/api/apiClient");
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 
 describe("Getting Geo Coordinates", () => {
   it("should return coordinates when API call is successful", async () => {
-    const mockApiResponse: Pick<AxiosResponse<any>, "data" | "status"> = {
-      data: {
-        latt: "51.51415",
-        longt: "-0.11473",
-      },
-      status: 200,
+    const mockApiResponse: Coordinates = {
+      latitude: "51.51415",
+      longitude: "-0.11473",
     };
     mockedApiClient.mockResolvedValue(mockApiResponse);
 
-    const location = "London";
+    const location = "Spain";
 
     const coordinates = await getGeoCoordinates(location);
     expect(coordinates).toEqual({
-      latitude: mockApiResponse.data.latt,
-      longitude: mockApiResponse.data.longt,
+      latitude: mockApiResponse.latitude,
+      longitude: mockApiResponse.longitude,
     });
   });
 });

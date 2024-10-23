@@ -1,14 +1,10 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import fs from "fs";
 import { mockThingsToDoHtml } from "./mock_data/fixtures";
-import { URLSForThingsToDo } from "../src/web/constants";
 import { scrapeDataWithRateLimits } from "../src/web/scrapeData";
 import { getThingsToDoData } from "../src/web/thingsToDo";
 import { ThingsToDo } from "../src/types";
-
-jest.mock("fs");
-
+  
 describe("scrapeDataWithRateLimit", () => {
   const mock = new MockAdapter(axios);
 
@@ -26,8 +22,8 @@ describe("scrapeDataWithRateLimit", () => {
     mock
       .onGet("https://orionrose.weebly.com/bucket-list.html")
       .reply(200, mockThingsToDoHtml);
-    const URL_BUCKET_LIST = process.env;
-    await scrapeDataWithRateLimits(URL_BUCKET_LIST, getThingsToDoData);
+    const URL_BUCKET_LIST = process.env.URL_BUCKET_LIST || "";
+    const data = await scrapeDataWithRateLimits(URL_BUCKET_LIST, getThingsToDoData);
 
     const expectedData: ThingsToDo[] = [
       {
@@ -40,9 +36,7 @@ describe("scrapeDataWithRateLimit", () => {
       },
     ];
 
-    expect(fs.writeFileSync).toHaveBeenCalledWith(
-      "things-to-do.json",
-      JSON.stringify(expectedData, null, 2)
-    );
+    expect(data).toEqual(expectedData);
   });
 });
+
