@@ -7,7 +7,7 @@ const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 
 describe("Getting Geo Coordinates", () => {
   it("should return coordinates when API call is successful", async () => {
-    const mockApiResponse: AxiosResponse<any> = {
+    const mockApiResponse: Pick<AxiosResponse<any>, "data" | "status"> = {
       data: {
         latt: "51.51415",
         longt: "-0.11473",
@@ -17,9 +17,8 @@ describe("Getting Geo Coordinates", () => {
     mockedApiClient.mockResolvedValue(mockApiResponse);
 
     const location = "London";
-    const token = process.env.AUTH_TOKEN || "";
 
-    const coordinates = await getGeoCoordinates(location, token);
+    const coordinates = await getGeoCoordinates(location);
     expect(coordinates).toEqual({
       latitude: mockApiResponse.data.latt,
       longitude: mockApiResponse.data.longt,
@@ -32,9 +31,8 @@ describe("Handle errors", () => {
     mockedApiClient.mockRejectedValue(new Error("API Error"));
 
     const location = "InvalidLocation";
-    const token = "test-token";
 
-    await expect(getGeoCoordinates(location, token)).rejects.toThrow(
+    await expect(getGeoCoordinates(location)).rejects.toThrow(
       "API Error"
     );
   });

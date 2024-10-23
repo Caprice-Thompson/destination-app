@@ -49,6 +49,5 @@ describe("Getting Population Data", () => {
       "cities_List_of_largest_cities.json",
       JSON.stringify(expectedData, null, 2)
     );
-    // expect(JSON.parse(fs.readFileSync("cities_List_of_largest_cities.json", "utf-8"))).toStrictEqual(expectedData);
   });
 });

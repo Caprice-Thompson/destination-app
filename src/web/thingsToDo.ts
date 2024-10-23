@@ -56,6 +56,7 @@ export async function getThingsToDoData(url: string) {
       const remainingText = $(element).contents().not("a").text().trim();
       const countryText = `${anchorText} ${remainingText}`.trim();
       const location = validateLocation(countryText);
+      
       if (location) {
         const items: string[] = [];
         const nextUl = $(element).closest("span").parent().next("ul");
