@@ -1,6 +1,6 @@
-import { getGeoCoordinates } from "../src/natural_hazards/getGeoCoordinates";
-import { apiClient } from "../src/api/apiClient";
-import { Coordinates } from "../src/types";
+import { getGeoCoordinates } from "../natural_hazards/getGeoCoordinates";
+import { apiClient } from "../api/apiClient";
+import { Coordinates } from "../types";
 
 jest.mock("../src/api/apiClient");
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
@@ -29,8 +29,6 @@ describe("Handle errors", () => {
 
     const location = "InvalidLocation";
 
-    await expect(getGeoCoordinates(location)).rejects.toThrow(
-      "API Error"
-    );
+    await expect(getGeoCoordinates(location)).rejects.toThrow("API Error");
   });
 });

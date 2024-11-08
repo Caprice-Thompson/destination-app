@@ -2,7 +2,8 @@
   "name": "destination-app",
   "description": "",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/index.ts",
+  "type": "module",
   "directories": {
     "test": "tests"
   },

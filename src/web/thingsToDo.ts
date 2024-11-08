@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { ThingsToDo } from "../types";
-import prisma from "../../prisma/prismaClient";
+import prisma from "../prisma/prismaClient";
 
 // TODO: Run a cron job
 const getDescription = (
@@ -56,7 +56,7 @@ export async function getThingsToDoData(url: string) {
       const remainingText = $(element).contents().not("a").text().trim();
       const countryText = `${anchorText} ${remainingText}`.trim();
       const location = validateLocation(countryText);
-      
+
       if (location) {
         const items: string[] = [];
         const nextUl = $(element).closest("span").parent().next("ul");

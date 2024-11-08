@@ -1,6 +1,6 @@
-import { getVolcanoList } from "../src/natural_hazards/volcanoes";
-import { Volcano } from "../src/types";
-import { apiClient } from "../src/api/apiClient";
+import { getVolcanoList } from "../natural_hazards/volcanoes";
+import { Volcano } from "../types";
+import { apiClient } from "../api/apiClient";
 
 jest.mock("../src/api/apiClient");
 

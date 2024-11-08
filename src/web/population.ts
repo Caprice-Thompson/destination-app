@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import prisma from "../../prisma/prismaClient";
+import prisma from "../prisma/prismaClient";
 
 export async function scrapeDataForPopulation(url: string) {
   try {

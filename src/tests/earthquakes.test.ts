@@ -4,11 +4,11 @@ import {
   Earthquake,
   EarthquakeDataAverages,
   EarthquakeDataParams,
-} from "../src/types";
+} from "../types";
 import {
   getEarthquakeData,
   averageEarthquakeData,
-} from "../src/natural_hazards/getEarthquakes";
+} from "../natural_hazards/getEarthquakes";
 
 const EQ_ENDPOINT = process.env;
 
@@ -84,7 +84,7 @@ describe("Earthquake data", () => {
 
       mock.onGet(url).reply(400);
 
-      jest.spyOn(console, "error").mockImplementation(() => { });
+      jest.spyOn(console, "error").mockImplementation(() => {});
 
       await expect(getEarthquakeData(params)).rejects.toThrow();
       expect(console.error).toHaveBeenCalled();

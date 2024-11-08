@@ -1,11 +1,11 @@
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import fs from "fs";
-import { scrapeDataWithRateLimits } from "../src/web/scrapeData";
-import { scrapeDataForPopulation } from "../src/web/population";
-import { URLSForLargestCities } from "../src/web/constants";
+import { scrapeDataWithRateLimits } from "../web/scrapeData";
+import { scrapeDataForPopulation } from "../web/population";
+import { URLSForLargestCities } from "../web/constants";
 import { mockLargestCitiesHtml } from "./mock_data/fixtures";
-import { Population } from "../src/types";
+import { Population } from "../types";
 
 jest.mock("fs");
 

@@ -1,4 +1,4 @@
-import prisma from "../prisma/prismaClient";
+import prisma from "./prisma/prismaClient";
 import { NaturalHazardService } from "./natural_hazards/NaturalHazardService";
 
 async function main() {
