@@ -13,6 +13,8 @@
     "build": "tsc",
     "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
+    "backend:start": "ts-node src/server.ts",
+    "backend:dev": "nodemon src/server.ts",
     "lint": "eslint ./src/**/.ts",
     "test": "jest",
     "test:watch": "jest --watch"
@@ -20,6 +22,8 @@
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.35",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
     "@types/jest": "^29.5.13",
     "@types/node": "^22.9.1",
     "@types/pg": "^8.11.10",
@@ -41,8 +45,10 @@
     "@prisma/client": "^5.21.0",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
     "date-fns": "^4.1.0",
     "dotenv": "^16.4.5",
+    "express": "^4.21.1",
     "faker": "^5.5.3",
     "json-server": "^1.0.0-beta.3",
     "pg": "^8.13.0",
