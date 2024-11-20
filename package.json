@@ -2,8 +2,7 @@
   "name": "destination-app",
   "description": "",
   "version": "1.0.0",
-  "main": "src/index.ts",
-  "type": "module",
+  "main": "src/index.js",
   "directories": {
     "test": "tests"
   },
@@ -16,14 +15,13 @@
     "dev": "nodemon src/index.ts",
     "lint": "eslint ./src/**/.ts",
     "test": "jest",
-    "test:watch": "jest --watch",
-    "generate:mock": "ts-node tests/mock_data/generateMockData.ts",
-    "start:mockapi": "json-server --watch src/api/db.json --port 3001"
+    "test:watch": "jest --watch"
   },
   "devDependencies": {
     "@types/axios": "^0.14.0",
     "@types/cheerio": "^0.22.35",
     "@types/jest": "^29.5.13",
+    "@types/node": "^22.9.1",
     "@types/pg": "^8.11.10",
     "@types/pg-format": "^1.0.5",
     "@types/qs": "^6.9.16",
@@ -41,10 +39,10 @@
   "dependencies": {
     "@faker-js/faker": "^9.0.3",
     "@prisma/client": "^5.21.0",
-    "@types/node": "^22.7.5",
     "axios": "^1.7.7",
     "cheerio": "^1.0.0",
     "date-fns": "^4.1.0",
+    "dotenv": "^16.4.5",
     "faker": "^5.5.3",
     "json-server": "^1.0.0-beta.3",
     "pg": "^8.13.0",

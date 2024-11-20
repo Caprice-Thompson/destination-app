@@ -10,7 +10,8 @@
     "noEmit": true,
     "outDir": "./dist",
     "rootDir": "./src",
-    "isolatedModules": true
+    "isolatedModules": true,
+    "typeRoots": ["./node_modules/@types", "./env.d.ts"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/tests/**/*.ts"],
   "exclude": ["node_modules", "dist"]

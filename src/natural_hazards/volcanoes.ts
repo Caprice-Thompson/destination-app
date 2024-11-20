@@ -1,6 +1,10 @@
 import { apiClient } from "../api/apiClient";
 import { Volcano } from "../types";
 
+import dotenv from "dotenv";
+
+dotenv.config();
+
 export const getVolcanoList = async (): Promise<Volcano[]> => {
   const options = {
     headers: {

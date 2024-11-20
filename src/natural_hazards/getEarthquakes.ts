@@ -4,7 +4,9 @@ import {
   EarthquakeDataAverages,
   EarthquakeDataParams,
 } from "../types";
+import dotenv from "dotenv";
 
+dotenv.config();
 const EQ_BASE_URL = process.env.EQ_BASE_URL;
 
 // 2.5 to 5.4	Often felt, but only causes minor damage.	500,000

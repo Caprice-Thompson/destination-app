@@ -1,5 +1,4 @@
-import axios from "axios";
-import MockAdapter from "axios-mock-adapter";
+import { apiClient } from "../api/apiClient";
 import {
   Earthquake,
   EarthquakeDataAverages,
@@ -10,90 +9,92 @@ import {
   averageEarthquakeData,
 } from "../natural_hazards/getEarthquakes";
 
-const EQ_ENDPOINT = process.env;
+jest.mock("../api/apiClient");
+
+const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
+beforeAll(async () => {
+  const originalEnv = process.env;
+  process.env = {
+    ...originalEnv,
+    EQ_BASE_URL: "https://mocked-earthquake-api.com",
+  };
+});
+
+afterAll(() => {
+  delete process.env.EQ_BASE_URL;
+});
 
 describe("Earthquake data", () => {
-  let mock: MockAdapter;
+  const params: EarthquakeDataParams = {
+    longitude: "142.369",
+    latitude: "-38.142",
+    startDate: "2023-01-01",
+    endDate: "2023-12-31",
+    limit: 10,
+  };
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-    mock = new MockAdapter(axios);
-  });
+  const mockUrl = `${process.env.EQ_BASE_URL}?starttime=${params.startDate}&endtime=${params.endDate}&latitude=${params.latitude}&longitude=${params.longitude}&maxradius=3&limit=${params.limit}&minmagnitude=4`;
 
-  afterEach(() => {
-    mock.restore();
-    jest.restoreAllMocks();
-  });
-
-  describe("Get Earthquake data from API", () => {
-    it("should return earthquake data for valid coordinates", async () => {
-      const params: EarthquakeDataParams = {
-        longitude: "142.369",
-        latitude: "-38.142",
-        startDate: "2023-01-01",
-        endDate: "2023-12-31",
-        limit: 10,
-      };
-
-      const mockResponse = {
-        features: [
-          {
-            properties: {
-              mag: 5.2,
-              place: "100km SSW of XYZ",
-              time: 1625247600000,
-              type: "earthquake",
-              tsunami: 0,
-            },
+  it("should return earthquake data for valid coordinates", async () => {
+    const mockResponse = {
+      features: [
+        {
+          properties: {
+            mag: 5.2,
+            place: "100km SSW of XYZ",
+            time: 1625247600000,
+            type: "earthquake",
+            tsunami: 0,
           },
-        ],
-      };
+        },
+      ],
+    };
 
-      const expectedData: Earthquake[] = mockResponse.features.map(
-        (feature: any) => ({
-          magnitude: feature.properties.mag,
-          name: feature.properties.place,
-          date: new Date(feature.properties.time).toISOString(),
-          type: feature.properties.type,
-          tsunami: feature.properties.tsunami,
-        })
-      );
-      const EQ_ENDPOINT = process.env;
-      const { startDate, endDate, latitude, longitude, limit } = params;
-      const url = `${EQ_ENDPOINT}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
+    const expectedData: Earthquake[] = [
+      {
+        magnitude: 5.2,
+        name: "100km SSW of XYZ",
+        date: new Date(1625247600000).toISOString(),
+        type: "earthquake",
+        tsunami: 0,
+      },
+    ];
 
-      mock.onGet(url).reply(200, mockResponse);
+    mockedApiClient.mockResolvedValue(mockResponse);
 
-      const data = await getEarthquakeData(params);
-      expect(data).toEqual(expectedData);
-    });
+    const data = await getEarthquakeData(params);
+    expect(data).toEqual(expectedData);
+    expect(mockedApiClient).toHaveBeenCalledWith(mockUrl);
   });
 
   describe("Handle errors", () => {
+    const params: EarthquakeDataParams = {
+      longitude: "0",
+      latitude: "0",
+      startDate: "invalid-date",
+      endDate: "invalid-date",
+      limit: 10,
+    };
+    const { startDate, endDate, latitude, longitude, limit } = params;
+    const mockUrl = `${process.env.EQ_BASE_URL}?starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
     it("should handle errors if the API call fails", async () => {
-      const params: EarthquakeDataParams = {
-        longitude: "0",
-        latitude: "0",
-        startDate: "invalid-date",
-        endDate: "invalid-date",
-        limit: 10,
-      };
 
-      const { startDate, endDate, latitude, longitude, limit } = params;
-      const url = `${EQ_ENDPOINT}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}`;
+      mockedApiClient.mockRejectedValue(new Error("API Error"));
 
-      mock.onGet(url).reply(400);
+      jest.spyOn(console, "error").mockImplementation(() => { });
 
-      jest.spyOn(console, "error").mockImplementation(() => {});
-
-      await expect(getEarthquakeData(params)).rejects.toThrow();
-      expect(console.error).toHaveBeenCalled();
+      await expect(getEarthquakeData(params)).rejects.toThrow("API Error");
+      expect(mockedApiClient).toHaveBeenCalledWith(mockUrl);
+      expect(console.error).toHaveBeenCalledWith(
+        `Error with request to ${mockUrl}:`,
+        "API Error"
+      );
     });
   });
 
   describe("Get averages", () => {
-    it("should return correct data for average number of earthquakes per month", async () => {
-      const mockData = [
+    it("should return correct data for average number of earthquakes per month", () => {
+      const mockData: Earthquake[] = [
         {
           magnitude: 5.2,
           name: "50km SSW of XYZ",

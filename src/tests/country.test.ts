@@ -2,12 +2,12 @@ import { apiClient } from "../api/apiClient";
 import { getCountryDetails } from "../country/country";
 import { Country } from "../types";
 
-jest.mock("../src/api/apiClient");
+jest.mock("../api/apiClient", () => ({
+  apiClient: jest.fn(),
+}));
+
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 
-afterEach(() => {
-  jest.clearAllMocks();
-});
 beforeAll(async () => {
   const originalEnv = process.env;
   process.env = {
@@ -15,7 +15,6 @@ beforeAll(async () => {
     COUNTRY_BASE_URL: "https://mocked-api.com/",
   };
 });
-process.env.COUNTRY_BASE_URL = "https://mocked-api.com/";
 
 describe("getCountryDetails", () => {
   const location = "Spain";

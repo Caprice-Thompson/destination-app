@@ -2,7 +2,7 @@ import { getVolcanoList } from "../natural_hazards/volcanoes";
 import { Volcano } from "../types";
 import { apiClient } from "../api/apiClient";
 
-jest.mock("../src/api/apiClient");
+jest.mock("../api/apiClient");
 
 describe("Volcano", () => {
   it("should return successful volcano data", async () => {
@@ -24,7 +24,7 @@ describe("Volcano", () => {
       ],
     };
 
-    mockedApiClient.mockImplementation((url: string, options: any) => {
+    mockedApiClient.mockImplementation((url: string) => {
       if (url.includes("page=1")) {
         return Promise.resolve(mockResponsePage1);
       } else if (url.includes("page=2")) {
@@ -42,7 +42,7 @@ describe("Volcano", () => {
     const volcanoList = await getVolcanoList();
 
     expect(volcanoList).toEqual(expectedVolcanoes);
-    expect(mockedApiClient).toHaveBeenCalledTimes(2);
+    expect(mockedApiClient).toHaveBeenCalledTimes(3);
     expect(mockedApiClient).toHaveBeenCalledWith(
       expect.stringContaining("page=1"),
       expect.any(Object)
