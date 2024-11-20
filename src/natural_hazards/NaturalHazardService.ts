@@ -15,6 +15,7 @@ async function NaturalHazardService(
   targetMonth: number
 ): Promise<Service<NaturalHazard>> {
   const coordinates = await getGeoCoordinates(location);
+  console.log(coordinates);
   const startDate = "2002-01-01";
   const endDate = "2022-12-01";
   const latitude = coordinates.latitude;

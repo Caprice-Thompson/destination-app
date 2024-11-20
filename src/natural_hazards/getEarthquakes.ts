@@ -18,6 +18,7 @@ export const getEarthquakeData = async (
   const url = `${EQ_BASE_URL}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
 
   const eqData = await apiClient<any>(url);
+  console.log(eqData);
   const earthquakeData: Earthquake[] = eqData.features.map((feature: any) => ({
     name: feature.properties.place,
     magnitude: feature.properties.mag,

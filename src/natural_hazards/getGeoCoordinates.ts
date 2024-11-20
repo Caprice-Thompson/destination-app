@@ -7,6 +7,10 @@ export const getGeoCoordinates = async (
   const url = `${process.env.GEO_ENDPOINT}${location}?json=1&auth=${process.env.GEO_TOKEN}`;
   const response = await apiClient<any>(url);
 
-  return response;
+  const coordinates: Coordinates = {
+    latitude: response.latt,
+    longitude: response.longt,
+  };
+  return coordinates;
 };
 
