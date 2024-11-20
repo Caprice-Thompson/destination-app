@@ -1,4 +1,4 @@
 node_modules
 constants.ts
 .env
-coverage
+coverage/
