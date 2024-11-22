@@ -1,8 +1,8 @@
-import { apiClient } from "../api/apiClient";
-import { getCountryDetails } from "../country/country";
-import { Country } from "../types";
+import { apiClient } from "../src/api/apiClient";
+import { getCountryDetails } from "../src/country/country";
+import { Country } from "../src/types";
 
-jest.mock("../api/apiClient", () => ({
+jest.mock("../src/api/apiClient", () => ({
   apiClient: jest.fn(),
 }));
 

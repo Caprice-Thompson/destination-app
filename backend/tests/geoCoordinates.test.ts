@@ -1,8 +1,8 @@
-import { getGeoCoordinates } from "../natural_hazards/getGeoCoordinates";
-import { apiClient } from "../api/apiClient";
-import { Coordinates } from "../types";
+import { getGeoCoordinates } from "../src/natural_hazards/getGeoCoordinates";
+import { apiClient } from "../src/api/apiClient";
+import { Coordinates } from "../src/types";
 
-jest.mock("../api/apiClient");
+jest.mock("../src/api/apiClient");
 
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 process.env.GEO_ENDPOINT = "https://mocked-api.com/";

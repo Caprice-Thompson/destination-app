@@ -1,15 +1,15 @@
-import { apiClient } from "../api/apiClient";
+import { apiClient } from "../src/api/apiClient";
 import {
   Earthquake,
   EarthquakeDataAverages,
   EarthquakeDataParams,
-} from "../types";
+} from "../src/types";
 import {
   getEarthquakeData,
   averageEarthquakeData,
-} from "../natural_hazards/getEarthquakes";
+} from "../src/natural_hazards/getEarthquakes";
 
-jest.mock("../api/apiClient");
+jest.mock("../src/api/apiClient");
 
 const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
 beforeAll(async () => {

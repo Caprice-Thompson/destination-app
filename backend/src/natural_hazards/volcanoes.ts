@@ -4,7 +4,7 @@ import { Volcano } from "../types";
 import dotenv from "dotenv";
 
 dotenv.config();
-
+//API Endpoint
 export const getVolcanoList = async (): Promise<Volcano[]> => {
   const options = {
     headers: {
