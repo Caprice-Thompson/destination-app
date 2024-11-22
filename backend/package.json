@@ -9,12 +9,15 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
-    "start": "ts-node src/index.ts",
+    "start": "./node_modules/.bin/dotenvx run -- ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
-    "backend:start": "ts-node src/server.ts",
+    "backend:start": "./node_modules/.bin/dotenvx run -- ts-node src/server.ts",
     "backend:dev": "nodemon src/server.ts"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@dotenvx/dotenvx": "^1.24.5"
+  }
 }

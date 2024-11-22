@@ -1,14 +1,7 @@
-// Input: Dependencies and location
-// Climate: Weather, rainfall
-// NaturalHazardService: Earthquakes, Volcanoes, Tsunami, hurricane etc
-// const NaturalHazardService = await NaturalHazardService.getData();
-// Output:return json of data
 import { NaturalHazard, Service } from "../types";
 import { averageEarthquakeData, getEarthquakeData } from "./getEarthquakes";
 import { getGeoCoordinates } from "./getGeoCoordinates";
 import { getVolcanoByCountry } from "./volcanoes";
-
-export const token = process.env.GEO_TOKEN;
 
 async function NaturalHazardService(
   location: string,

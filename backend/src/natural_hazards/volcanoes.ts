@@ -1,10 +1,7 @@
 import { apiClient } from "../api/apiClient";
 import { Volcano } from "../types";
-import dotenv from "dotenv";
 
-dotenv.config();
-
-export const getVolcanoList = async (): Promise<Volcano[]> => {
+export async function getVolcanoList(): Promise<Volcano[]> {
   const options = {
     headers: {
       Accept: "application/json",
@@ -73,3 +70,9 @@ export const getVolcanoList = async (): Promise<Volcano[]> => {
 
   return allVolcanoes;
 };
+
+export async function getVolcanoByCountry(country: string): Promise<Volcano[]> {
+  const volcanoList = await getVolcanoList();
+  return volcanoList.filter((volcano) => volcano.country === country);
+};
+

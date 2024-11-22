@@ -4,9 +4,6 @@ import {
   EarthquakeDataAverages,
   EarthquakeDataParams,
 } from "../types";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 // 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
 // 5.5 to 6.0	Slight damage to buildings and other structures.
