@@ -2,6 +2,9 @@
 
 Destination-App is an intelligent data aggregation tool designed for travelers and researchers. It scrapes and compiles comprehensive information about various destinations worldwide, including activities, largest cities, UNESCO World Heritage Sites, and climate data. Destination-App provides up-to-date and detailed information to help users plan their travels or conduct geographical research.
 
+### Notes
+In DB: population, things to do, volcano list, unesco sites
+
 ## Features
 
 - **Web Scraping**: Extracts data from multiple sources such as Wikipedia and World Population Review.
