@@ -7,7 +7,6 @@ import {
 import dotenv from "dotenv";
 
 dotenv.config();
-const EQ_BASE_URL = process.env.EQ_BASE_URL;
 
 // 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
 // 5.5 to 6.0	Slight damage to buildings and other structures.
@@ -15,10 +14,10 @@ export const getEarthquakeData = async (
   params: EarthquakeDataParams
 ): Promise<Earthquake[]> => {
   const { startDate, endDate, latitude, longitude, limit = 9000 } = params;
-  const url = `${EQ_BASE_URL}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
+  const url = `${process.env.EQ_BASE_URL}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
 
   const eqData = await apiClient<any>(url);
-  console.log(eqData);
+
   const earthquakeData: Earthquake[] = eqData.features.map((feature: any) => ({
     name: feature.properties.place,
     magnitude: feature.properties.mag,

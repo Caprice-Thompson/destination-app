@@ -14,7 +14,9 @@ export async function apiClient<T>(
       url,
       ...options,
     });
+    console.log(`response.data: ${response.data}`);
     return response.data;
+
   } catch (err) {
     if (axios.isAxiosError(err)) {
       console.error(`Error with request to ${url}:`, err.message);

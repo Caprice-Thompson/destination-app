@@ -4,46 +4,43 @@ import { Coordinates } from "../src/types";
 
 jest.mock("../src/api/apiClient");
 
-const mockedApiClient = apiClient as jest.MockedFunction<typeof apiClient>;
-process.env.GEO_ENDPOINT = "https://mocked-api.com/";
-process.env.GEO_TOKEN = "0123456789";
-
-beforeAll(async () => {
+describe("Geo Coordinates", () => {
   const originalEnv = process.env;
-  process.env = {
-    ...originalEnv,
-    GEO_ENDPOINT: "https://mocked-api.com/",
-    GEO_TOKEN: "0123456789",
-  };
-});
 
-describe("Getting Geo Coordinates", () => {
-  const location = "Spain";
-  const mockUrl = `${process.env.GEO_ENDPOINT}${location}?json=1&auth=${process.env.GEO_TOKEN}`;
-
-  it("should return coordinates when API call is successful", async () => {
-    const mockApiResponse: Coordinates = {
-      latitude: "51.51415",
-      longitude: "-0.11473",
-    };
-
-    mockedApiClient.mockResolvedValueOnce(mockApiResponse);
-
-    const result = await getGeoCoordinates(location);
-    expect(result).toEqual(mockApiResponse);
-    expect(mockedApiClient).toHaveBeenCalledWith(mockUrl);
+  beforeAll(() => {
+    process.env = { ...originalEnv, GEO_ENDPOINT: "https://mocked-api.com/", GEO_TOKEN: "mocked-token" };
   });
-});
 
-describe("Handle errors", () => {
-  it("should handle API errors gracefully", async () => {
-    mockedApiClient.mockRejectedValue(new Error("API Error"));
+  afterAll(() => {
+    process.env = originalEnv;
+  });
 
+  describe("Getting Geo Coordinates", () => {
+    const location = "Spain";
+    const mockUrl = `https://mocked-api.com/${location}?json=1&auth=mocked-token`;
+
+    it("should return coordinates when API call is successful", async () => {
+      const mockApiResponse: Coordinates = {
+        latitude: "51.51415",
+        longitude: "-0.11473",
+      };
+      (apiClient as jest.Mock).mockResolvedValue(mockApiResponse);
+
+      const result = await getGeoCoordinates(location);
+      expect(apiClient).toHaveBeenCalledWith(mockUrl);
+      expect(result).toEqual(mockApiResponse);
+    });
+  });
+
+  describe("Handle errors", () => {
     const location = "InvalidLocation";
+    const mockUrl = `https://mocked-api.com/${location}?json=1&auth=mocked-token`;
 
-    await expect(getGeoCoordinates(location)).rejects.toThrow("API Error");
-    expect(mockedApiClient).toHaveBeenCalledWith(
-      `${process.env.GEO_ENDPOINT}${location}?json=1&auth=${process.env.GEO_TOKEN}`
-    );
+    it("should handle API errors gracefully", async () => {
+      (apiClient as jest.Mock).mockRejectedValue(new Error("API Error"));
+
+      await expect(getGeoCoordinates(location)).rejects.toThrow("API Error");
+      expect(apiClient).toHaveBeenCalledWith(mockUrl);
+    });
   });
 });

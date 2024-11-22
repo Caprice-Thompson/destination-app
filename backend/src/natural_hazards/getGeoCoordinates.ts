@@ -8,9 +8,10 @@ export const getGeoCoordinates = async (
   const response = await apiClient<any>(url);
 
   const coordinates: Coordinates = {
-    latitude: response.latt,
-    longitude: response.longt,
+    latitude: response.latitude,
+    longitude: response.longitude,
   };
+
   return coordinates;
 };
 
