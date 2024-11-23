@@ -5,11 +5,11 @@ export interface Weather {
 }
 
 type Name = {
-  common: string; // common name of the country
+  common: string; 
 };
 
 type Currency = {
-  [key: string]: CurrencyDetail; // mapped to CurrencyDetail
+  [key: string]: CurrencyDetail; 
 };
 
 type CurrencyDetail = {

@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
-import { NaturalHazardService } from "./natural_hazards/NaturalHazardService";
+import { NaturalHazardService } from "./services/NaturalHazardService";
 
 const app = express();
 const PORT = process.env.PORT || 5000;

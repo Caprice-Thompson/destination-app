@@ -1,7 +1,7 @@
 import { NaturalHazard, Service } from "../types";
-import { averageEarthquakeData, getEarthquakeData } from "./getEarthquakes";
-import { getGeoCoordinates } from "./getGeoCoordinates";
-import { getVolcanoByCountry } from "./volcanoes";
+import { averageEarthquakeData, getEarthquakeData } from "../natural_hazards/getEarthquakes";
+import { getGeoCoordinates } from "../natural_hazards/getGeoCoordinates";
+import { getVolcanoByCountry } from "../natural_hazards/volcanoes";
 
 async function NaturalHazardService(
   location: string,

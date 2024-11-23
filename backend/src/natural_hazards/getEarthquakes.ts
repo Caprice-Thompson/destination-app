@@ -10,7 +10,9 @@ import {
 export const getEarthquakeData = async (
   params: EarthquakeDataParams
 ): Promise<Earthquake[]> => {
+
   const { startDate, endDate, latitude, longitude, limit = 9000 } = params;
+
   const url = `${process.env.EQ_BASE_URL}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
 
   const eqData = await apiClient<any>(url);
