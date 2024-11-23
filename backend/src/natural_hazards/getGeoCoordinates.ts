@@ -1,5 +1,5 @@
-import { apiClient } from "../api/apiClient";
-import { Coordinates } from "../types";
+import {apiClient} from "../api/apiClient";
+import {Coordinates} from "../types";
 
 export const getGeoCoordinates = async (
   location: string
@@ -7,11 +7,9 @@ export const getGeoCoordinates = async (
   const url = `${process.env.GEO_ENDPOINT}${location}?json=1&auth=${process.env.GEO_TOKEN}`;
   const response = await apiClient<any>(url);
 
-  const coordinates: Coordinates = {
+  return {
     latitude: response.latitude,
     longitude: response.longitude,
   };
-
-  return coordinates;
 };
 

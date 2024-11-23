@@ -69,10 +69,10 @@ export async function getVolcanoList(): Promise<Volcano[]> {
   }
 
   return allVolcanoes;
-};
+}
 
 export async function getVolcanoByCountry(country: string): Promise<Volcano[]> {
   const volcanoList = await getVolcanoList();
   return volcanoList.filter((volcano) => volcano.country === country);
-};
+}
 

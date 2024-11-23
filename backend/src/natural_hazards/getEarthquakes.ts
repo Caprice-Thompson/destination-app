@@ -1,9 +1,5 @@
-import { apiClient } from "../api/apiClient";
-import {
-  Earthquake,
-  EarthquakeDataAverages,
-  EarthquakeDataParams,
-} from "../types";
+import {apiClient} from "../api/apiClient";
+import {Earthquake, EarthquakeDataAverages, EarthquakeDataParams,} from "../types";
 
 // 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
 // 5.5 to 6.0	Slight damage to buildings and other structures.
@@ -17,15 +13,13 @@ export const getEarthquakeData = async (
 
   const eqData = await apiClient<any>(url);
 
-  const earthquakeData: Earthquake[] = eqData.features.map((feature: any) => ({
+  return eqData.features.map((feature: any) => ({
     name: feature.properties.place,
     magnitude: feature.properties.mag,
     date: new Date(feature.properties.time).toISOString(),
     type: feature.properties.type,
     tsunami: feature.properties.tsunami,
   }));
-
-  return earthquakeData;
 };
 
 export const averageEarthquakeData = (
@@ -56,12 +50,10 @@ export const averageEarthquakeData = (
     totalEqs > 0 ? (tsunamiCount / totalEqs).toFixed(1).toString() : 0;
   const avgMagnitude = eqCount > 0 ? (sumMagnitude / eqCount).toFixed(1) : 0;
 
-  const results: EarthquakeDataAverages = {
+  return {
     totalNumberOfEqs: totalEqs,
     avgNumberOfEqsInAMonth: Number(numberOfEqsInAMonth),
     avgNumberOfTsunamis: Number(avgNumberOfTsunamis),
     avgMagnitude: Number(avgMagnitude),
   };
-
-  return results;
 };
