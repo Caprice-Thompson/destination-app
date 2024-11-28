@@ -1,5 +1,8 @@
 import { NaturalHazard, Service } from "../types";
-import { averageEarthquakeData, getEarthquakeData } from "../natural_hazards/getEarthquakes";
+import {
+  averageEarthquakeData,
+  earthquakeData,
+} from "../natural_hazards/getEarthquakes";
 import { getGeoCoordinates } from "../natural_hazards/getGeoCoordinates";
 import { getVolcanoByCountry } from "../natural_hazards/volcanoes";
 
@@ -8,18 +11,23 @@ async function NaturalHazardService(
   targetMonth: number
 ): Promise<Service<NaturalHazard>> {
   const coordinates = await getGeoCoordinates(location);
-  const startDate = "2002-01-01";
-  const endDate = "2022-12-01";
-  const latitude = coordinates.latitude;
-  const longitude = coordinates.longitude;
+  const today = new Date();
+  const formattedDate = today.toISOString().split("T")[0];
+  const pastDate = "2015-01-01";
+  const earthquakeApiUrl = process.env.EQ_BASE_URL ?? "";
+  const params = {
+    startTime: pastDate,
+    endTime: formattedDate,
+    latitude: coordinates!.latt,
+    longitude: coordinates!.longt,
+    format: "geojson",
+    maxRadius: 3,
+  };
 
-  const params = { startDate, endDate, latitude, longitude };
-
-  const eqData = await getEarthquakeData(params);
+  const eqData = await earthquakeData(earthquakeApiUrl).getEarthquakeData(params);
 
   const earthquakeAvgData = averageEarthquakeData(eqData, targetMonth);
   const volcanoList = getVolcanoByCountry(location);
-  console.log(earthquakeAvgData);
 
   return {
     data: {

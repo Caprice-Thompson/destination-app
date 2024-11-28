@@ -1,8 +1,8 @@
 import { getVolcanoList } from "../src/natural_hazards/volcanoes";
 import { Volcano } from "../src/types";
-import { apiClient } from "../src/api/apiClient";
+import { getData } from "../src/api/client";
 
-jest.mock("../src/api/apiClient");
+jest.mock("../src/api/client");
 
 describe("Volcano List Fetching", () => {
   const originalEnv = process.env;
@@ -36,7 +36,7 @@ describe("Volcano List Fetching", () => {
       ],
     };
 
-    (apiClient as jest.Mock).mockImplementation((url: string) => {
+    (getData as jest.Mock).mockImplementation((url: string) => {
       if (url.includes("page=1")) {
         return Promise.resolve(mockResponsePage1);
       } else if (url.includes("page=2")) {
@@ -54,8 +54,8 @@ describe("Volcano List Fetching", () => {
     const volcanoList = await getVolcanoList();
 
     expect(volcanoList).toEqual(expectedVolcanoes);
-    expect(apiClient).toHaveBeenCalledTimes(2); // Two pages fetched
-    expect(apiClient).toHaveBeenCalledWith(
+    expect(getData).toHaveBeenCalledTimes(2); 
+    expect(getData).toHaveBeenCalledWith(
       "https://mocked-volcano-api.com?page=1",
       {
         headers: {
@@ -64,7 +64,7 @@ describe("Volcano List Fetching", () => {
         },
       }
     );
-    expect(apiClient).toHaveBeenCalledWith(
+    expect(getData).toHaveBeenCalledWith(
       "https://mocked-volcano-api.com?page=2",
       {
         headers: {
@@ -76,16 +76,16 @@ describe("Volcano List Fetching", () => {
   });
 
   it("should handle no volcano data gracefully", async () => {
-    (apiClient as jest.Mock).mockResolvedValueOnce({
+    (getData as jest.Mock).mockResolvedValueOnce({
       totalPages: 0,
       items: [],
     });
-    jest.spyOn(console, "error").mockImplementation(() => { });
+    jest.spyOn(console, "error").mockImplementation(() => {});
     const volcanoList = await getVolcanoList();
 
     expect(volcanoList).toEqual([]);
-    expect(apiClient).toHaveBeenCalledTimes(1);
-    expect(apiClient).toHaveBeenCalledWith(
+    expect(getData).toHaveBeenCalledTimes(1);
+    expect(getData).toHaveBeenCalledWith(
       "https://mocked-volcano-api.com?page=1",
       {
         headers: {
@@ -97,13 +97,13 @@ describe("Volcano List Fetching", () => {
   });
 
   it("should handle API errors gracefully", async () => {
-    (apiClient as jest.Mock).mockRejectedValueOnce(new Error("API error"));
+    (getData as jest.Mock).mockRejectedValueOnce(new Error("API error"));
 
     const volcanoList = await getVolcanoList();
 
     expect(volcanoList).toEqual([]);
-    expect(apiClient).toHaveBeenCalledTimes(1);
-    expect(apiClient).toHaveBeenCalledWith(
+    expect(getData).toHaveBeenCalledTimes(1);
+    expect(getData).toHaveBeenCalledWith(
       "https://mocked-volcano-api.com?page=1",
       {
         headers: {

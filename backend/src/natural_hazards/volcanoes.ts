@@ -1,4 +1,4 @@
-import { apiClient } from "../api/apiClient";
+import { getData } from "../api/client";
 import { Volcano } from "../types";
 
 export async function getVolcanoList(): Promise<Volcano[]> {
@@ -19,7 +19,7 @@ export async function getVolcanoList(): Promise<Volcano[]> {
   const allVolcanoes: Volcano[] = [];
 
   try {
-    const firstResponse = await apiClient<any>(
+    const firstResponse = await getData<any>(
       `${VOLCANO_ENDPOINT}?page=1`,
       options
     );
@@ -46,7 +46,7 @@ export async function getVolcanoList(): Promise<Volcano[]> {
     // Process additional pages
     const totalPages = firstResponse.totalPages;
     for (let page = 2; page <= totalPages; page++) {
-      const response = await apiClient<any>(
+      const response = await getData<any>(
         `${VOLCANO_ENDPOINT}?page=${page}`,
         options
       );
@@ -75,4 +75,3 @@ export async function getVolcanoByCountry(country: string): Promise<Volcano[]> {
   const volcanoList = await getVolcanoList();
   return volcanoList.filter((volcano) => volcano.country === country);
 }
-

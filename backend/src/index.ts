@@ -1,19 +1,22 @@
+
+import { earthquakeData } from "./natural_hazards/getEarthquakes";
 import prisma from "./prisma/prismaClient";
 import { NaturalHazardService } from "./services/NaturalHazardService";
-import { getVolcanoList } from "./natural_hazards/volcanoes";
-import { getURL } from "./api/getURL";
 
 async function main() {
-  //const test = await NaturalHazardService("Spain", 1);
-  //const test2 = await getVolcanoList();
-  const as = getURL({
-    baseURL: "https://www.google.co.uk",
-    path: "",
-    params: [""],
-  });
-  console.log(as);
-  //console.log(JSON.stringify(test, null, 2));
-  // console.log(JSON.stringify(test2, null, 2));
+  const test = await NaturalHazardService("Spain", 1);
+  const params = {
+    startTime: "2015-01-01",
+    endTime: "2020-11-28",
+    latitude: "43.46587",
+    longitude: "43.46587",
+    format: "geojson",
+    maxRadius: 3,
+  };
+  // const earthquakeApiUrl = process.env.EQ_BASE_URL ?? "";
+  // const eqData = await earthquakeData(earthquakeApiUrl).getEarthquakeData(params);
+  console.log(JSON.stringify(test, null, 2));
+  //   const data = getGeoCoordinates("Spain");
 }
 
 main()

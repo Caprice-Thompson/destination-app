@@ -1,26 +1,79 @@
-import {apiClient} from "../api/apiClient";
-import {Earthquake, EarthquakeDataAverages, EarthquakeDataParams,} from "../types";
+import { getData } from "../api/client";
+import { getCustomURL } from "../api/getURL";
+import { EarthquakeDataAverages, EarthquakeDataParams } from "../types";
 
-// 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
-// 5.5 to 6.0	Slight damage to buildings and other structures.
-export const getEarthquakeData = async (
-  params: EarthquakeDataParams
-): Promise<Earthquake[]> => {
-
-  const { startDate, endDate, latitude, longitude, limit = 9000 } = params;
-
-  const url = `${process.env.EQ_BASE_URL}&starttime=${startDate}&endtime=${endDate}&latitude=${latitude}&longitude=${longitude}&maxradius=3&limit=${limit}&minmagnitude=4`;
-
-  const eqData = await apiClient<any>(url);
-
-  return eqData.features.map((feature: any) => ({
-    name: feature.properties.place,
-    magnitude: feature.properties.mag,
-    date: new Date(feature.properties.time).toISOString(),
-    type: feature.properties.type,
-    tsunami: feature.properties.tsunami,
-  }));
+// TODO: Earthquake Factory function
+/**
+ * Define interface for getting EQ data, input: url, output: api response
+ * create function that returns the interface and inside also fetches the data
+ * Then create another function that uses the factory function to get the data
+ */
+// TODO: Implement logger
+/**
+ * Research some
+ */
+// TODO: Define EQ Info
+/**
+ * 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
+ * 5.5 to 6.0	Slight damage to buildings and other structures.
+ */
+export type EarthquakeResponse = {
+  features: {
+    properties: {
+      mag: number;
+      place: string;
+      time: number;
+      updated: number;
+      tsunami: number;
+      type: string;
+    };
+  }[];
 };
+
+export type Earthquake = {
+  name: string;
+  magnitude: number;
+  date: string;
+  type: string;
+  tsunami: number;
+};
+
+export interface EarthquakeService {
+  getEarthquakeData: (params: EarthquakeDataParams) => Promise<Earthquake[]>;
+}
+
+export function earthquakeData(
+  earthquakeApiUrl: string,
+): EarthquakeService {
+  if (!earthquakeApiUrl) {
+    throw new Error("Earthquake API URL is required");
+  }
+
+  return {
+    getEarthquakeData: async (params: EarthquakeDataParams): Promise<Earthquake[]> => {
+      console.info(
+        "Fetching earthquake data with params",
+        JSON.stringify(params),
+      );
+
+      const earthquakeURL = getCustomURL.getParams(earthquakeApiUrl, params);
+      const eqData = await getData<EarthquakeResponse>(earthquakeURL);
+
+      if (!eqData) {
+        console.error("No data found");
+        return [];
+      }
+
+      return eqData.features.map((feature) => ({
+        name: feature.properties.place,
+        magnitude: feature.properties.mag,
+        date: new Date(feature.properties.time).toISOString(),
+        type: feature.properties.type,
+        tsunami: feature.properties.tsunami,
+      }));
+    },
+  };
+}
 
 export const averageEarthquakeData = (
   data: Earthquake[],

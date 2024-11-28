@@ -1,3 +1,5 @@
+import { Earthquake } from "./natural_hazards/getEarthquakes";
+
 export interface Weather {
   id: number;
   location: string;
@@ -5,11 +7,11 @@ export interface Weather {
 }
 
 type Name = {
-  common: string; 
+  common: string;
 };
 
 type Currency = {
-  [key: string]: CurrencyDetail; 
+  [key: string]: CurrencyDetail;
 };
 
 type CurrencyDetail = {
@@ -45,24 +47,11 @@ export interface ThingsToDo {
   item: string[];
 }
 
-export type Earthquake = {
-  name: string;
-  magnitude: number;
-  date: string;
-  type: string;
-  tsunami: number;
-};
-
 export type EarthquakeDataAverages = {
   totalNumberOfEqs: number;
   avgNumberOfEqsInAMonth: number;
   avgNumberOfTsunamis: number;
   avgMagnitude: number;
-};
-
-export type Coordinates = {
-  latitude: string;
-  longitude: string;
 };
 
 export type Volcano = {
@@ -83,7 +72,10 @@ export type NaturalHazard = {
 export type EarthquakeDataParams = {
   longitude: string;
   latitude: string;
-  startDate: string;
-  endDate: string;
+  startTime: string;
+  endTime: string;
+  maxRadius: number;
   limit?: number;
+  minMagnitude?: number;
 };
+

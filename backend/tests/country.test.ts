@@ -1,8 +1,8 @@
-import { apiClient } from "../src/api/apiClient";
+import { getData } from "../src/api/client";
 import { getCountryDetails } from "../src/country/country";
 import { Country } from "../src/types";
 
-jest.mock("../src/api/apiClient");
+jest.mock("../src/api/client");
 
 describe("getCountryDetails", () => {
   const originalEnv = process.env;
@@ -29,18 +29,17 @@ describe("getCountryDetails", () => {
     process.env = originalEnv;
   });
 
-
   it("should return country details if the request is successful", async () => {
-    (apiClient as jest.Mock).mockResolvedValue(mockCountryDetails);
+    (getData as jest.Mock).mockResolvedValue(mockCountryDetails);
 
     const result = await getCountryDetails(location);
 
     expect(result).toStrictEqual(mockCountryDetails);
-    expect(apiClient).toHaveBeenCalledWith(mockUrl);
+    expect(getData).toHaveBeenCalledWith(mockUrl);
   });
 
   it("should return the status code if the request fails with an error status code", async () => {
-    (apiClient as jest.Mock).mockResolvedValue(404);
+    (getData as jest.Mock).mockResolvedValue(404);
 
     const result = await getCountryDetails(location);
     expect(result).toBe(404);

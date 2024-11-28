@@ -1,6 +1,5 @@
-import { apiClient } from "../src/api/apiClient";
+import { getData } from "../src/api/client";
 import {
-  Earthquake,
   EarthquakeDataAverages,
   EarthquakeDataParams,
 } from "../src/types";
@@ -8,11 +7,13 @@ import {
   getEarthquakeData,
   averageEarthquakeData,
 } from "../src/natural_hazards/getEarthquakes";
+import { getCustomURL } from "../src/api/getURL";
 
-jest.mock("../src/api/apiClient");
+jest.mock("../src/api/client");
 
 describe("Earthquake data", () => {
   const originalEnv = process.env;
+  const baseURL = `https://mocked-earthquake-api.com`;
 
   beforeAll(async () => {
     process.env = {
@@ -26,15 +27,17 @@ describe("Earthquake data", () => {
   });
 
   describe("Earthquake data retrieval", () => {
-
     const params: EarthquakeDataParams = {
-      longitude: "142.369",
+      startTime: "2023-01-01",
+      endTime: "2023-12-31",
       latitude: "-38.142",
-      startDate: "2023-01-01",
-      endDate: "2023-12-31",
+      longitude: "142.369",
+      maxRadius: 3,
       limit: 10,
+      minMagnitude: 4,
     };
-    const mockUrl = `https://mocked-earthquake-api.com&starttime=${params.startDate}&endtime=${params.endDate}&latitude=${params.latitude}&longitude=${params.longitude}&maxradius=3&limit=${params.limit}&minmagnitude=4`;
+
+    const earthquakeURL = getCustomURL.getParams(baseURL, params);
 
     it("should return earthquake data for valid coordinates", async () => {
       const mockResponse = {
@@ -61,30 +64,28 @@ describe("Earthquake data", () => {
         },
       ];
 
-      (apiClient as jest.Mock).mockResolvedValue(mockResponse);
+      (getData as jest.Mock).mockResolvedValue(mockResponse);
 
       const data = await getEarthquakeData(params);
       expect(data).toEqual(expectedData);
-      expect(apiClient).toHaveBeenCalledWith(mockUrl);
+      expect(getData).toHaveBeenCalledWith(earthquakeURL);
     });
 
     describe("Handle errors", () => {
-
       const params: EarthquakeDataParams = {
         longitude: "0",
         latitude: "0",
-        startDate: "invalid-date",
-        endDate: "invalid-date",
+        startTime: "invalid-date",
+        endTime: "invalid-date",
         limit: 10,
       };
+      const earthquakeURL = getCustomURL.getParams(baseURL, params);
 
-      const mockUrl = `https://mocked-earthquake-api.com&starttime=${params.startDate}&endtime=${params.endDate}&latitude=${params.latitude}&longitude=${params.longitude}&maxradius=3&limit=${params.limit}&minmagnitude=4`;
       it("should handle errors if the API call fails", async () => {
-
-        (apiClient as jest.Mock).mockRejectedValue(new Error("API Error"));
+        (getData as jest.Mock).mockRejectedValue(new Error("API Error"));
 
         await expect(getEarthquakeData(params)).rejects.toThrow("API Error");
-        expect(apiClient).toHaveBeenCalledWith(mockUrl);
+        expect(getData).toHaveBeenCalledWith(earthquakeURL);
       });
     });
 
