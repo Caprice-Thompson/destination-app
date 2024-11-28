@@ -1,4 +1,5 @@
-import { Earthquake } from "./natural_hazards/getEarthquakes";
+import { Earthquake, EarthquakeDataAverages } from "./natural_hazards/getEarthquakes";
+import { Volcano } from "./natural_hazards/volcanoes";
 
 export interface Weather {
   id: number;
@@ -46,20 +47,6 @@ export interface ThingsToDo {
   location: string;
   item: string[];
 }
-
-export type EarthquakeDataAverages = {
-  totalNumberOfEqs: number;
-  avgNumberOfEqsInAMonth: number;
-  avgNumberOfTsunamis: number;
-  avgMagnitude: number;
-};
-
-export type Volcano = {
-  name: string;
-  region: string;
-  country: string;
-};
-
 export interface Service<T> {
   data: T;
 }
@@ -69,13 +56,4 @@ export type NaturalHazard = {
   earthquakeAverages: EarthquakeDataAverages;
 };
 
-export type EarthquakeDataParams = {
-  longitude: string;
-  latitude: string;
-  startTime: string;
-  endTime: string;
-  maxRadius: number;
-  limit?: number;
-  minMagnitude?: number;
-};
 

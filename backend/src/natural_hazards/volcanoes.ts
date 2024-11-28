@@ -1,74 +1,97 @@
 import { getData } from "../api/client";
-import { Volcano } from "../types";
+
+export type Volcano = {
+  name: string;
+  region: string;
+  country: string;
+};
+
+export type VolcanoApiResponse = {
+  items: Volcano[];
+  totalPages?: number;
+  currentPage?: number;
+};
 
 export async function getVolcanoList(): Promise<Volcano[]> {
+  const volcanoUrl = process.env.VOLCANO_ENDPOINT;
+
+  if (!volcanoUrl) {
+    console.error("Environment variable is not set.");
+    return [];
+  }
+
+  try {
+    const firstPageData = await getVolcanoPage(volcanoUrl, 1);
+    if (!firstPageData) {
+      console.error("No valid response from the API for page 1.");
+      return [];
+    }
+
+    const totalPages = firstPageData.totalPages || 1;
+    const allPagesData = await getAllVolcanoPages(volcanoUrl, totalPages);
+
+    const uniqueVolcanoes = extractUniqueVolcanoes(allPagesData);
+
+    return uniqueVolcanoes;
+  } catch (error) {
+    console.error("Error fetching volcano list:", error);
+    return [];
+  }
+}
+
+export async function getVolcanoPage(
+  endpoint: string,
+  page: number
+): Promise<VolcanoApiResponse> {
   const options = {
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
     },
   };
-  const VOLCANO_ENDPOINT = process.env.VOLCANO_ENDPOINT;
 
-  if (!VOLCANO_ENDPOINT) {
-    console.error("Environment variable VOLCANO_ENDPOINT is not set.");
-    return [];
+  const response = await getData<VolcanoApiResponse>(
+    `${endpoint}?page=${page}`,
+    options
+  );
+  if (!response) {
+    throw new Error("No response received from volcano API");
+  }
+  return response;
+}
+
+async function getAllVolcanoPages(
+  endpoint: string,
+  totalPages: number
+): Promise<VolcanoApiResponse[]> {
+  const fetchPromises: Promise<VolcanoApiResponse | null>[] = [];
+
+  for (let page = 1; page <= totalPages; page++) {
+    fetchPromises.push(getVolcanoPage(endpoint, page));
   }
 
+  const pagesData = await Promise.all(fetchPromises);
+  return pagesData.filter((page): page is VolcanoApiResponse => page !== null);
+}
+
+function extractUniqueVolcanoes(pagesData: VolcanoApiResponse[]): Volcano[] {
   const uniqueVolcanoNames = new Set<string>();
-  const allVolcanoes: Volcano[] = [];
+  const uniqueVolcanoes: Volcano[] = [];
 
-  try {
-    const firstResponse = await getData<any>(
-      `${VOLCANO_ENDPOINT}?page=1`,
-      options
-    );
-
-    if (!firstResponse || !firstResponse.totalPages) {
-      console.error("No valid response from the API or no pages found.");
-      return [];
-    }
-
-    // Process the first page
-    if (firstResponse.items) {
-      firstResponse.items.forEach((item: any) => {
-        if (!uniqueVolcanoNames.has(item.name)) {
-          uniqueVolcanoNames.add(item.name);
-          allVolcanoes.push({
-            name: item.name,
-            region: item.location,
-            country: item.country,
-          });
-        }
-      });
-    }
-
-    // Process additional pages
-    const totalPages = firstResponse.totalPages;
-    for (let page = 2; page <= totalPages; page++) {
-      const response = await getData<any>(
-        `${VOLCANO_ENDPOINT}?page=${page}`,
-        options
-      );
-
-      if (response && response.items) {
-        response.items.forEach((item: any) => {
-          if (!uniqueVolcanoNames.has(item.name)) {
-            uniqueVolcanoNames.add(item.name);
-            allVolcanoes.push({
-              name: item.name,
-              region: item.location,
-              country: item.country,
-            });
-          }
+  pagesData.forEach((page) => {
+    page.items.forEach((item: any) => {
+      if (item.name && !uniqueVolcanoNames.has(item.name)) {
+        uniqueVolcanoNames.add(item.name);
+        uniqueVolcanoes.push({
+          name: item.name,
+          region: item.location,
+          country: item.country,
         });
       }
-    }
-  } catch (error) {
-    console.error("Error fetching volcano list:", error);
-  }
+    });
+  });
 
-  return allVolcanoes;
+  return uniqueVolcanoes;
 }
 
 export async function getVolcanoByCountry(country: string): Promise<Volcano[]> {

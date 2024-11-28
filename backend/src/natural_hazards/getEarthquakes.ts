@@ -1,6 +1,5 @@
 import { getData } from "../api/client";
 import { getCustomURL } from "../api/getURL";
-import { EarthquakeDataAverages, EarthquakeDataParams } from "../types";
 
 // TODO: Earthquake Factory function
 /**
@@ -17,6 +16,23 @@ import { EarthquakeDataAverages, EarthquakeDataParams } from "../types";
  * 2.5 to 5.4	Often felt, but only causes minor damage.	500,000
  * 5.5 to 6.0	Slight damage to buildings and other structures.
  */
+export type EarthquakeDataParams = {
+  longitude: string;
+  latitude: string;
+  startTime: string;
+  endTime: string;
+  maxRadius: number;
+  limit?: number;
+  minMagnitude?: number;
+};
+
+export type EarthquakeDataAverages = {
+  totalNumberOfEqs: number;
+  avgNumberOfEqsInAMonth: number;
+  avgNumberOfTsunamis: number;
+  avgMagnitude: number;
+};
+
 export type EarthquakeResponse = {
   features: {
     properties: {
@@ -42,25 +58,25 @@ export interface EarthquakeService {
   getEarthquakeData: (params: EarthquakeDataParams) => Promise<Earthquake[]>;
 }
 
-export function earthquakeData(
-  earthquakeApiUrl: string,
-): EarthquakeService {
+export function earthquakeData(earthquakeApiUrl: string): EarthquakeService {
   if (!earthquakeApiUrl) {
     throw new Error("Earthquake API URL is required");
   }
 
   return {
-    getEarthquakeData: async (params: EarthquakeDataParams): Promise<Earthquake[]> => {
+    getEarthquakeData: async (
+      params: EarthquakeDataParams
+    ): Promise<Earthquake[]> => {
       console.info(
         "Fetching earthquake data with params",
-        JSON.stringify(params),
+        JSON.stringify(params)
       );
 
       const earthquakeURL = getCustomURL.getParams(earthquakeApiUrl, params);
       const eqData = await getData<EarthquakeResponse>(earthquakeURL);
 
       if (!eqData) {
-        console.error("No data found");
+        console.error("No earthquake data found");
         return [];
       }
 
@@ -76,37 +92,48 @@ export function earthquakeData(
 }
 
 export const averageEarthquakeData = (
-  data: Earthquake[],
-  month: number
+  earthquakes: Earthquake[],
+  targetMonth: number
 ): EarthquakeDataAverages => {
-  let eqCount = 0;
-  let sumMagnitude = 0;
-  let tsunamiCount = 0;
-  data.map((earthquake) => {
-    const getMonth = new Date(earthquake.date).getMonth() + 1;
-    if (getMonth === month) {
-      if (earthquake.tsunami > 0) {
-        tsunamiCount++;
-      }
-      if (earthquake.type === "earthquake") {
-        if (!isNaN(earthquake.magnitude)) {
-          sumMagnitude += Number(earthquake.magnitude);
-        }
-        eqCount++;
-      }
-    }
+  const totalEarthquakes = earthquakes.length;
+
+  const earthquakesInMonth = earthquakes.filter((eq) => {
+    const earthquakeMonth = new Date(eq.date).getMonth() + 1;
+    return earthquakeMonth === targetMonth && eq.type === "earthquake";
   });
-  const totalEqs = data.length;
-  const numberOfEqsInAMonth =
-    totalEqs > 0 ? (eqCount / totalEqs).toFixed(2) : 0;
-  const avgNumberOfTsunamis =
-    totalEqs > 0 ? (tsunamiCount / totalEqs).toFixed(1).toString() : 0;
-  const avgMagnitude = eqCount > 0 ? (sumMagnitude / eqCount).toFixed(1) : 0;
+
+  const totalEarthquakesInMonth = earthquakesInMonth.length;
+
+  const tsunamiCount = earthquakesInMonth.reduce(
+    (count, eq) => count + (eq.tsunami > 0 ? 1 : 0),
+    0
+  );
+
+  const sumMagnitude = earthquakesInMonth.reduce(
+    (sum, eq) => sum + (isNaN(eq.magnitude) ? 0 : eq.magnitude),
+    0
+  );
+
+  const averageMagnitude =
+    totalEarthquakesInMonth > 0
+      ? parseFloat((sumMagnitude / totalEarthquakesInMonth).toFixed(1))
+      : 0;
+
+  const averageEarthquakesInMonth =
+    totalEarthquakes > 0
+      ? parseFloat((totalEarthquakesInMonth / totalEarthquakes).toFixed(2))
+      : 0;
+
+  const averageTsunamis =
+    totalEarthquakes > 0
+      ? parseFloat((tsunamiCount / totalEarthquakes).toFixed(1))
+      : 0;
 
   return {
-    totalNumberOfEqs: totalEqs,
-    avgNumberOfEqsInAMonth: Number(numberOfEqsInAMonth),
-    avgNumberOfTsunamis: Number(avgNumberOfTsunamis),
-    avgMagnitude: Number(avgMagnitude),
+    totalNumberOfEqs: totalEarthquakes,
+    avgNumberOfEqsInAMonth: averageEarthquakesInMonth,
+    avgNumberOfTsunamis: averageTsunamis,
+    avgMagnitude: averageMagnitude,
   };
 };
+

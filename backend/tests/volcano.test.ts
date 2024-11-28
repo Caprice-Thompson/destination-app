@@ -1,5 +1,4 @@
-import { getVolcanoList } from "../src/natural_hazards/volcanoes";
-import { Volcano } from "../src/types";
+import { getVolcanoList, getVolcanoPage, Volcano } from "../src/natural_hazards/volcanoes";
 import { getData } from "../src/api/client";
 
 jest.mock("../src/api/client");
@@ -54,7 +53,7 @@ describe("Volcano List Fetching", () => {
     const volcanoList = await getVolcanoList();
 
     expect(volcanoList).toEqual(expectedVolcanoes);
-    expect(getData).toHaveBeenCalledTimes(2); 
+    expect(getData).toHaveBeenCalledTimes(3);
     expect(getData).toHaveBeenCalledWith(
       "https://mocked-volcano-api.com?page=1",
       {
@@ -80,11 +79,16 @@ describe("Volcano List Fetching", () => {
       totalPages: 0,
       items: [],
     });
-    jest.spyOn(console, "error").mockImplementation(() => {});
+    const firstPageData = await getVolcanoPage(
+      "https://mocked-volcano-api.com",
+      0
+    );
+    jest.spyOn(console, "error").mockImplementation(() => { });
     const volcanoList = await getVolcanoList();
 
+    expect(firstPageData).toEqual({ totalPages: 0, items: [] });
     expect(volcanoList).toEqual([]);
-    expect(getData).toHaveBeenCalledTimes(1);
+    expect(getData).toHaveBeenCalledTimes(2);
     expect(getData).toHaveBeenCalledWith(
       "https://mocked-volcano-api.com?page=1",
       {
