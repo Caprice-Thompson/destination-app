@@ -136,4 +136,3 @@ export const averageEarthquakeData = (
     avgMagnitude: averageMagnitude,
   };
 };
-
