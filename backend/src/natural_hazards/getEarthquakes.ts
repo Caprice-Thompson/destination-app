@@ -54,11 +54,13 @@ export type Earthquake = {
   tsunami: number;
 };
 
-export interface EarthquakeService {
+export interface EarthquakeServiceInterface {
   getEarthquakeData: (params: EarthquakeDataParams) => Promise<Earthquake[]>;
 }
 
-export function earthquakeData(earthquakeApiUrl: string): EarthquakeService {
+export function earthquakeService(
+  earthquakeApiUrl: string
+): EarthquakeServiceInterface {
   if (!earthquakeApiUrl) {
     throw new Error("Earthquake API URL is required");
   }

@@ -1,12 +1,11 @@
 import axios from "axios";
-import { NaturalHazard } from "../../src/types";
 
 export const fetchNaturalHazardData = async (
   location: string,
   targetMonth: number
-): Promise<NaturalHazard> => {
+): Promise<any> => {
   try {
-    const response = await axios.get<NaturalHazard>("/api/natural-hazard", {
+    const response = await axios.get<any>("/api/natural-hazard", {
       params: { location, targetMonth },
     });
     return response.data;

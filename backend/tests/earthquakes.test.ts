@@ -2,7 +2,7 @@ import { getData } from "../src/api/client";
 import {
   averageEarthquakeData,
   Earthquake,
-  earthquakeData,
+  earthquakeService,
   EarthquakeDataAverages,
   EarthquakeDataParams,
 } from "../src/natural_hazards/getEarthquakes";
@@ -65,7 +65,9 @@ describe("Earthquake data", () => {
 
       (getData as jest.Mock).mockResolvedValue(mockResponse);
 
-      const data = await earthquakeData(earthquakeURL).getEarthquakeData(params);
+      const data = await earthquakeService(earthquakeURL).getEarthquakeData(
+        params
+      );
       expect(data).toEqual(expectedData);
       expect(getData).toHaveBeenCalledWith(earthquakeURL);
     });
@@ -84,7 +86,9 @@ describe("Earthquake data", () => {
       it("should handle errors if the API call fails", async () => {
         (getData as jest.Mock).mockRejectedValue(new Error("API Error"));
 
-        await expect(earthquakeData(earthquakeURL).getEarthquakeData(params)).rejects.toThrow("API Error");
+        await expect(
+          earthquakeService(earthquakeURL).getEarthquakeData(params)
+        ).rejects.toThrow("API Error");
         expect(getData).toHaveBeenCalledWith(earthquakeURL);
       });
     });

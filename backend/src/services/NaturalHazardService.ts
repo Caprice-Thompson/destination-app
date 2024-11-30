@@ -1,11 +1,12 @@
 import { NaturalHazard, Service } from "../types";
 import {
   averageEarthquakeData,
-  earthquakeData,
+  earthquakeService,
 } from "../natural_hazards/getEarthquakes";
 import { getGeoCoordinates } from "../natural_hazards/getGeoCoordinates";
 import { getVolcanoByCountry } from "../natural_hazards/volcanoes";
 
+// currently its just a function that returns a list
 async function NaturalHazardService(
   location: string,
   targetMonth: number
@@ -23,12 +24,14 @@ async function NaturalHazardService(
     format: "geojson",
     maxRadius: 3,
   };
-
-  const eqData = await earthquakeData(earthquakeApiUrl).getEarthquakeData(params);
-
+  // i have to get eq data from the earthquake service
+  const eqData = await earthquakeService(earthquakeApiUrl).getEarthquakeData(
+    params
+  );
+// then use it again here - should be all in one?
   const earthquakeAvgData = averageEarthquakeData(eqData, targetMonth);
   const volcanoList = getVolcanoByCountry(location);
-
+// I should just have display earthquake info none of the set up - shouldnt do set up in service
   return {
     data: {
       volcano: await volcanoList,
