@@ -1,5 +1,4 @@
 import { getCountryDetails } from "./country/country";
-import { earthquakeService } from "./natural_hazards/getEarthquakes";
 import { getPopulation, getWorldHeritageSites } from "./prisma/dbQueries";
 import { getThingsToDo } from "./prisma/dbQueries";
 import prisma from "./prisma/prismaClient";

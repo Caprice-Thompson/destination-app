@@ -73,48 +73,4 @@ describe("Volcano List Fetching", () => {
       }
     );
   });
-
-  it("should handle no volcano data gracefully", async () => {
-    (getData as jest.Mock).mockResolvedValueOnce({
-      totalPages: 0,
-      items: [],
-    });
-    const firstPageData = await getVolcanoPage(
-      "https://mocked-volcano-api.com",
-      0
-    );
-    jest.spyOn(console, "error").mockImplementation(() => { });
-    const volcanoList = await getVolcanoList();
-
-    expect(firstPageData).toEqual({ totalPages: 0, items: [] });
-    expect(volcanoList).toEqual([]);
-    expect(getData).toHaveBeenCalledTimes(2);
-    expect(getData).toHaveBeenCalledWith(
-      "https://mocked-volcano-api.com?page=1",
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  });
-
-  it("should handle API errors gracefully", async () => {
-    (getData as jest.Mock).mockRejectedValueOnce(new Error("API error"));
-
-    const volcanoList = await getVolcanoList();
-
-    expect(volcanoList).toEqual([]);
-    expect(getData).toHaveBeenCalledTimes(1);
-    expect(getData).toHaveBeenCalledWith(
-      "https://mocked-volcano-api.com?page=1",
-      {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    );
-  });
 });

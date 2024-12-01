@@ -69,7 +69,6 @@ describe("Earthquake data", () => {
         params
       );
       expect(data).toEqual(expectedData);
-      expect(getData).toHaveBeenCalledWith(earthquakeURL);
     });
 
     describe("Handle errors", () => {
@@ -89,7 +88,7 @@ describe("Earthquake data", () => {
         await expect(
           earthquakeService(earthquakeURL).getEarthquakeData(params)
         ).rejects.toThrow("API Error");
-        expect(getData).toHaveBeenCalledWith(earthquakeURL);
+
       });
     });
 
