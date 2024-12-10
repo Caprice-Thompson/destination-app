@@ -1,7 +1,5 @@
 import { getCountryDetails } from "./country/country";
-import { getPopulation, getWorldHeritageSites } from "./prisma/dbQueries";
-import { getThingsToDo } from "./prisma/dbQueries";
-import prisma from "./prisma/prismaClient";
+import { getPopulation, getThingsToDo, getWorldHeritageSites } from "./prisma/dbQueries";
 import { CountryService } from "./services/CountryService";
 import { NaturalHazardService } from "./services/NaturalHazardService";
 import {
@@ -26,15 +24,6 @@ async function main() {
   }).getCountryService("Spain");
 
   console.log(JSON.stringify(serviceResult, null, 2));
-  console.log(JSON.stringify(test, null, 2));
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+main();

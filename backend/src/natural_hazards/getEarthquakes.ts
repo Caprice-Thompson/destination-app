@@ -57,7 +57,7 @@ export type Earthquake = {
 export interface EarthquakeServiceInterface {
   getEarthquakeData: (params: EarthquakeDataParams) => Promise<Earthquake[]>;
 }
-
+//init eq service
 export function earthquakeService(
   earthquakeApiUrl: string
 ): EarthquakeServiceInterface {

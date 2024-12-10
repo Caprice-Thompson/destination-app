@@ -1,59 +1,11 @@
 {
   "name": "destination-app",
-  "description": "",
   "version": "1.0.0",
-  "main": "src/index.js",
-  "directories": {
-    "test": "tests"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Destination-App is an intelligent data aggregation tool designed for travelers and researchers. It scrapes and compiles comprehensive information about various destinations worldwide, including activities, largest cities, UNESCO World Heritage Sites, and climate data. Destination-App provides up-to-date and detailed information to help users plan their travels or conduct geographical research.",
+  "main": "index.js",
   "scripts": {
-    "build": "tsc",
-    "start": "ts-node src/index.ts",
-    "dev": "nodemon src/index.ts",
-    "backend:start": "ts-node src/server.ts",
-    "backend:dev": "nodemon src/server.ts",
-    "lint": "eslint ./src/**/.ts",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "devDependencies": {
-    "@types/axios": "^0.14.0",
-    "@types/cheerio": "^0.22.35",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/jest": "^29.5.13",
-    "@types/node": "^22.9.1",
-    "@types/pg": "^8.11.10",
-    "@types/pg-format": "^1.0.5",
-    "@types/qs": "^6.9.16",
-    "@typescript-eslint/eslint-plugin": "^8.5.0",
-    "@typescript-eslint/parser": "^8.5.0",
-    "axios-mock-adapter": "^2.0.0",
-    "eslint": "^9.10.0",
-    "jest": "^29.7.0",
-    "nodemon": "^3.1.4",
-    "prisma": "^5.21.0",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.6.3"
-  },
-  "dependencies": {
-    "@faker-js/faker": "^9.0.3",
-    "@prisma/client": "^5.21.0",
-    "axios": "^1.7.7",
-    "cheerio": "^1.0.0",
-    "cors": "^2.8.5",
-    "date-fns": "^4.1.0",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.1",
-    "faker": "^5.5.3",
-    "json-server": "^1.0.0-beta.3",
-    "pg": "^8.13.0",
-    "pg-format": "^1.0.4",
-    "pg-promise": "^11.10.1",
-    "qs": "^6.13.0"
-  }
+  "author": "",
+  "license": "ISC"
 }
