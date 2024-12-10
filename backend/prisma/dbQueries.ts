@@ -1,6 +1,8 @@
+import { Population, WorldHeritageSiteData } from "../src/types";
+import { ThingsToDo } from "../src/types";
 import prisma from "./prismaClient";
-import { Population, ThingsToDo, WorldHeritageSiteData } from "../types";
 
+// Move file in src
 export const getThingsToDo = async (country: string): Promise<ThingsToDo[]> => {
     const thingsToDo = await prisma.thingToDo.findMany({
         where: {

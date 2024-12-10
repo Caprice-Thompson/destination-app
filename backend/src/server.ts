@@ -2,10 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import { NaturalHazardService } from "./services/NaturalHazardService";
 import { getCountryDetails } from "./country/country";
-import { getThingsToDo, getWorldHeritageSites } from "./prisma/dbQueries";
 import { Country, ThingsToDo, Population, WorldHeritageSiteData } from "./types";
-import { getPopulation } from "./prisma/dbQueries";
 import { CountryService } from "./services/CountryService";
+import { getPopulation, getThingsToDo, getWorldHeritageSites } from "../prisma/dbQueries";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -38,7 +37,7 @@ app.get("/", async (req: Request, res: Response) => {
             getPopulation: getPopulation as (country: string) => Promise<Population[]>,
             getWorldHeritageSites: getWorldHeritageSites as (country: string) => Promise<WorldHeritageSiteData[]>,
         }).getCountryService("Spain");
-
+        console.log(countryData);
         const combinedData = {
             naturalHazardData,
             countryData

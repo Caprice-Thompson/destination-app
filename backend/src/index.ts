@@ -1,5 +1,5 @@
+import { getPopulation, getThingsToDo, getWorldHeritageSites } from "../prisma/dbQueries";
 import { getCountryDetails } from "./country/country";
-import { getPopulation, getThingsToDo, getWorldHeritageSites } from "./prisma/dbQueries";
 import { CountryService } from "./services/CountryService";
 import { NaturalHazardService } from "./services/NaturalHazardService";
 import {

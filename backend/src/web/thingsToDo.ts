@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import { ThingsToDo } from "../types";
-import prisma from "../prisma/prismaClient";
+import prisma from "../../prisma/prismaClient";
 
 // TODO: Run a cron job
 const getDescription = (
