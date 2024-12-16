@@ -11,8 +11,7 @@
     "build": "tsc",
     "start": "ts-node src/server.ts",
     "dev": "nodemon src/index.ts",
-    "backend:start": "ts-node src/server.ts",
-    "backend:dev": "nodemon src/server.ts",
+    "docker:dev": "docker-compose up --build",
     "deploy:zip": "zip -r backend.zip * -x \"node_modules/*\" -x \"tests/*\"",
     "deploy": "npm run deploy:zip && eb deploy"
   },
