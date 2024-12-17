@@ -58,6 +58,14 @@ Ensure you have [Node.js](https://nodejs.org/) installed. Then, run:
 
 - **Develop the Application:**
 
+Run Docker DB container first
+
+  ```bash
+  npm run docker:db
+  ```
+
+Then 
+
   ```bash
   npm run dev
   ```
