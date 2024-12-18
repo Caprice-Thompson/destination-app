@@ -5,7 +5,11 @@ import {
 } from "../natural_hazards/getEarthquakes";
 import { getGeoCoordinates } from "../natural_hazards/getGeoCoordinates";
 import { getVolcanoByCountry } from "../natural_hazards/volcanoes";
+import { getCustomURL } from "../api/getURL";
+import { launchEarthquakeService } from "../natural_hazards/EarthquakeService";
 
+// get earthquake service
+//get volcano service
 async function NaturalHazardService(
   location: string,
   targetMonth: number
@@ -23,19 +27,22 @@ async function NaturalHazardService(
     format: "geojson",
     maxRadius: 3,
   };
+  const earthquakeURL = getCustomURL.getParams(earthquakeApiUrl, params);
+  const earthquakeService = launchEarthquakeService(earthquakeURL, params);
+  const earthquakeData = await earthquakeService.getEarthquakeData();
 
-  const eqData = await earthquakeService(earthquakeApiUrl).getEarthquakeData(
-    params
+  //Calculate averages for a specific month
+  const averages = earthquakeService.calculateEarthquakeStatistics(
+    earthquakeData,
+    5
   );
   const volcanoList = await getVolcanoByCountry(location);
 
-  const earthquakeAvgData = averageEarthquakeData(eqData, targetMonth);
-
   return {
     data: {
-      volcano: await volcanoList,
-      earthquake: eqData,
-      earthquakeAverages: earthquakeAvgData,
+      volcano: volcanoList,
+      earthquake: earthquakeData,
+      earthquakeAverages: averages,
     },
   };
 }

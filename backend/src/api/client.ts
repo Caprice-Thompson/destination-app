@@ -20,7 +20,11 @@ export async function getData<T>(
   try {
     const response = await fetch(url, defaultOptions);
     if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
+      throw new Error(
+        `HTTP error! Status: ${response.status}: ${JSON.stringify(
+          response.body
+        )}`
+      );
     }
     const data: T = await response.json();
     return data;

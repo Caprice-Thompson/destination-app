@@ -9,6 +9,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc",
+    "main": "./node_modules/.bin/dotenvx run -- ts-node src/index.ts",
     "start": "ts-node src/server.ts",
     "dev": "nodemon src/server.ts",
     "docker:db": "docker-compose up -d db",
