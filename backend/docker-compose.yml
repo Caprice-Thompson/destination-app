@@ -1,7 +1,24 @@
 services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    tty: true
+    stdin_open: true
+    restart: always
+    env_file:
+      - ./.env
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    command: npm run dev
+    volumes:
+      - .:/destination-app/backend # Mount the local code into the container
+      - /destination-app/backend/node_modules # Prevent overriding node_modules
+
   db:
     image: postgres:14
-    container_name: backend-db
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER}

@@ -1,8 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { WorldHeritageSiteData } from "../types";
 import prisma from "../../prisma/prismaClient";
-
+import { UNESCOSites } from "../country/TourismService";
 
 // 7 wonders of the world
 export async function getWorldHeritageSites(url: string) {
@@ -10,7 +9,7 @@ export async function getWorldHeritageSites(url: string) {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
-    const sites: WorldHeritageSiteData[] = [];
+    const sites: UNESCOSites[] = [];
     // regex do not include numbers
     $("table.wikitable tbody tr").each((index, element) => {
       if (index === 0) return;

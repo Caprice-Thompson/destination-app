@@ -2,8 +2,9 @@ import { getData } from "../api/client";
 import { getCustomURL } from "../api/getURL";
 
 export type EarthquakeDataParams = {
-  longitude: string;
-  latitude: string;
+  format: string;
+  longitude: string | undefined;
+  latitude: string | undefined;
   startTime: string;
   endTime: string;
   maxRadius: number;
@@ -12,9 +13,9 @@ export type EarthquakeDataParams = {
 };
 
 export type EarthquakeDataAverages = {
-  totalNumberOfEqs: number;
-  avgNumberOfEqsInAMonth: number;
-  avgNumberOfTsunamis: number;
+  totalEarthquakes: number;
+  avgEarthquakesInMonth: number;
+  avgTsunamiCount: number;
   avgMagnitude: number;
 };
 
@@ -60,7 +61,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
   async getEarthquakeData(): Promise<Earthquake[]> {
     try {
       const response = await getData<EarthquakeResponse>(this.earthquakeApiUrl);
-
+      console.log(response);
       if (!response || !response.features) {
         console.error("No earthquake data found");
         return [];
@@ -116,9 +117,9 @@ class EarthquakeService implements EarthquakeServiceInterface {
         : 0;
 
     return {
-      totalNumberOfEqs: totalEarthquakes,
-      avgNumberOfEqsInAMonth: avgEarthquakesInAMonth,
-      avgNumberOfTsunamis: avgTsunamis,
+      totalEarthquakes: totalEarthquakes,
+      avgEarthquakesInMonth: avgEarthquakesInAMonth,
+      avgTsunamiCount: avgTsunamis,
       avgMagnitude: averageMagnitude,
     };
   }

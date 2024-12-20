@@ -1,5 +1,5 @@
-import { getVolcanoList, getVolcanoPage, Volcano } from "../src/natural_hazards/volcanoes";
 import { getData } from "../src/api/client";
+import { Volcano, VolcanoService } from "../src/natural_hazards/VolcanoService";
 
 jest.mock("../src/api/client");
 
@@ -49,8 +49,8 @@ describe("Volcano List Fetching", () => {
       { name: "Mount Etna", region: "Sicily", country: "Italy" },
       { name: "Kilauea", region: "Hawaii", country: "USA" },
     ];
-
-    const volcanoList = await getVolcanoList();
+    const volcanoService = new VolcanoService();
+    const volcanoList = await volcanoService.getVolcanoList();
 
     expect(volcanoList).toEqual(expectedVolcanoes);
     expect(getData).toHaveBeenCalledTimes(3);

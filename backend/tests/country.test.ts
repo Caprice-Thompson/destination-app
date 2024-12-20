@@ -1,6 +1,5 @@
 import { getData } from "../src/api/client";
-import { getCountryDetails } from "../src/country/country";
-import { Country } from "../src/types";
+import { Country, getCountryDetails } from "../src/country/country";
 
 jest.mock("../src/api/client");
 
@@ -14,7 +13,7 @@ describe("getCountryDetails", () => {
       capitalCity: ["City"],
       currencies: { EUR: { name: "Euro", symbol: "€" } },
       flag: "https://flag.com/es.png",
-      languages: { name: "Spanish" },
+      languages: [{ name: "Spanish" }],
     },
   ];
 

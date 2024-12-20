@@ -1,6 +1,7 @@
-import { Population, WorldHeritageSiteData } from "../types";
-import { ThingsToDo } from "../types";
+
 import prisma from "../../prisma/prismaClient";
+import { CityPopulation } from "./CountryService";
+import { ThingsToDo, UNESCOSites } from "./TourismService";
 
 export const getThingsToDo = async (country: string): Promise<ThingsToDo[]> => {
   const thingsToDo = await prisma.thingToDo.findMany({
@@ -11,7 +12,9 @@ export const getThingsToDo = async (country: string): Promise<ThingsToDo[]> => {
   return thingsToDo;
 };
 
-export const getPopulation = async (country: string): Promise<Population[]> => {
+export const getPopulation = async (
+  country: string
+): Promise<CityPopulation[]> => {
   const population = await prisma.largestCity.findMany({
     where: {
       country: country,
@@ -20,9 +23,9 @@ export const getPopulation = async (country: string): Promise<Population[]> => {
   return population;
 };
 
-export const getWorldHeritageSites = async (
+export const getUNESCOSites = async (
   country: string
-): Promise<WorldHeritageSiteData[]> => {
+): Promise<UNESCOSites[]> => {
   const worldHeritageSites = await prisma.worldHeritageSite.findMany({
     where: {
       country: country,

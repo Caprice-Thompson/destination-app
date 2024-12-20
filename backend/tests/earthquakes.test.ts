@@ -1,11 +1,10 @@
 import { getData } from "../src/api/client";
 import {
-  averageEarthquakeData,
   Earthquake,
-  earthquakeService,
   EarthquakeDataAverages,
   EarthquakeDataParams,
-} from "../src/natural_hazards/getEarthquakes";
+  launchEarthquakeService,
+} from "../src/natural_hazards/EarthquakeService";
 import { getCustomURL } from "../src/api/getURL";
 
 jest.mock("../src/api/client");
@@ -27,6 +26,7 @@ describe("Earthquake data", () => {
 
   describe("Earthquake data retrieval", () => {
     const params: EarthquakeDataParams = {
+      format: "geojson",
       startTime: "2023-01-01",
       endTime: "2023-12-31",
       latitude: "-38.142",
@@ -64,15 +64,14 @@ describe("Earthquake data", () => {
       ];
 
       (getData as jest.Mock).mockResolvedValue(mockResponse);
-
-      const data = await earthquakeService(earthquakeURL).getEarthquakeData(
-        params
-      );
+      const earthquakeService = launchEarthquakeService(baseURL, params);
+      const data = await earthquakeService.getEarthquakeData();
       expect(data).toEqual(expectedData);
     });
 
     describe("Handle errors", () => {
       const params: EarthquakeDataParams = {
+        format: "geojson",
         longitude: "0",
         latitude: "0",
         startTime: "invalid-date",
@@ -84,11 +83,10 @@ describe("Earthquake data", () => {
 
       it("should handle errors if the API call fails", async () => {
         (getData as jest.Mock).mockRejectedValue(new Error("API Error"));
-
-        await expect(
-          earthquakeService(earthquakeURL).getEarthquakeData(params)
-        ).rejects.toThrow("API Error");
-
+        const earthquakeService = launchEarthquakeService(baseURL, params);
+        await expect(earthquakeService.getEarthquakeData()).rejects.toThrow(
+          "API Error"
+        );
       });
     });
 
@@ -126,13 +124,19 @@ describe("Earthquake data", () => {
         ];
 
         const expectedData: EarthquakeDataAverages = {
-          totalNumberOfEqs: 4,
-          avgNumberOfEqsInAMonth: 0.75,
-          avgNumberOfTsunamis: 0.5,
+          totalEarthquakes: 4,
+          avgEarthquakesInMonth: 0.75,
+          avgTsunamiCount: 0.5,
           avgMagnitude: 6.2,
         };
-
-        const result = averageEarthquakeData(mockData, 1);
+        const earthquakeService = launchEarthquakeService(
+          baseURL,
+          params
+        );
+        const result = earthquakeService.calculateEarthquakeStatistics(
+          mockData,
+          1
+        );
         expect(result).toStrictEqual(expectedData);
       });
     });
