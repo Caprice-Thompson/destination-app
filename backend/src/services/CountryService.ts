@@ -20,15 +20,15 @@ type LanguageDetail = {
   name: string;
 };
 
-export interface Country {
+export type Country = {
   name: string;
   capitalCity: string[];
   languages: LanguageDetail[];
   currencies: Currencies;
   flag: string;
-}
+};
 
-type CountryResponse = {
+export type CountryResponse = {
   name: { common: string };
   capital: string[];
   languages: Record<string, string>;
@@ -59,22 +59,21 @@ export class CountryService implements CountryServiceInterface {
 
     const [data] = response;
 
-    return {
+    const mappedCountry: Country = {
       name: data.name.common,
       capitalCity: data.capital,
       languages: Object.values(data.languages).map((lang) => ({ name: lang })),
       currencies: Object.entries(data.currencies).reduce(
-        (acc, [key, details]) => {
-          acc[key] = {
-            name: details.name as string,
-            symbol: details.symbol as string,
-          };
-          return acc;
-        },
+        (acc, [key, details]) => ({
+          ...acc,
+          [key]: { name: details.name, symbol: details.symbol },
+        }),
         {} as Currencies
       ),
       flag: data.flags.svg,
     };
+
+    return mappedCountry;
   }
 
   async getCityPopulation(): Promise<CityPopulation[]> {

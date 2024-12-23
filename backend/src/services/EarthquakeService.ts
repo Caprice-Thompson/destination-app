@@ -12,7 +12,7 @@ export type EarthquakeDataParams = {
   minMagnitude?: number;
 };
 
-export type EarthquakeDataAverages = {
+export type EarthquakeStatistics = {
   totalEarthquakes: number;
   avgEarthquakesInMonth: number;
   avgTsunamiCount: number;
@@ -45,7 +45,7 @@ export interface EarthquakeServiceInterface {
   calculateEarthquakeStatistics: (
     earthquakes: Earthquake[],
     targetMonth: number
-  ) => EarthquakeDataAverages;
+  ) => EarthquakeStatistics;
 }
 
 class EarthquakeService implements EarthquakeServiceInterface {
@@ -61,7 +61,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
   async getEarthquakeData(): Promise<Earthquake[]> {
     try {
       const response = await getData<EarthquakeResponse>(this.earthquakeApiUrl);
-      console.log(response);
+
       if (!response || !response.features) {
         console.error("No earthquake data found");
         return [];
@@ -83,7 +83,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
   calculateEarthquakeStatistics(
     earthquakes: Earthquake[],
     targetMonth: number
-  ): EarthquakeDataAverages {
+  ): EarthquakeStatistics {
     const totalEarthquakes = earthquakes.length;
 
     const earthquakesInMonth = earthquakes.filter(

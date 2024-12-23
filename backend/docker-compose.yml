@@ -28,17 +28,17 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
-  # tests:
-  #   image: node:18
-  #   env_file:
-  #     - ./.env
-  #   working_dir: /destination-app/backend
-  #   depends_on:
-  #     - db
-  #   command: sh -c "npm install && npm run test"
-  #   volumes:
-  #     - .:/destination-app/backend
-  #     - /destination-app/backend/node_modules
+  tests:
+    image: node:18
+    env_file:
+      - ./.env
+    working_dir: /destination-app/backend
+    depends_on:
+      - db
+    command: sh -c "npm install && npm run test"
+    volumes:
+      - .:/destination-app/backend
+      - /destination-app/backend/node_modules
 
   migrations:
     image: node:18
