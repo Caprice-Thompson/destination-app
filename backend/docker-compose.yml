@@ -11,7 +11,7 @@ services:
       - "8080:8080"
     depends_on:
       - db
-    command: sh -c "npm install && npx prisma generate --schema=./prisma/schema.prisma && npm run dev"
+    command: sh -c "npm install && npm run dev"
     volumes:
       - .:/destination-app/backend # Mount the local code into the container
       - /destination-app/backend/node_modules # Prevent overriding node_modules
@@ -28,14 +28,26 @@ services:
     volumes:
       - db-data:/var/lib/postgresql/data
 
-  tests:
-    image: node:18 # Same Node.js 
+  # tests:
+  #   image: node:18
+  #   env_file:
+  #     - ./.env
+  #   working_dir: /destination-app/backend
+  #   depends_on:
+  #     - db
+  #   command: sh -c "npm install && npm run test"
+  #   volumes:
+  #     - .:/destination-app/backend
+  #     - /destination-app/backend/node_modules
+
+  migrations:
+    image: node:18
     env_file:
       - ./.env
-    working_dir: /destination-app/backend
     depends_on:
-      - db 
-    command: sh -c "npm install && npm run test"
+      - db
+    command: sh -c "apt-get update && apt-get install -y postgresql-client && npm install && ./runMigrations.sh"
+    working_dir: /destination-app/backend
     volumes:
       - .:/destination-app/backend
       - /destination-app/backend/node_modules

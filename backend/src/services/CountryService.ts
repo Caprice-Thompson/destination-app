@@ -1,5 +1,5 @@
 import { getData } from "../api/client";
-import { getPopulation } from "../utils/dbQueries";
+import { getPopulation } from "../db/dbQueries";
 
 export interface CityPopulation {
   city: string;
