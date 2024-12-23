@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
-import { getGeoCoordinates } from "./natural_hazards/getGeoCoordinates";
-import { getCountryAndTourismData, getNaturalHazardData } from "./helper";
+import { getCountryAndTourismData, getNaturalHazardData } from "./utils/helper";
 import cors from "cors";
 
 const app = express();
@@ -42,16 +41,19 @@ app.get(
   "/api/natural-hazard",
   async (req: Request, res: Response): Promise<any> => {
     const { country, month } = req.query;
-
+    console.log(req.query.country);
+    console.log(req.query.month);
     if (!country || !month) {
-      res
-        .status(400)
-        .json({ error: "Missing country or targetMonth parameter" });
+      res.status(400).json({ error: "Missing country or month parameter" });
       return;
     }
 
-    if (typeof country !== "string" || month !== "string") {
-      return res.status(400).json({ error: "Invalid country parameter" });
+    if (typeof country !== "string" || typeof month !== "string") {
+      return res.status(400).json({ error: "Invalid parameter" });
+    }
+
+    if (isNaN(Number(month))) {
+      return res.status(400).json({ error: "Invalid month parameter" });
     }
     const monthNumber = parseInt(month, 10);
     try {

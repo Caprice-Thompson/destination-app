@@ -1,4 +1,4 @@
-import { getThingsToDo, getUNESCOSites } from "./dbQueries";
+import { getThingsToDo, getUNESCOSites } from "../utils/dbQueries";
 
 export interface UNESCOSites {
   site: string;
@@ -6,6 +6,7 @@ export interface UNESCOSites {
   country: string;
   description: string;
 }
+
 export interface ThingsToDo {
   location: string;
   item: string[];

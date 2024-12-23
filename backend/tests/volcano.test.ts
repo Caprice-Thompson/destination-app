@@ -1,5 +1,5 @@
 import { getData } from "../src/api/client";
-import { Volcano, VolcanoService } from "../src/natural_hazards/VolcanoService";
+import { Volcano, VolcanoService } from "../src/services/VolcanoService";
 
 jest.mock("../src/api/client");
 

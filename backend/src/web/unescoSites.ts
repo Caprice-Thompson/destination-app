@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import prisma from "../../prisma/prismaClient";
-import { UNESCOSites } from "../country/TourismService";
+import { UNESCOSites } from "../services/TourismService";
 
 // 7 wonders of the world
 export async function getWorldHeritageSites(url: string) {

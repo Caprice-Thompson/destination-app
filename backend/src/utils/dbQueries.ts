@@ -1,7 +1,6 @@
-
 import prisma from "../../prisma/prismaClient";
-import { CityPopulation } from "./CountryService";
-import { ThingsToDo, UNESCOSites } from "./TourismService";
+import { CityPopulation } from "../services/CountryService";
+import { ThingsToDo, UNESCOSites } from "../services/TourismService";
 
 export const getThingsToDo = async (country: string): Promise<ThingsToDo[]> => {
   const thingsToDo = await prisma.thingToDo.findMany({

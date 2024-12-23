@@ -28,7 +28,7 @@ export class VolcanoService {
     try {
       const firstPageData = await this.getPage(1);
       if (!firstPageData) {
-        throw new Error("No valid response from the API for page 1.");
+        throw new Error("No valid response from the API for page 1");
       }
 
       const totalPages = firstPageData.totalPages || 1;

@@ -1,7 +1,4 @@
-import {
-  Coordinates,
-  getGeoCoordinates,
-} from "../src/natural_hazards/getGeoCoordinates";
+import { Coordinates, getGeoCoordinates } from "../src/utils/getGeoCoordinates";
 import { getData } from "../src/api/client";
 
 jest.mock("../src/api/client");

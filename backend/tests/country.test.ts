@@ -1,5 +1,5 @@
 import { getData } from "../src/api/client";
-import { Country, getCountryDetails } from "../src/country/country";
+import { Country } from "../src/services/CountryService";
 
 jest.mock("../src/api/client");
 

@@ -1,14 +1,11 @@
-import { CountryService } from "./country/CountryService";
-import { TourismService } from "./country/TourismService";
+import { CountryService } from "../services/CountryService";
+import { TourismService } from "../services/TourismService";
 import {
   EarthquakeDataParams,
   launchEarthquakeService,
-} from "./natural_hazards/EarthquakeService";
-import { VolcanoService } from "./natural_hazards/VolcanoService";
-import {
-  Coordinates,
-  getGeoCoordinates,
-} from "./natural_hazards/getGeoCoordinates";
+} from "../services/EarthquakeService";
+import { VolcanoService } from "../services/VolcanoService";
+import { Coordinates, getGeoCoordinates } from "./getGeoCoordinates";
 
 export const getEQParams = (coordinates: Coordinates): EarthquakeDataParams => {
   const currentDate = new Date();

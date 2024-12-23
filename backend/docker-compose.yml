@@ -1,18 +1,17 @@
 services:
   backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: node:18
     tty: true
     stdin_open: true
     restart: always
     env_file:
       - ./.env
+    working_dir: /destination-app/backend
     ports:
       - "8080:8080"
     depends_on:
       - db
-    command: npm run dev
+    command: sh -c "npm install && npx prisma generate --schema=./prisma/schema.prisma && npm run dev"
     volumes:
       - .:/destination-app/backend # Mount the local code into the container
       - /destination-app/backend/node_modules # Prevent overriding node_modules
@@ -28,6 +27,18 @@ services:
       - "5432:5432"
     volumes:
       - db-data:/var/lib/postgresql/data
+
+  tests:
+    image: node:18 # Same Node.js 
+    env_file:
+      - ./.env
+    working_dir: /destination-app/backend
+    depends_on:
+      - db 
+    command: sh -c "npm install && npm run test"
+    volumes:
+      - .:/destination-app/backend
+      - /destination-app/backend/node_modules
 
 volumes:
   db-data:

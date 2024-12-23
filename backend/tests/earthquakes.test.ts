@@ -4,7 +4,7 @@ import {
   EarthquakeDataAverages,
   EarthquakeDataParams,
   launchEarthquakeService,
-} from "../src/natural_hazards/EarthquakeService";
+} from "../src/services/EarthquakeService";
 import { getCustomURL } from "../src/api/getURL";
 
 jest.mock("../src/api/client");
@@ -129,10 +129,7 @@ describe("Earthquake data", () => {
           avgTsunamiCount: 0.5,
           avgMagnitude: 6.2,
         };
-        const earthquakeService = launchEarthquakeService(
-          baseURL,
-          params
-        );
+        const earthquakeService = launchEarthquakeService(baseURL, params);
         const result = earthquakeService.calculateEarthquakeStatistics(
           mockData,
           1

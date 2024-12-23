@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 import prisma from "../../prisma/prismaClient";
-import { ThingsToDo } from "../country/TourismService";
+import { ThingsToDo } from "../services/TourismService";
 
 // TODO: Run a cron job
 const getDescription = (
@@ -24,8 +24,8 @@ const getDescription = (
   });
 };
 
-const validateLocation = (location: string): string | null => {
-  const match = location.match(/(.*?)\s*\(\d+\)$/);
+const validateLocation = (country: string): string | null => {
+  const match = country.match(/(.*?)\s*\(\d+\)$/);
   return match ? match[1].trim() : null;
 };
 
@@ -55,9 +55,9 @@ export async function getThingsToDoData(url: string) {
       const anchorText = anchor.text().trim();
       const remainingText = $(element).contents().not("a").text().trim();
       const countryText = `${anchorText} ${remainingText}`.trim();
-      const location = validateLocation(countryText);
+      const country = validateLocation(countryText);
 
-      if (location) {
+      if (country) {
         const items: string[] = [];
         const nextUl = $(element).closest("span").parent().next("ul");
 
@@ -65,8 +65,8 @@ export async function getThingsToDoData(url: string) {
           getDescription(nextUl, items, $);
         }
 
-        if (!results.some((item) => item.location === location)) {
-          results.push({ location, item: items });
+        if (!results.some((item) => item.location === country)) {
+          results.push({ location: country, item: items });
         }
       }
     });
