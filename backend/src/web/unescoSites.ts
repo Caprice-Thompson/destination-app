@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import prisma from "../../prisma/prismaClient";
 import { UNESCOSites } from "../services/TourismService";
+import db from "../db/db";
 
 // 7 wonders of the world
 export async function getWorldHeritageSites(url: string) {
@@ -39,16 +39,12 @@ export async function getWorldHeritageSites(url: string) {
       }
     });
 
-    const unesco = sites.map((site) =>
-      prisma.worldHeritageSite.create({
-        data: {
-          site: site.site,
-          area: site.area,
-          country: site.country,
-          description: site.description,
-        },
-      })
-    );
+    const unesco = sites.map((site) => {
+      return db.none(
+        "INSERT INTO world_heritage_site (site, area, country, description) VALUES ($1, $2, $3, $4)",
+        [site.site, site.area, site.country, site.description]
+      );
+    });
 
     await Promise.all(unesco);
     console.log(

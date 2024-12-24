@@ -5,10 +5,6 @@
 !.env.vault
 node_modules/
 backend.zip
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
 backup.sql
 destination_dump.sql
-
+dist

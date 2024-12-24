@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import prisma from "../../prisma/prismaClient";
+import db from "../db/db";
 
 export async function scrapeDataForPopulation(url: string) {
   try {
@@ -26,15 +26,12 @@ export async function scrapeDataForPopulation(url: string) {
       }
     });
 
-    const populationData = cities.map((result) =>
-      prisma.largestCity.create({
-        data: {
-          city: result.city,
-          country: result.country,
-          population: result.population,
-        },
-      })
-    );
+    const populationData = cities.map((result) => {
+      return db.none(
+        "INSERT INTO largest_city (city, country, population) VALUES ($1, $2, $3)",
+        [result.city, result.country, result.population]
+      );
+    });
 
     await Promise.all(populationData);
     console.log(`Successfully written data for ${url} to file`);

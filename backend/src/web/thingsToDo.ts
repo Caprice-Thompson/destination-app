@@ -1,7 +1,7 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import prisma from "../../prisma/prismaClient";
 import { ThingsToDo } from "../services/TourismService";
+import db from "../db/db";
 
 // TODO: Run a cron job
 const getDescription = (
@@ -88,14 +88,13 @@ export async function getThingsToDoData(url: string) {
       }
     });
 
-    const thingsToDoData = results.map((result) =>
-      prisma.thingToDo.create({
-        data: {
-          location: result.location,
-          item: result.item,
-        },
-      })
-    );
+    const thingsToDoData = results.map((result) => {
+      return db.none(
+        "INSERT INTO thing_to_do (location, item) VALUES ($1, $2)",
+        [result.location, result.item]
+      );
+    });
+
     await Promise.all(thingsToDoData);
     console.log(`Successfully merged data for things to do and written to db`);
   } catch (error) {
