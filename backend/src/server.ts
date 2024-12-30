@@ -41,8 +41,6 @@ app.get(
   "/api/natural-hazard",
   async (req: Request, res: Response): Promise<any> => {
     const { country, month } = req.query;
-    console.log(req.query.country);
-    console.log(req.query.month);
     if (!country || !month) {
       res.status(400).json({ error: "Missing country or month parameter" });
       return;

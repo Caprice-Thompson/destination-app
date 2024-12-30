@@ -1,13 +1,11 @@
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
-import { VolcanoService } from "../services/VolcanoService";
+import { TourismService } from "../services/TourismService";
 
 export const handler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   try {
-    const volcanoService = new VolcanoService();
-
     const country = event.queryStringParameters?.country;
     if (!country) {
       return {
@@ -18,15 +16,15 @@ export const handler = async (
       };
     }
 
-    const volcanoesByCountry = await volcanoService.getVolcanoByCountry(
-      country
-    );
+    const tourismService = new TourismService(country);
+    const thingsToDo = tourismService.thingsToDoList();
+    const unescoSites = tourismService.getUNESCOSitesList();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
         message: "Scheduled task executed successfully!",
-        data: volcanoesByCountry,
+        data: [JSON.stringify(thingsToDo), JSON.stringify(unescoSites)],
       }),
     };
   } catch (err) {
