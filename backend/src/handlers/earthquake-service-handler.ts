@@ -14,7 +14,7 @@ export const handler = async (
       return {
         statusCode: 400,
         body: JSON.stringify({
-          message: "Both parameters are required.",
+          message: "Country and month parameters are required.",
         }),
       };
     }
@@ -33,9 +33,12 @@ export const handler = async (
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Scheduled task executed successfully!",
-        data: [JSON.stringify(earthquakeData), JSON.stringify(eqAverages)],
-      }),
+        message: "Earthquake service executed successfully!",
+        data: {
+          earthquakeData,
+          eqAverages
+        }
+      }, null, 2),
     };
   } catch (err) {
     console.error("Error occurred:", err);

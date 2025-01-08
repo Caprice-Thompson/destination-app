@@ -17,15 +17,18 @@ export const handler = async (
     }
 
     const tourismService = new TourismService(country);
-    const thingsToDo = tourismService.thingsToDoList();
-    const unescoSites = tourismService.getUNESCOSitesList();
+    const thingsToDo = await tourismService.thingsToDoList();
+    const unescoSites = await tourismService.getUNESCOSitesList();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Scheduled task executed successfully!",
-        data: [JSON.stringify(thingsToDo), JSON.stringify(unescoSites)],
-      }),
+        message: "Tourism service executed successfully!",
+        data: {
+          thingsToDo,
+          unescoSites
+        }
+      }, null, 2),
     };
   } catch (err) {
     console.error("Error occurred:", err);

@@ -25,9 +25,9 @@ export const handler = async (
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Scheduled task executed successfully!",
+        message: "Volcano service executed successfully!",
         data: volcanoesByCountry,
-      }),
+      }, null, 2),
     };
   } catch (err) {
     console.error("Error occurred:", err);

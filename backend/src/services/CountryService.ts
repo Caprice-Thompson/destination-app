@@ -51,29 +51,36 @@ export class CountryService implements CountryServiceInterface {
   async getCountryDetails(): Promise<Country> {
     const countryBaseUrl = process.env.COUNTRY_BASE_URL ?? "";
     const countryUrl = `${countryBaseUrl}/${this.country}`;
-    const response = await getData<CountryResponse[]>(countryUrl);
 
-    if (!response || response.length === 0) {
-      throw new Error("No country data found.");
+    try {
+      const response = await getData<CountryResponse[]>(countryUrl);
+
+      if (!response || response.length === 0) {
+        console.error(`No data returned from API for URL: ${countryUrl}`);
+        throw new Error("No country data found.");
+      }
+
+      const [data] = response;
+
+      const mappedCountry: Country = {
+        name: data.name.common,
+        capitalCity: data.capital,
+        languages: Object.values(data.languages).map((lang) => ({ name: lang })),
+        currencies: Object.entries(data.currencies).reduce(
+          (acc, [key, details]) => ({
+            ...acc,
+            [key]: { name: details.name, symbol: details.symbol },
+          }),
+          {} as Currencies
+        ),
+        flag: data.flags.svg,
+      };
+
+      return mappedCountry;
+    } catch (error) {
+      console.error(`Error fetching country details: ${error}`);
+      throw error;
     }
-
-    const [data] = response;
-
-    const mappedCountry: Country = {
-      name: data.name.common,
-      capitalCity: data.capital,
-      languages: Object.values(data.languages).map((lang) => ({ name: lang })),
-      currencies: Object.entries(data.currencies).reduce(
-        (acc, [key, details]) => ({
-          ...acc,
-          [key]: { name: details.name, symbol: details.symbol },
-        }),
-        {} as Currencies
-      ),
-      flag: data.flags.svg,
-    };
-
-    return mappedCountry;
   }
 
   async getCityPopulation(): Promise<CityPopulation[]> {

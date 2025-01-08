@@ -17,22 +17,25 @@ export const handler = async (
     }
 
     const countryService = new CountryService(country);
-    const cityPopulation = countryService.getCityPopulation();
-    const countryDetails = countryService.getCountryDetails();
+    const cityPopulation = await countryService.getCityPopulation();
+    const countryDetails = await countryService.getCountryDetails();
 
     return {
       statusCode: 200,
       body: JSON.stringify({
-        message: "Scheduled task executed successfully!",
-        data: [JSON.stringify(countryDetails), JSON.stringify(cityPopulation)],
-      }),
+        message: "Country service executed successfully!",
+        data: {
+          cityPopulation,
+          countryDetails
+        }
+      }, null, 2),
     };
   } catch (err) {
     console.error("Error occurred:", err);
     return {
       statusCode: 500,
       body: JSON.stringify({
-        message: "Internal server error.",
+        message: `Internal server error. ${err}`,
       }),
     };
   }
