@@ -8,3 +8,7 @@ backend.zip
 backup.sql
 destination_dump.sql
 dist
+country-function.zip
+tourism-function.zip
+earthquake-function.zip
+volcano-function.zip
