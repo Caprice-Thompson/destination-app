@@ -39,7 +39,7 @@ services:
     volumes:
       - .:/destination-app/backend
       - /destination-app/backend/node_modules
-
+#Need script in yml file to run migrations when push to main (pipeline) to update prod db
   migrations:
     image: node:18
     env_file:

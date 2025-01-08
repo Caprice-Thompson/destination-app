@@ -1,3 +1,5 @@
+import { AppError } from "../utils/errorHandler";
+
 type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
@@ -20,7 +22,8 @@ export async function getData<T>(
   try {
     const response = await fetch(url, defaultOptions);
     if (!response.ok) {
-      throw new Error(
+      throw new AppError(
+        response.status,
         `HTTP error! Status: ${response.status}: ${JSON.stringify(
           response.body
         )}`
@@ -30,9 +33,9 @@ export async function getData<T>(
     return data;
   } catch (error) {
     if (error instanceof Error) {
-      console.error("Error occurred:", error.message);
+      throw new AppError(500, error.message);
     } else {
-      console.error("Unexpected error occurred:", error);
+      throw new AppError(500, 'Unexpected error occurred');
     }
   }
 }

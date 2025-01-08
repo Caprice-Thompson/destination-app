@@ -2,8 +2,9 @@ import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 import { getGeoCoordinates } from "../utils/getGeoCoordinates";
 import { getEQParams } from "../utils/helper";
 import { launchEarthquakeService } from "../services/EarthquakeService";
+import { AppError } from "../utils/errorHandler";
 
-export const handler = async (
+export const getEarthquakeServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
@@ -11,12 +12,7 @@ export const handler = async (
     const country = event.queryStringParameters?.country;
     const monthString = event.queryStringParameters?.month;
     if (!country || !monthString) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "Country and month parameters are required.",
-        }),
-      };
+      throw new AppError(400, 'Country and month parameters are required.');
     }
 
     const month = parseInt(monthString, 10);
@@ -42,11 +38,6 @@ export const handler = async (
     };
   } catch (err) {
     console.error("Error occurred:", err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal server error.",
-      }),
-    };
+    throw new AppError(500, 'Internal server error');
   }
 };

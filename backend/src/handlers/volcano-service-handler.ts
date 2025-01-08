@@ -1,7 +1,8 @@
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 import { VolcanoService } from "../services/VolcanoService";
+import { AppError } from "../utils/errorHandler";
 
-export const handler = async (
+export const getVolcanoServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
@@ -10,12 +11,7 @@ export const handler = async (
 
     const country = event.queryStringParameters?.country;
     if (!country) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "Country parameter is required.",
-        }),
-      };
+      throw new AppError(400, 'Country parameter is required');
     }
 
     const volcanoesByCountry = await volcanoService.getVolcanoByCountry(
@@ -31,11 +27,6 @@ export const handler = async (
     };
   } catch (err) {
     console.error("Error occurred:", err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal server error.",
-      }),
-    };
+    throw new AppError(500, 'Internal server error');
   }
 };

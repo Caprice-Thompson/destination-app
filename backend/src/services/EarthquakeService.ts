@@ -1,5 +1,6 @@
 import { getData } from "../api/client";
 import { getCustomURL } from "../api/getURL";
+import { AppError } from "../utils/errorHandler";
 
 export type EarthquakeDataParams = {
   format: string;
@@ -53,7 +54,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
 
   constructor(baseApiUrl: string, params: EarthquakeDataParams) {
     if (!baseApiUrl) {
-      throw new Error("Base API URL is required");
+      throw new AppError(400, 'Base API URL is required');
     }
     this.earthquakeApiUrl = getCustomURL.getParams(baseApiUrl, params);
   }
@@ -63,8 +64,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
       const response = await getData<EarthquakeResponse>(this.earthquakeApiUrl);
 
       if (!response || !response.features) {
-        console.error("No earthquake data found");
-        return [];
+        throw new AppError(404, 'No earthquake data found');
       }
 
       return response.features.map((feature) => ({
@@ -76,7 +76,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
       }));
     } catch (error) {
       console.error("Error fetching earthquake data:", error);
-      return [];
+      throw new AppError(500, 'Internal server error');
     }
   }
 

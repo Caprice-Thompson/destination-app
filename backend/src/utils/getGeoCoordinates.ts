@@ -1,5 +1,6 @@
 import { getData } from "../api/client";
 import { getCustomURL } from "../api/getURL";
+import { AppError } from "./errorHandler";
 
 export type Coordinates = {
   latt: string;
@@ -19,8 +20,7 @@ export const getGeoCoordinates = async (
   const geoURL = getCustomURL.getParams(base, params, country);
   const response = await getData<Coordinates>(geoURL);
   if (!response) {
-    console.error("Failed to retrieve coordinates");
-    return;
+    throw new AppError(404, 'Failed to retrieve coordinates');
   }
 
   return {

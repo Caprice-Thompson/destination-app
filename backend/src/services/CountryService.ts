@@ -1,5 +1,6 @@
 import { getData } from "../api/client";
 import { getPopulation } from "../db/dbQueries";
+import { AppError } from "../utils/errorHandler";
 
 export interface CityPopulation {
   city: string;
@@ -57,7 +58,7 @@ export class CountryService implements CountryServiceInterface {
 
       if (!response || response.length === 0) {
         console.error(`No data returned from API for URL: ${countryUrl}`);
-        throw new Error("No country data found.");
+        throw new AppError(404, 'No country data found');
       }
 
       const [data] = response;

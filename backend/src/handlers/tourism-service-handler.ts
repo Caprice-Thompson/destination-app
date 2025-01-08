@@ -1,19 +1,15 @@
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 import { TourismService } from "../services/TourismService";
+import { AppError } from "../utils/errorHandler";
 
-export const handler = async (
+export const getTourismServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   try {
     const country = event.queryStringParameters?.country;
     if (!country) {
-      return {
-        statusCode: 400,
-        body: JSON.stringify({
-          message: "Country parameter is required.",
-        }),
-      };
+      throw new AppError(400, 'Country parameter is required');
     }
 
     const tourismService = new TourismService(country);
@@ -32,11 +28,6 @@ export const handler = async (
     };
   } catch (err) {
     console.error("Error occurred:", err);
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal server error.",
-      }),
-    };
+    throw new AppError(500, 'Internal server error');
   }
 };

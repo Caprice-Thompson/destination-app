@@ -1,4 +1,5 @@
 import { getData } from "../api/client";
+import { AppError } from "../utils/errorHandler";
 
 export type Volcano = {
   name: string;
@@ -18,7 +19,8 @@ export class VolcanoService {
   constructor() {
     this.volcanoApiEndpoint = process.env.VOLCANO_ENDPOINT || "";
     if (!this.volcanoApiEndpoint) {
-      throw new Error(
+      throw new AppError(
+        400,
         "Volcano API endpoint is not set in environment variables."
       );
     }
@@ -28,7 +30,7 @@ export class VolcanoService {
     try {
       const firstPageData = await this.getPage(1);
       if (!firstPageData) {
-        throw new Error("No valid response from the API for page 1");
+        throw new AppError(404, "No valid response from the API for page 1");
       }
 
       const totalPages = firstPageData.totalPages || 1;
@@ -36,8 +38,7 @@ export class VolcanoService {
 
       return this.getUniqueVolcanoes(allPagesData);
     } catch (error) {
-      console.error("Error fetching volcano list:", error);
-      return [];
+      throw new AppError(500, 'Internal server error');
     }
   }
 
@@ -60,7 +61,7 @@ export class VolcanoService {
     );
 
     if (!response) {
-      throw new Error(`No response received from volcano API for page ${page}`);
+      throw new AppError(404, `No response received from volcano API for page ${page}`);
     }
 
     return response;

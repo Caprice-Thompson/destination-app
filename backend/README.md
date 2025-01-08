@@ -50,28 +50,39 @@ backend/
 
 ## Installation
 
+**Prerequisites:**
+- [Node.js](https://nodejs.org/) (v16 or higher recommended)
+- [Docker](https://www.docker.com/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
+
 **Install Dependencies:**
-
-Ensure you have [Node.js](https://nodejs.org/) and [docker](https://www.docker.com/) installed.
-
-Then, run:
 
 ```bash
 cd backend
 npm install
 ```
 
-- **Start the Application:**
+## Running the Application
 
-  ```bash
-  docker-compose up backend
-  ```
+1. **Start the Application:**
 
 Starts and runs the application in docker containers with `nodemon` for automatic restarts on code changes.
 
-Then open:
+   ```bash
+   docker-compose up backend
+   ```
+   The server will start on http://localhost:8080/
 
-http://localhost:8080/
+2. **Stopping the Application:**
+   ```bash
+   docker-compose down
+   ```
+
+3. **Rebuilding Containers:**
+
+   ```bash
+   docker-compose up backend --build
+   ```
 
 ## Testing
 
