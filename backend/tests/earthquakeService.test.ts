@@ -70,18 +70,30 @@ describe("EarthquakeService", () => {
     });
 
     it("should handle errors when API call fails", async () => {
-      const errorMessage = "API Error";
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+      const mockError = new Error("API Error");
+      (getData as jest.Mock).mockRejectedValue(mockError);
 
-      (getData as jest.Mock).mockRejectedValue(new Error(errorMessage));
+      const service = launchEarthquakeService("http://test.com", {
+        format: "geojson",
+        longitude: "0",
+        latitude: "0",
+        startTime: "2021-01-01",
+        endTime: "2021-12-31",
+        maxRadius: 100,
+      });
 
-      const earthquakeService = launchEarthquakeService(baseURL, params);
-      const data = await earthquakeService.getEarthquakeData();
+      await expect(service.getEarthquakeData()).rejects.toThrow(
+        "Internal server error"
+      );
+      await expect(service.getEarthquakeData()).rejects.toHaveProperty(
+        "statusCode",
+        500
+      );
 
-      expect(data).toEqual([]);
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         "Error fetching earthquake data:",
-        expect.objectContaining(new Error(errorMessage))
+        expect.any(Error)
       );
     });
   });
@@ -129,7 +141,7 @@ describe("EarthquakeService", () => {
       const earthquakeService = launchEarthquakeService(baseURL, params);
       const stats = earthquakeService.calculateEarthquakeStatistics(
         mockData,
-        1 
+        1
       );
 
       expect(stats).toStrictEqual(expectedStats);
@@ -146,7 +158,7 @@ describe("EarthquakeService", () => {
       const earthquakeService = launchEarthquakeService(baseURL, params);
       const stats = earthquakeService.calculateEarthquakeStatistics(
         mockData,
-        12 
+        12
       );
 
       expect(stats).toStrictEqual(expectedStats);

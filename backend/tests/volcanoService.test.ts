@@ -56,21 +56,14 @@ describe("Volcano Service", () => {
       expect(volcanoList).toEqual(expectedVolcanoes);
       expect(getData).toHaveBeenCalledTimes(3);
     });
-    it("should handle API errors and log an error message", async () => {
-      const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
 
+    it("should handle API errors and throw AppError", async () => {
       (getData as jest.Mock).mockRejectedValue(new Error("API Error"));
 
       const volcanoService = new VolcanoService();
-      const volcanoList = await volcanoService.getVolcanoList();
 
-      expect(volcanoList).toEqual([]);
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        "Error fetching volcano list:",
-        expect.any(Error)
-      );
-
-      consoleErrorSpy.mockRestore();
+      await expect(volcanoService.getVolcanoList()).rejects.toThrow('Internal server error');
+      await expect(volcanoService.getVolcanoList()).rejects.toHaveProperty('statusCode', 500);
     });
     it("should throw an error if the API endpoint is missing", () => {
       process.env.VOLCANO_ENDPOINT = "";
