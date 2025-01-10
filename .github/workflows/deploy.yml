@@ -65,17 +65,21 @@ jobs:
           zip -j volcano-function.zip ./dist/src/handlers/volcano-service-handler.js*
           
           aws lambda update-function-code \
+            --region eu-west-2 \
             --function-name getCountryService \
             --zip-file fileb://country-function.zip
             
           aws lambda update-function-code \
+            --region eu-west-2 \
             --function-name getTourismService \
             --zip-file fileb://tourism-function.zip
             
           aws lambda update-function-code \
+            --region eu-west-2 \
             --function-name getEarthquakeService \
             --zip-file fileb://earthquake-function.zip
             
           aws lambda update-function-code \
+            --region eu-west-2 \
             --function-name getVolcanoService \
             --zip-file fileb://volcano-function.zip
