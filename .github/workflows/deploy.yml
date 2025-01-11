@@ -30,4 +30,4 @@ jobs:
       - name: Upload ZIP to S3
         run: aws s3 cp country-function.zip s3://destination-lambda-deploy-storage/country-function.zip
       - name: Deploy Lambda Function
-        run: aws lambda update-function-code --function-name=getCountryService --zip-file=fileb://country-function.zip
+        run: aws lambda update-function-code --function-name=getCountryService --s3-bucket destination-lambda-deploy-storage --s3-key country-function.zip
