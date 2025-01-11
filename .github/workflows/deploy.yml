@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main
+permissions:
+  id-token: write   # Required for OIDC
+  contents: read    # Required for actions/checkout
+
 jobs:
   lambda:
     runs-on: ubuntu-latest
@@ -18,12 +22,10 @@ jobs:
           cd backend
           npm install
           npm run build
-      - uses: aws-actions/configure-aws-credentials@v2
+      - uses: aws-actions/configure-aws-credentials@v4
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-          aws-region: ${{ secrets.AWS_REGION }}
+         role-to-assume: arn:aws:iam::390403869591:role/GitHubActionsRole
+         aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Zip the Lambda function
         run: zip -r country-function.zip ./backend/dist/
