@@ -13,10 +13,11 @@ jobs:
         with:
           node-version: "18"
           cache: "npm"
-      - name: Install dependencies
-        run: npm install
-      - name: Build the project
-        run: npm run build
+      - name: Install dependencies and Build
+        run: |
+          cd backend
+          npm install
+          npm run build
       - uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
