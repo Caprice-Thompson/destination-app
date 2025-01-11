@@ -18,7 +18,7 @@ export const getEQParams = (coordinates: Coordinates): EarthquakeDataParams => {
     startTime: formattedStartDate,
     endTime: formattedDate,
     maxRadius: 5,
-    limit: 10,
+    limit: 20,
     format: "geojson",
   };
   return params;
