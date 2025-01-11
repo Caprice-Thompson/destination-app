@@ -24,5 +24,10 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ secrets.AWS_REGION }}
-      - run: zip -j country-function.zip ./dist/src/handlers/country-service-handler.js*
-      - run: aws lambda update-function-code --function-name=getCountryService --zip-file=fileb://country-function.zip
+
+      - name: Zip the Lambda function
+        run: zip -j country-function.zip ./dist/src/handlers/country-service-handler.js*
+      - name: Upload ZIP to S3
+        run: aws s3 cp country-function.zip s3://destination-lambda-deploy-storage/country-function.zip
+      - name: Deploy Lambda Function
+        run: aws lambda update-function-code --function-name=getCountryService --zip-file=fileb://country-function.zip
