@@ -28,8 +28,12 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Zip the Lambda function
-        run: zip -r country-function.zip ./backend/dist/ ./backend/node_modules/
+        run: zip -r lambda-function.zip ./backend/dist/ ./backend/node_modules/
       - name: Upload ZIP to S3
-        run: aws s3 cp country-function.zip s3://destination-lambda-deploy-storage/country-function.zip
-      - name: Deploy Lambda Function
-        run: aws lambda update-function-code --function-name=getCountryService --s3-bucket destination-lambda-deploy-storage --s3-key country-function.zip
+        run: aws s3 cp lambda-function.zip s3://destination-lambda-deploy-storage/lambda-function.zip
+      - name: Deploy Lambda Functions
+        run: |
+          aws lambda update-function-code --function-name=getCountryService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
+          aws lambda update-function-code --function-name=getEarthquakeService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
+          aws lambda update-function-code --function-name=getTourismService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
+          aws lambda update-function-code --function-name=getVolcanoService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
