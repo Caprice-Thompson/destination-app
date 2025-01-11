@@ -26,7 +26,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Zip the Lambda function
-        run: zip -j country-function.zip ./backend/dist/src/handlers/country-service-handler.js*
+        run: zip -r country-function.zip ./backend/dist/
       - name: Upload ZIP to S3
         run: aws s3 cp country-function.zip s3://destination-lambda-deploy-storage/country-function.zip
       - name: Deploy Lambda Function
