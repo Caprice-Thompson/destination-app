@@ -5,8 +5,8 @@ on:
     branches:
       - main
 permissions:
-  id-token: write   # Required for OIDC
-  contents: read    # Required for actions/checkout
+  id-token: write 
+  contents: read 
 
 jobs:
   lambda:
@@ -24,11 +24,11 @@ jobs:
           npm run build
       - uses: aws-actions/configure-aws-credentials@v4
         with:
-         role-to-assume: arn:aws:iam::390403869591:role/GitHubActionsRole
-         aws-region: ${{ secrets.AWS_REGION }}
+          role-to-assume: arn:aws:iam::390403869591:role/GitHubActionsRole
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Zip the Lambda function
-        run: zip -r country-function.zip ./backend/dist/
+        run: zip -r country-function.zip ./backend/dist/ ./backend/node_modules/
       - name: Upload ZIP to S3
         run: aws s3 cp country-function.zip s3://destination-lambda-deploy-storage/country-function.zip
       - name: Deploy Lambda Function
