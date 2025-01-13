@@ -39,13 +39,14 @@ services:
     volumes:
       - .:/destination-app/backend
       - /destination-app/backend/node_modules
-#Need script in yml file to run migrations when push to main (pipeline) to update prod db
+  #Need script in yml file to run migrations when push to main (pipeline) to update prod db
   migrations:
     image: node:18
     env_file:
       - ./.env
     depends_on:
       - db
+      - backend
     command: sh -c "apt-get update && apt-get install -y postgresql-client && npm install && ./runMigrations.sh"
     working_dir: /destination-app/backend
     volumes:

@@ -1,15 +1,16 @@
 import express, { Request, Response } from "express";
-import { getCountryAndTourismData, getEQParams, getNaturalHazardData } from "./utils/helper";
+import { simulateAPIGatewayEvent } from "./utils/helper";
 import cors from "cors";
 import { AppError } from "./utils/errorHandler";
-import { CountryService } from "./services/CountryService";
-import { VolcanoService } from "./services/VolcanoService";
-import { launchEarthquakeService } from "./services/EarthquakeService";
-import { getGeoCoordinates } from "./utils/getGeoCoordinates";
-import { TourismService } from "./services/TourismService";
+import { getCountryServiceHandler } from "./handlers/country-service-handler";
+import { Context } from "aws-lambda";
+import { getTourismServiceHandler } from "./handlers/tourism-service-handler";
+import { getEarthquakeServiceHandler } from "./handlers/earthquake-service-handler";
+import { getVolcanoServiceHandler } from "./handlers/volcano-service-handler";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+const context: Context = {} as Context;
 
 // Middleware
 app.use(cors());
@@ -21,121 +22,81 @@ const handleError = (res: Response, message: string, error: any) => {
   res.status(500).json({ error: "Internal Server Error" });
 };
 
-app.get("/", async (req: Request, res: Response) => {
+app.get("/api/getCountryData", async (req: Request, res: Response) => {
+  const queryStringParameters = req.query;
+
+  const event = simulateAPIGatewayEvent(
+    "/api/getCountryData",
+    queryStringParameters as { [key: string]: string },
+    req.headers as { [key: string]: string }
+  );
+
   try {
-    const country = "Spain";
-    const month = 6;
+    const result = await getCountryServiceHandler(event, context);
 
-    const [hazardData, countryTourismData] = await Promise.all([
-      getNaturalHazardData(country, month),
-      getCountryAndTourismData(country),
-    ]);
-
-    const combinedData = { ...hazardData, ...countryTourismData };
-    res.json(combinedData);
-  } catch (error) {
-    handleError(
-      res,
-      "Error fetching natural hazard data for root route:",
-      error
-    );
+    res.status(result.statusCode).send(result.body);
+  } catch (err) {
+    handleError(res, "Error occurred:", err);
   }
 });
 
-// API Endpoint
-app.get(
-  "/api/getCountryService",
-  async (req: Request, res: Response): Promise<any> => {
-    const country = req.query.country as string;
-    if (!country) {
-      throw new AppError(400, 'Country parameter is required');
-    }
-
-    try {
-      const countryService = new CountryService(country);
-      const cityPopulation = await countryService.getCityPopulation();
-      const countryDetails = await countryService.getCountryDetails();
-
-      const combinedData = { ...cityPopulation, ...countryDetails };
-      res.json(combinedData);
-    } catch (error) {
-      throw new AppError(500, 'Internal Server Error');
-    }
-  }
-);
-
-app.get("/api/getTourismService", async (req: Request, res: Response) => {
+app.get("/api/getTourismData", async (req: Request, res: Response) => {
   const country = req.query.country as string;
   if (!country) {
-    throw new AppError(400, 'Country parameter is required');
+    throw new AppError(400, "Country parameter is required");
   }
-
+  const event = simulateAPIGatewayEvent(
+    "/api/getTourismData",
+    req.query as { [key: string]: string },
+    req.headers as { [key: string]: string }
+  );
   try {
-    const tourismService = new TourismService(country);
-    const thingsToDo = await tourismService.thingsToDoList();
-    const unescoSites = await tourismService.getUNESCOSitesList();
+    const result = await getTourismServiceHandler(event, context);
 
-    res.json({
-      message: "Tourism service executed successfully!",
-      data: {
-        thingsToDo,
-        unescoSites
-      }
-    });
+    res.status(result.statusCode).send(result.body);
   } catch (error) {
-    throw new AppError(500, 'Internal Server Error');
+    throw new AppError(500, "Internal Server Error");
   }
 });
 
 // Earthquake Service Endpoint
-app.get("/api/getEarthquakeService", async (req: Request, res: Response) => {
+app.get("/api/getEarthquakeData", async (req: Request, res: Response) => {
   const country = req.query.country as string;
   const month = req.query.month as string;
 
   if (!country || !month) {
-    throw new AppError(400, 'Country and month parameters are required.');
+    throw new AppError(400, "Country and month parameters are required.");
   }
-
+  const event = simulateAPIGatewayEvent(
+    "/api/getEarthquakeData",
+    req.query as { [key: string]: string },
+    req.headers as { [key: string]: string }
+  );
   try {
-    const coordinates = await getGeoCoordinates(country);
-    const params = getEQParams(coordinates!);
-    const earthquakeApiUrl = process.env.EQ_BASE_URL ?? "";
-    const earthquakeService = launchEarthquakeService(earthquakeApiUrl, params);
-    const earthquakeData = await earthquakeService.getEarthquakeData();
-    const eqAverages = earthquakeService.calculateEarthquakeStatistics(
-      earthquakeData,
-      parseInt(month, 10)
-    );
-
-    res.json({
-      message: "Earthquake service executed successfully!",
-      data: {
-        earthquakeData,
-        eqAverages
-      }
-    });
+    const result = await getEarthquakeServiceHandler(event, context);
+    res.status(result.statusCode).send(result.body);
   } catch (error) {
-    throw new AppError(500, 'Internal Server Error');
+    throw new AppError(500, "Internal Server Error");
   }
 });
 
 // Volcano Service Endpoint
-app.get("/api/getVolcanoService", async (req: Request, res: Response) => {
+app.get("/api/getVolcanoData", async (req: Request, res: Response) => {
   const country = req.query.country as string;
   if (!country) {
-    throw new AppError(400, 'Country parameter is required');
+    throw new AppError(400, "Country parameter is required");
   }
-
+  const event = simulateAPIGatewayEvent(
+    "/api/getVolcanoData",
+    req.query as { [key: string]: string },
+    req.headers as { [key: string]: string }
+  );
   try {
-    const volcanoService = new VolcanoService();
-    const volcanoesByCountry = await volcanoService.getVolcanoByCountry(country);
+    const result = await getVolcanoServiceHandler(event, context);
 
-    res.json({
-      message: "Volcano service executed successfully!",
-      data: volcanoesByCountry
-    });
+    res.status(result.statusCode).send(result.body);
   } catch (error) {
-    throw new AppError(500, 'Internal Server Error');
+    throw new AppError(500, "Internal Server Error");
   }
 });
 

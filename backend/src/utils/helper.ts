@@ -1,11 +1,7 @@
-import { CountryService } from "../services/CountryService";
-import { TourismService } from "../services/TourismService";
 import {
   EarthquakeDataParams,
-  launchEarthquakeService,
 } from "../services/EarthquakeService";
-import { VolcanoService } from "../services/VolcanoService";
-import { Coordinates, getGeoCoordinates } from "./getGeoCoordinates";
+import { Coordinates } from "./getGeoCoordinates";
 
 export const getEQParams = (coordinates: Coordinates): EarthquakeDataParams => {
   const currentDate = new Date();
@@ -24,36 +20,19 @@ export const getEQParams = (coordinates: Coordinates): EarthquakeDataParams => {
   return params;
 };
 
-export const getNaturalHazardData = async (country: string, month: number) => {
-  const coordinates = await getGeoCoordinates(country);
-  const params = getEQParams(coordinates!);
-
-  const volcanoService = new VolcanoService();
-  const volcanoesByCountry = await volcanoService.getVolcanoByCountry(country);
-
-  const earthquakeApiUrl = process.env.EQ_BASE_URL ?? "";
-  const earthquakeService = launchEarthquakeService(earthquakeApiUrl, params);
-  const earthquakeData = await earthquakeService.getEarthquakeData();
-  const eqAverages = earthquakeService.calculateEarthquakeStatistics(
-    earthquakeData,
-    month
-  );
-
-  return { volcanoesByCountry, earthquakeData, eqAverages };
-};
-
-export const getCountryAndTourismData = async (country: string) => {
-  const countryService = new CountryService(country);
-  const [countryDetails, cityPopulation] = await Promise.all([
-    countryService.getCountryDetails(),
-    countryService.getCityPopulation(),
-  ]);
-
-  const tourismService = new TourismService(country);
-  const [thingsToDo, unescoList] = await Promise.all([
-    tourismService.thingsToDoList(),
-    tourismService.getUNESCOSitesList(),
-  ]);
-
-  return { countryDetails, cityPopulation, thingsToDo, unescoList };
+export const simulateAPIGatewayEvent = (path: string, queryStringParameters: { [key: string]: string }, headers: { [key: string]: string }) => {
+  return {
+    httpMethod: "GET",
+    path: path,
+    queryStringParameters,
+    headers,
+    body: null,
+    isBase64Encoded: false,
+    pathParameters: null,
+    stageVariables: null,
+    resource: "",
+    requestContext: {} as any,
+    multiValueHeaders: {},
+    multiValueQueryStringParameters: null,
+  }
 };
