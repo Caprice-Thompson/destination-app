@@ -1,11 +1,10 @@
-import { getCountryServiceHandler } from "../src/handlers/country-service-handler";
 import { APIGatewayEvent } from "aws-lambda";
-import { getEarthquakeServiceHandler } from "../src/handlers/earthquake-service-handler";
-import { EarthquakeStatistics, launchEarthquakeService } from "../src/services/EarthquakeService";
-import { getGeoCoordinates } from "../src/utils/getGeoCoordinates";
+import { getEarthquakeServiceHandler } from "../../src/handlers/earthquake-service-handler";
+import { EarthquakeStatistics, launchEarthquakeService } from "../../src/services/EarthquakeService";
+import { getGeoCoordinates } from "../../src/utils/getGeoCoordinates";
 
-jest.mock('../src/utils/getGeoCoordinates');
-jest.mock('../src/services/EarthquakeService');
+jest.mock('../../src/utils/getGeoCoordinates');
+jest.mock('../../src/services/EarthquakeService');
 
 describe("Earthquake Service Lambda handler", () => {
     const originalEnv = process.env;

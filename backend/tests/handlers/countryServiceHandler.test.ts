@@ -1,4 +1,4 @@
-import { getCountryServiceHandler } from "../src/handlers/country-service-handler";
+import { getCountryServiceHandler } from "../../src/handlers/country-service-handler";
 import { APIGatewayEvent } from "aws-lambda";
 
 const mockCountryService = {
@@ -6,7 +6,7 @@ const mockCountryService = {
   getCountryDetails: jest.fn(),
 };
 const mockContext = {} as any;
-jest.mock("../src/services/CountryService", () => ({
+jest.mock("../../src/services/CountryService", () => ({
   CountryService: jest.fn().mockImplementation(() => mockCountryService),
 }));
 
@@ -34,7 +34,6 @@ describe("Country Service Lambda handler", () => {
     const response = await getCountryServiceHandler(mockEvent, mockContext);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toBeDefined();
     expect(response.body).toEqual(
       JSON.stringify(
         {
@@ -64,9 +63,11 @@ describe("Country Service Lambda handler", () => {
       const response = await getCountryServiceHandler(mockEvent, mockContext);
 
       expect(response.statusCode).toBe(400);
-      expect(JSON.parse(response.body)).toEqual({
-        message: "Country parameter is required",
-      });
+      expect(response.body).toEqual(
+        JSON.stringify({
+          message: "Country parameter is required",
+        })
+      );
     });
     it("should return 500 status code when event is invalid", async () => {
       const mockEvent = null as any;
@@ -74,9 +75,11 @@ describe("Country Service Lambda handler", () => {
       const response = await getCountryServiceHandler(mockEvent, mockContext);
 
       expect(response.statusCode).toBe(500);
-      expect(JSON.parse(response.body)).toEqual({
-        message: "Internal server error"
-      });
+      expect(response.body).toEqual(
+        JSON.stringify({
+          message: "Internal server error"
+        })
+      );
     });
   });
 });

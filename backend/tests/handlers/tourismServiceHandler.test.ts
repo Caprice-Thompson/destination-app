@@ -1,0 +1,87 @@
+import { APIGatewayEvent } from "aws-lambda";
+import { getTourismServiceHandler } from "../../src/handlers/tourism-service-handler";
+
+const mockTourismService = {
+    thingsToDoList: jest.fn(),
+    getUNESCOSitesList: jest.fn(),
+};
+const mockContext = {} as any;
+jest.mock("../../src/services/TourismService", () => ({
+    TourismService: jest.fn().mockImplementation(() => mockTourismService),
+}));
+
+describe("Volcano Service Lambda handler", () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockTourismService.thingsToDoList.mockResolvedValueOnce({
+            name: "Japan",
+        });
+        mockTourismService.getUNESCOSitesList.mockResolvedValueOnce({
+            name: "Japan",
+        });
+    });
+
+    it("should execute successfully and return status code 200", async () => {
+
+        const mockEvent: APIGatewayEvent = {
+            httpMethod: "GET",
+            path: "/api/getTourismTestData",
+            queryStringParameters: { country: "Japan" },
+            headers: {},
+            body: null,
+            isBase64Encoded: false,
+        } as any;
+
+        const response = await getTourismServiceHandler(mockEvent, mockContext);
+
+        expect(response.statusCode).toBe(200);
+        expect(response.body).toEqual(
+            JSON.stringify(
+                {
+                    message: "Tourism service executed successfully!",
+                    data: {
+                        thingsToDo: {
+                            name: "Japan",
+                        },
+                        unescoSites: {
+                            name: "Japan",
+                        },
+                    },
+                },
+                null,
+                2
+            )
+        );
+    });
+
+    describe("Error Handling", () => {
+        it("should return 400 when country parameter is missing", async () => {
+            const mockEvent: APIGatewayEvent = {
+                httpMethod: "GET",
+                path: "/api/getTourismTestData",
+                queryStringParameters: null,
+                headers: {},
+                body: null,
+                isBase64Encoded: false,
+            } as any;
+
+            const response = await getTourismServiceHandler(mockEvent, mockContext);
+
+            expect(response.statusCode).toBe(400);
+            expect(JSON.parse(response.body)).toEqual({
+                message: "Country parameter is required",
+            });
+        });
+        it("should return 500 status code when event is invalid", async () => {
+            const mockEvent = null as any;
+
+            const response = await getTourismServiceHandler(mockEvent, mockContext);
+
+            expect(response.statusCode).toBe(500);
+            expect(JSON.parse(response.body)).toEqual({
+                message: "Internal server error"
+            });
+        });
+    });
+});
