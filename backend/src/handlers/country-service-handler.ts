@@ -9,7 +9,7 @@ export const getCountryServiceHandler = async (
   try {
     const country = event.queryStringParameters?.country;
     if (!country) {
-      throw new AppError(400, 'Country parameter is required');
+      throw new AppError(400, "Country parameter is required");
     }
 
     const countryService = new CountryService(country);
@@ -26,8 +26,21 @@ export const getCountryServiceHandler = async (
         }
       }, null, 2),
     };
-  } catch (err) {
-    console.error("Error occurred:", err);
-    throw new AppError(500, 'Internal server error');
+  } catch (error) {
+    if (error instanceof AppError) {
+      return {
+        statusCode: error.statusCode,
+        body: JSON.stringify({
+          message: error.message,
+          detail: error.detail
+        })
+      };
+    }
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Internal server error"
+      })
+    };
   }
 };

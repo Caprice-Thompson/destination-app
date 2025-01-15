@@ -1,5 +1,5 @@
 export class AppError extends Error {
-    constructor(public statusCode: number, message: string) {
+    constructor(public statusCode: number, message: string, public detail?: string) {
         super(message);
     }
 
@@ -7,7 +7,7 @@ export class AppError extends Error {
         if (error instanceof AppError) {
             return {
                 statusCode: error.statusCode,
-                body: JSON.stringify({ message: error.message })
+                body: JSON.stringify({ message: error.message, detail: this.detail })
             };
         }
 
