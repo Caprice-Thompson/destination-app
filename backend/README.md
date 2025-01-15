@@ -13,6 +13,12 @@ backend/
 │   │   |── client.ts
 |   |   └── getURL.ts
 |   |
+|   |── handlers/
+|   |   ├── volcanoServiceHandler.ts
+|   |   ├── countryServiceHandler.ts
+|   |   ├── earthquakeServiceHandler.ts
+|   |   └── tourismServiceHandler.ts
+|   |
 │   ├── services/
 │   │   ├── CountryService.ts
 │   │   ├── EarthquakesService.ts
@@ -25,6 +31,11 @@ backend/
 │   ├── index.ts
 │   └── server.ts
 ├── tests/
+│   ├── handlers/
+│   │   ├── volcanoServiceHandler.test.ts
+|   │   ├── countryServiceHandler.test.ts
+|   │   ├── earthquakeServiceHandler.test.ts
+|   │   └── tourismServiceHandler.test.ts
 │   ├── volcanoService.test.ts
 |   ├── countryService.test.ts
 |   ├── earthquakeService.test.ts

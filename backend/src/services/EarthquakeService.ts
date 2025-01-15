@@ -124,7 +124,7 @@ class EarthquakeService implements EarthquakeServiceInterface {
     };
   }
 }
-
+// Is this needed for now?
 // Factory function to instantiate the service
 export function launchEarthquakeService(
   baseApiUrl: string,
