@@ -25,7 +25,7 @@ export interface TourismInterface {
 
 // Domain
 export class Tourism {
-  constructor(private readonly tourismRepo: TourismInterface) {}
+  constructor(private readonly tourismRepo: TourismInterface) { }
 
   async getTourismData(country: string): Promise<TourismData> {
     const thingsToDoList = await this.tourismRepo.getThingsToDo(country);
@@ -43,7 +43,7 @@ export class TourismApplicationService {
     this.tourismDomain = new Tourism(tourismRepo);
   }
 
-  async getTourismData(country: string): Promise<TourismData> {
+  async getTourismData(country: string | undefined): Promise<TourismData> {
     if (!country) {
       throw new AppError(400, "Country parameter is required");
     }

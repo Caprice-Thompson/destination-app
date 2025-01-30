@@ -14,11 +14,8 @@ export const getTourismServiceHandler = async (
   context: Context
 ): Promise<APIGatewayProxyResult> => {
   try {
-    const country = event.queryStringParameters?.country;
-    if (!country) {
-      throw new AppError(400, "Country parameter is required");
-    }
 
+    const country = event.queryStringParameters?.country;
     const tourismData = await tourismAppService.getTourismData(country);
 
     return {
