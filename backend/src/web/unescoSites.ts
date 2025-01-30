@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
-import { UNESCOSites } from "../services/TourismService";
+import { UNESCOSite } from "../services/TourismService";
 import db from "../db/db";
 
 // 7 wonders of the world
@@ -9,7 +9,7 @@ export async function getWorldHeritageSites(url: string) {
     const { data } = await axios.get(url);
     const $ = cheerio.load(data);
 
-    const sites: UNESCOSites[] = [];
+    const sites: UNESCOSite[] = [];
     // regex do not include numbers
     $("table.wikitable tbody tr").each((index, element) => {
       if (index === 0) return;
