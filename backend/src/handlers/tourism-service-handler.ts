@@ -7,7 +7,7 @@ import {
 } from "../services/TourismService";
 
 const tourismDatabaseRepo = new TourismDatabaseRepository();
-const tourismAppService = new TourismApplicationService(tourismDatabaseRepo);
+const tourismAppLayer = new TourismApplicationService(tourismDatabaseRepo);
 
 export const getTourismServiceHandler = async (
   event: APIGatewayEvent,
@@ -16,7 +16,7 @@ export const getTourismServiceHandler = async (
   try {
 
     const country = event.queryStringParameters?.country;
-    const tourismData = await tourismAppService.getTourismData(country);
+    const tourismData = await tourismAppLayer.getTourismData(country);
 
     return {
       statusCode: 200,

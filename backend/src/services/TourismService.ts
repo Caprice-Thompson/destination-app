@@ -25,7 +25,7 @@ export interface TourismInterface {
 
 // Domain
 export class Tourism {
-  constructor(private readonly tourismRepo: TourismInterface) { }
+  constructor(private readonly tourismRepo: TourismInterface) {}
 
   async getTourismData(country: string): Promise<TourismData> {
     const thingsToDoList = await this.tourismRepo.getThingsToDo(country);

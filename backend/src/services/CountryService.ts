@@ -37,12 +37,27 @@ export type CountryResponse = {
   flags: { svg: string };
 };
 
-interface CountryServiceInterface {
-  getCountryDetails: (country: string) => Promise<Country>;
-  getCityPopulation: (country: string) => Promise<CityPopulation[]>;
+interface CountryRepoInterface {
+  getCountryDetails: () => Promise<Country>;
+  getCityPopulation: () => Promise<CityPopulation[]>;
+}
+export class CountryDomain {
+  constructor(private readonly countryRepo: CountryRepoInterface) {}
+
+  async getCountryData(
+    country: string | undefined
+  ): Promise<{ countryDetails: Country; cityPopulations: CityPopulation[] }> {
+    if (!country) {
+      throw new AppError(400, "Country parameter is required");
+    }
+
+    const countryDetails = await this.countryRepo.getCountryDetails();
+    const cityPopulations = await this.countryRepo.getCityPopulation();
+    return { countryDetails, cityPopulations };
+  }
 }
 
-export class CountryService implements CountryServiceInterface {
+export class CountryRepo implements CountryRepoInterface {
   country: string;
 
   constructor(country: string) {
@@ -90,10 +105,4 @@ export class CountryService implements CountryServiceInterface {
     const cityPopulations = await getPopulation(this.country);
     return cityPopulations;
   }
-
-  // async getCountryData(): Promise<CountryServiceInterface> {
-  //   const countryDetails = await this.getCountryDetails();
-  //   const cityPopulations = await this.getCityPopulation();
-  //   return { countryDetails, cityPopulations };
-  // }
 }

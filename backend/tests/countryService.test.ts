@@ -2,13 +2,12 @@ import { getData } from "../src/api/client";
 import {
   Country,
   CountryResponse,
-  CountryService,
+  CountryRepo,
 } from "../src/services/CountryService";
 
 jest.mock("../src/api/client");
 
 describe("Country Service", () => {
-
   describe("getCountryDetails", () => {
     const originalEnv = process.env;
     const country = "Spain";
@@ -46,7 +45,7 @@ describe("Country Service", () => {
     it("should return country details if the request is successful", async () => {
       (getData as jest.Mock).mockResolvedValue(mockCountryResponse);
 
-      const countryService = new CountryService(country);
+      const countryService = new CountryRepo(country);
       const result = await countryService.getCountryDetails();
 
       expect(result).toStrictEqual(expectedCountryDetails);
@@ -56,15 +55,20 @@ describe("Country Service", () => {
     it("should throw an error if no data is returned", async () => {
       (getData as jest.Mock).mockResolvedValue([]);
       const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-      const countryService = new CountryService(country);
+      const countryService = new CountryRepo(country);
 
-      await expect(countryService.getCountryDetails()).rejects.toThrow('No country data found');
-      await expect(countryService.getCountryDetails()).rejects.toHaveProperty('statusCode', 404);
+      await expect(countryService.getCountryDetails()).rejects.toThrow(
+        "No country data found"
+      );
+      await expect(countryService.getCountryDetails()).rejects.toHaveProperty(
+        "statusCode",
+        404
+      );
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('No data returned from API for URL:')
+        expect.stringContaining("No data returned from API for URL:")
       );
     });
-    describe("getCityPopulation", () => { });
+    describe("getCityPopulation", () => {});
   });
 });
