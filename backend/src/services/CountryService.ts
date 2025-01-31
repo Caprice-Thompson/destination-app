@@ -58,7 +58,7 @@ export class CountryService implements CountryServiceInterface {
 
       if (!response || response.length === 0) {
         console.error(`No data returned from API for URL: ${countryUrl}`);
-        throw new AppError(404, 'No country data found');
+        throw new AppError(404, "No country data found");
       }
 
       const [data] = response;
@@ -66,7 +66,9 @@ export class CountryService implements CountryServiceInterface {
       const mappedCountry: Country = {
         name: data.name.common,
         capitalCity: data.capital,
-        languages: Object.values(data.languages).map((lang) => ({ name: lang })),
+        languages: Object.values(data.languages).map((lang) => ({
+          name: lang,
+        })),
         currencies: Object.entries(data.currencies).reduce(
           (acc, [key, details]) => ({
             ...acc,
@@ -88,4 +90,10 @@ export class CountryService implements CountryServiceInterface {
     const cityPopulations = await getPopulation(this.country);
     return cityPopulations;
   }
+
+  // async getCountryData(): Promise<CountryServiceInterface> {
+  //   const countryDetails = await this.getCountryDetails();
+  //   const cityPopulations = await this.getCityPopulation();
+  //   return { countryDetails, cityPopulations };
+  // }
 }
