@@ -3,14 +3,16 @@ import {
   Earthquake,
   EarthquakeStatistics,
   EarthquakeDataParams,
-  launchEarthquakeService,
+  EarthquakeService,
+  EarthquakeDomain
 } from "../src/services/EarthquakeService";
 import { getCustomURL } from "../src/api/getURL";
 
 jest.mock("../src/api/client");
 
-describe("EarthquakeService", () => {
+describe("Earthquake Domain and Repository", () => {
   const baseURL = "https://mocked-earthquake-api.com";
+  let consoleErrorSpy: jest.SpyInstance;
 
   const params: EarthquakeDataParams = {
     format: "geojson",
@@ -47,12 +49,19 @@ describe("EarthquakeService", () => {
     },
   ];
 
-  describe("getEarthquakeData", () => {
-    it("should return earthquake data for valid parameters", async () => {
+  beforeEach(() => {
+    consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+  });
+
+  afterEach(() => {
+    consoleErrorSpy.mockRestore();
+  });
+  describe("EarthquakeService (Repository)", () => {
+    it("should fetch earthquake data for valid parameters", async () => {
       (getData as jest.Mock).mockResolvedValue(mockResponse);
 
-      const earthquakeService = launchEarthquakeService(baseURL, params);
-      const data = await earthquakeService.getEarthquakeData();
+      const repository = new EarthquakeService(baseURL, params);
+      const data = await repository.fetchEarthquakes();
 
       expect(data).toEqual(expectedData);
       expect(getData).toHaveBeenCalledWith(
@@ -60,13 +69,13 @@ describe("EarthquakeService", () => {
       );
     });
 
-    it("should return an empty array when no data is available", async () => {
-      (getData as jest.Mock).mockResolvedValue({ features: [] });
+    it("should throw error when no data is available", async () => {
+      (getData as jest.Mock).mockResolvedValue({ features: null });
 
-      const earthquakeService = launchEarthquakeService(baseURL, params);
-      const data = await earthquakeService.getEarthquakeData();
-
-      expect(data).toEqual([]);
+      const repository = new EarthquakeService(baseURL, params);
+      await expect(repository.fetchEarthquakes()).rejects.toThrow(
+        "Internal server error"
+      );
     });
 
     it("should handle errors when API call fails", async () => {
@@ -74,7 +83,7 @@ describe("EarthquakeService", () => {
       const mockError = new Error("API Error");
       (getData as jest.Mock).mockRejectedValue(mockError);
 
-      const service = launchEarthquakeService("http://test.com", {
+      const repository = new EarthquakeService("http://test.com", {
         format: "geojson",
         longitude: "0",
         latitude: "0",
@@ -83,10 +92,10 @@ describe("EarthquakeService", () => {
         maxRadius: 100,
       });
 
-      await expect(service.getEarthquakeData()).rejects.toThrow(
+      await expect(repository.fetchEarthquakes()).rejects.toThrow(
         "Internal server error"
       );
-      await expect(service.getEarthquakeData()).rejects.toHaveProperty(
+      await expect(repository.fetchEarthquakes()).rejects.toHaveProperty(
         "statusCode",
         500
       );
@@ -98,7 +107,7 @@ describe("EarthquakeService", () => {
     });
   });
 
-  describe("calculateEarthquakeStatistics", () => {
+  describe("EarthquakeDomain", () => {
     const mockData: Earthquake[] = [
       {
         magnitude: 5.2,
@@ -130,7 +139,14 @@ describe("EarthquakeService", () => {
       },
     ];
 
-    it("should return correct statistics for a specific month", () => {
+    const mockRepository = {
+      fetchEarthquakes: jest.fn().mockResolvedValue(mockData)
+    };
+
+    it("should return correct earthquake data and statistics", async () => {
+      const domain = new EarthquakeDomain(mockRepository);
+      const result = await domain.getEarthquakeData("TestCountry", 1);
+
       const expectedStats: EarthquakeStatistics = {
         totalEarthquakes: 4,
         avgEarthquakesInMonth: 0.75,
@@ -138,16 +154,14 @@ describe("EarthquakeService", () => {
         avgMagnitude: 6.2,
       };
 
-      const earthquakeService = launchEarthquakeService(baseURL, params);
-      const stats = earthquakeService.calculateEarthquakeStatistics(
-        mockData,
-        1
-      );
-
-      expect(stats).toStrictEqual(expectedStats);
+      expect(result.earthquakeData).toEqual(mockData);
+      expect(result.earthquakeStatistics).toStrictEqual(expectedStats);
     });
 
-    it("should handle cases with no earthquakes in the target month", () => {
+    it("should handle months with no earthquakes", async () => {
+      const domain = new EarthquakeDomain(mockRepository);
+      const result = await domain.getEarthquakeData("TestCountry", 12);
+
       const expectedStats: EarthquakeStatistics = {
         totalEarthquakes: 4,
         avgEarthquakesInMonth: 0,
@@ -155,13 +169,19 @@ describe("EarthquakeService", () => {
         avgMagnitude: 0,
       };
 
-      const earthquakeService = launchEarthquakeService(baseURL, params);
-      const stats = earthquakeService.calculateEarthquakeStatistics(
-        mockData,
-        12
-      );
+      expect(result.earthquakeStatistics).toStrictEqual(expectedStats);
+    });
 
-      expect(stats).toStrictEqual(expectedStats);
+    it("should throw error when country or month is missing", async () => {
+      const domain = new EarthquakeDomain(mockRepository);
+
+      await expect(domain.getEarthquakeData(undefined, 1))
+        .rejects
+        .toThrow("Country and target month parameters are required");
+
+      await expect(domain.getEarthquakeData("TestCountry", undefined as any))
+        .rejects
+        .toThrow("Country and target month parameters are required");
     });
   });
 });

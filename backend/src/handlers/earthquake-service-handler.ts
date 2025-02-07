@@ -1,8 +1,8 @@
 import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 import { getGeoCoordinates } from "../utils/getGeoCoordinates";
 import { getEQParams } from "../utils/helper";
-import { launchEarthquakeService } from "../services/EarthquakeService";
 import { AppError } from "../utils/errorHandler";
+import { EarthquakeDomain, EarthquakeService } from "../services/EarthquakeService";
 
 export const getEarthquakeServiceHandler = async (
   event: APIGatewayEvent,
@@ -18,23 +18,22 @@ export const getEarthquakeServiceHandler = async (
     const month = parseInt(monthString, 10);
     const coordinates = await getGeoCoordinates(country);
     const params = getEQParams(coordinates!);
-    const earthquakeApiUrl = process.env.EQ_BASE_URL ?? "";
-    const earthquakeService = launchEarthquakeService(earthquakeApiUrl, params);
-    const earthquakeData = await earthquakeService.getEarthquakeData();
-    const eqAverages = earthquakeService.calculateEarthquakeStatistics(
-      earthquakeData,
-      month
+
+    const earthquakeRepo = new EarthquakeService(
+      process.env.EQ_BASE_URL ?? "",
+      params
     );
+
+    const earthquakeDomain = new EarthquakeDomain(earthquakeRepo);
+    const result = await earthquakeDomain.getEarthquakeData(country, month);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        message: "Earthquake service executed successfully!",
-        data: {
-          earthquakeData,
-          eqAverages
-        }
-      }, null, 2),
+      body: JSON.stringify(
+        {
+          message: "Earthquake service executed successfully!",
+          data: result
+        }, null, 2),
     };
   } catch (error) {
     if (error instanceof AppError) {

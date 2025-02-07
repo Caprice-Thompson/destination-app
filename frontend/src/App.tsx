@@ -1,10 +1,10 @@
 import React from "react";
-import Display from "./components/Display";
 
 const App: React.FC = () => {
   return (
     <div className="App">
-      <Display />
+      <h1>Travel Destination</h1>
+      
     </div>
   );
 };

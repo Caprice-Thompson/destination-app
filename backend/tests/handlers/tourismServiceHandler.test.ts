@@ -1,5 +1,6 @@
 import { APIGatewayEvent } from "aws-lambda";
 import { getTourismServiceHandler } from "../../src/handlers/tourism-service-handler";
+import { AppError } from "../../src/utils/errorHandler";
 
 jest.mock("../../src/services/TourismService", () => ({
   TourismDatabaseRepository: jest.fn().mockImplementation(() => ({
@@ -8,9 +9,14 @@ jest.mock("../../src/services/TourismService", () => ({
   })),
   Tourism: jest.fn(),
   TourismApplicationService: jest.fn().mockImplementation(() => ({
-    getTourismData: jest.fn().mockResolvedValue({
-      thingsToDo: { name: "Japan" },
-      unescoSites: { name: "Japan" },
+    getTourismData: jest.fn().mockImplementation((country) => {
+      if (!country) {
+        throw new AppError(400, "Country parameter is required");
+      }
+      return Promise.resolve({
+        thingsToDo: { name: "Japan" },
+        unescoSites: { name: "Japan" },
+      });
     }),
   })),
 }));
@@ -55,7 +61,7 @@ describe("Tourism Service Lambda handler", () => {
   });
 
   describe("Error Handling", () => {
-    it.skip("should return 400 when country parameter is missing", async () => {
+    it("should return 400 when country parameter is missing", async () => {
       const mockEvent: APIGatewayEvent = {
         httpMethod: "GET",
         path: "/api/getTourismTestData",

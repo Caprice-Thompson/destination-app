@@ -41,6 +41,10 @@ export type Earthquake = {
   tsunami: number;
 };
 
+export interface EarthquakeRepository {
+  fetchEarthquakes(): Promise<Earthquake[]>;
+}
+
 export interface EarthquakeServiceInterface {
   getEarthquakeData: () => Promise<Earthquake[]>;
   calculateEarthquakeStatistics: (
@@ -49,38 +53,57 @@ export interface EarthquakeServiceInterface {
   ) => EarthquakeStatistics;
 }
 
-class EarthquakeService implements EarthquakeServiceInterface {
-  private earthquakeApiUrl: string;
-
-  constructor(baseApiUrl: string, params: EarthquakeDataParams) {
+export class EarthquakeService implements EarthquakeRepository {
+  constructor(private readonly baseApiUrl: string, private readonly params: EarthquakeDataParams) {
     if (!baseApiUrl) {
       throw new AppError(400, 'Base API URL is required');
     }
-    this.earthquakeApiUrl = getCustomURL.getParams(baseApiUrl, params);
   }
 
-  async getEarthquakeData(): Promise<Earthquake[]> {
+  async fetchEarthquakes(): Promise<Earthquake[]> {
     try {
-      const response = await getData<EarthquakeResponse>(this.earthquakeApiUrl);
+      const url = getCustomURL.getParams(this.baseApiUrl, this.params);
+      const response = await getData<EarthquakeResponse>(url);
 
       if (!response || !response.features) {
         throw new AppError(404, 'No earthquake data found');
       }
 
-      return response.features.map((feature) => ({
-        name: feature.properties.place,
-        magnitude: feature.properties.mag,
-        date: new Date(feature.properties.time).toISOString(),
-        type: feature.properties.type,
-        tsunami: feature.properties.tsunami,
-      }));
+      return response.features.map(feature => this.mapToEarthquake(feature));
     } catch (error) {
       console.error("Error fetching earthquake data:", error);
       throw new AppError(500, 'Internal server error');
     }
   }
 
-  calculateEarthquakeStatistics(
+  private mapToEarthquake(feature: EarthquakeResponse['features'][0]): Earthquake {
+    return {
+      name: feature.properties.place,
+      magnitude: feature.properties.mag,
+      date: new Date(feature.properties.time).toISOString(),
+      type: feature.properties.type,
+      tsunami: feature.properties.tsunami,
+    };
+  }
+}
+
+export class EarthquakeDomain {
+  constructor(private readonly earthquakeRepo: EarthquakeRepository) { }
+
+  async getEarthquakeData(
+    country: string | undefined,
+    targetMonth: number
+  ): Promise<{ earthquakeData: Earthquake[]; earthquakeStatistics: EarthquakeStatistics }> {
+    if (!country || !targetMonth) {
+      throw new AppError(400, "Country and target month parameters are required");
+    }
+
+    const earthquakeData = await this.earthquakeRepo.fetchEarthquakes();
+    const earthquakeStatistics = this.calculateEarthquakeStatistics(earthquakeData, targetMonth);
+    return { earthquakeData, earthquakeStatistics };
+  }
+
+  private calculateEarthquakeStatistics(
     earthquakes: Earthquake[],
     targetMonth: number
   ): EarthquakeStatistics {
@@ -123,12 +146,4 @@ class EarthquakeService implements EarthquakeServiceInterface {
       avgMagnitude: averageMagnitude,
     };
   }
-}
-// Is this needed for now?
-// Factory function to instantiate the service
-export function launchEarthquakeService(
-  baseApiUrl: string,
-  params: EarthquakeDataParams
-): EarthquakeServiceInterface {
-  return new EarthquakeService(baseApiUrl, params);
 }
