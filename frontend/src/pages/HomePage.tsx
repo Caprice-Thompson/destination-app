@@ -3,13 +3,8 @@ import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 import { useNavigate } from 'react-router-dom';
+import { getCountryAndTourismData } from "../api";
 
-
-// axios.get('/api/getCountryData').then((response) => {
-//     console.log(response.data);
-// }).catch((error) => {
-//     console.error('Error fetching country data:', error);
-// });
 const monthOptions = [
     { value: '1', label: 'January' },
     { value: '2', label: 'February' },
@@ -28,7 +23,6 @@ const monthOptions = [
 const HomePage = () => {
     const [countryName, setCountryName] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
 
@@ -39,42 +33,34 @@ const HomePage = () => {
         }
 
         try {
-            setIsLoading(true);
             
-            // Updated API call to use GET with query parameters
-            const response = await fetch(`http://localhost:8080/api/getCountryData?country=${encodeURIComponent(countryName)}&month=${encodeURIComponent(selectedMonth)}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
+            const { countryData, tourismData } = await getCountryAndTourismData(countryName, selectedMonth);
 
-            if (!response.ok) {
-                throw new Error('Failed to fetch data');
-            }
+            // if (!response.ok) {
+            //     throw new Error('Failed to fetch data');
+            // }
 
-            const data = await response.json();
-            console.log('Success:', data);
+            // const data = await tourismData.json();
+            // console.log('Success:', data);
             
             // Navigate after successful data fetch
             navigate('/results', { 
                 state: { 
-                    countryName, 
-                    selectedMonth,
-                    data // Pass the API response data to results page
+                    countryName,
+                    data: {
+                        countryData,
+                        tourismData
+                    }
                 } 
             });
 
         } catch (error) {
             console.error('Error:', error);
             alert('Failed to fetch data. Please try again.');
-        } finally {
-            setIsLoading(false);
-        }
+        } 
     };
     return (
         <>
-
         <h1>The Destination Station</h1>
         <h3>Prepare for your next adventure</h3>
         <div className="form-container">
