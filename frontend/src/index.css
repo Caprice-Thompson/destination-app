@@ -7,41 +7,9 @@ h1 {
 }
 
 h3 {
-  font-size: 18px;
-  color: #666;
+  font-size: 20px;
+  color: white;
   text-align: center;
-}
-
-.form-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-}
-
-input {
-  margin: 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 250px;
-}
-
-select {
-  margin: 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 150px;
-}
-
-button {
-  margin: 0;
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 100px;
-  cursor: pointer;
 }
 
 .results-page {
