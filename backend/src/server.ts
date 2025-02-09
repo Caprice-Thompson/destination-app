@@ -1,16 +1,18 @@
 import express, { Request, Response } from "express";
-import { simulateAPIGatewayEvent } from "./utils/helper";
+import { getEQParams } from "./utils/helper";
 import cors from "cors";
 import { AppError } from "./utils/errorHandler";
-import { getCountryServiceHandler } from "./handlers/country-service-handler";
-import { Context } from "aws-lambda";
-import { getTourismServiceHandler } from "./handlers/tourism-service-handler";
-import { getEarthquakeServiceHandler } from "./handlers/earthquake-service-handler";
-import { getVolcanoServiceHandler } from "./handlers/volcano-service-handler";
+import { CountryDomain } from "./services/CountryService";
+import { CountryRepo } from "./services/CountryService";
+import { TourismDatabaseRepository } from "./services/TourismService";
+import { TourismApplicationService } from "./services/TourismService";
+import { EarthquakeService } from "./services/EarthquakeService";
+import { EarthquakeDomain } from "./services/EarthquakeService";
+import { getGeoCoordinates } from "./utils/getGeoCoordinates";
+import { VolcanoService } from "./services/VolcanoService";
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const context: Context = {} as Context;
 
 // Middleware
 app.use(cors());
@@ -23,18 +25,21 @@ const handleError = (res: Response, message: string, error: any) => {
 };
 
 app.get("/api/getCountryData", async (req: Request, res: Response) => {
-  const queryStringParameters = req.query;
-
-  const event = simulateAPIGatewayEvent(
-    "/api/getCountryData",
-    queryStringParameters as { [key: string]: string },
-    req.headers as { [key: string]: string }
-  );
+  const country = req.query.country as string;
+  if (!country) {
+    throw new AppError(400, "Country parameter is required");
+  }
 
   try {
-    const result = await getCountryServiceHandler(event, context);
+    const countryRepo = new CountryRepo(country);
+    const countryDomain = new CountryDomain(countryRepo);
 
-    res.status(result.statusCode).send(result.body);
+    const countryData = await countryDomain.getCountryData(country);
+
+    res.status(200).json({
+      message: "Country data fetched successfully",
+      data: countryData,
+    });
   } catch (err) {
     handleError(res, "Error occurred:", err);
   }
@@ -42,18 +47,19 @@ app.get("/api/getCountryData", async (req: Request, res: Response) => {
 
 app.get("/api/getTourismData", async (req: Request, res: Response) => {
   const country = req.query.country as string;
+  const tourismDatabaseRepo = new TourismDatabaseRepository();
+  const tourismAppLayer = new TourismApplicationService(tourismDatabaseRepo);
   if (!country) {
     throw new AppError(400, "Country parameter is required");
   }
-  const event = simulateAPIGatewayEvent(
-    "/api/getTourismData",
-    req.query as { [key: string]: string },
-    req.headers as { [key: string]: string }
-  );
-  try {
-    const result = await getTourismServiceHandler(event, context);
 
-    res.status(result.statusCode).send(result.body);
+  try {
+    const tourismData = await tourismAppLayer.getTourismData(country);
+
+    res.status(200).json({
+      message: "Tourism data fetched successfully",
+      data: tourismData,
+    });
   } catch (error) {
     throw new AppError(500, "Internal Server Error");
   }
@@ -63,18 +69,25 @@ app.get("/api/getTourismData", async (req: Request, res: Response) => {
 app.get("/api/getEarthquakeData", async (req: Request, res: Response) => {
   const country = req.query.country as string;
   const month = req.query.month as string;
-
+  const monthInt = parseInt(month, 10);
+  const coordinates = await getGeoCoordinates(country);
+  const params = getEQParams(coordinates!);
   if (!country || !month) {
     throw new AppError(400, "Country and month parameters are required.");
   }
-  const event = simulateAPIGatewayEvent(
-    "/api/getEarthquakeData",
-    req.query as { [key: string]: string },
-    req.headers as { [key: string]: string }
-  );
+
   try {
-    const result = await getEarthquakeServiceHandler(event, context);
-    res.status(result.statusCode).send(result.body);
+    const earthquakeRepo = new EarthquakeService(
+      process.env.EQ_BASE_URL ?? "",
+      params
+    );
+
+    const earthquakeDomain = new EarthquakeDomain(earthquakeRepo);
+    const result = await earthquakeDomain.getEarthquakeData(country, monthInt);
+    res.status(200).json({
+      message: "Earthquake data fetched successfully",
+      data: result,
+    });
   } catch (error) {
     throw new AppError(500, "Internal Server Error");
   }
@@ -86,15 +99,17 @@ app.get("/api/getVolcanoData", async (req: Request, res: Response) => {
   if (!country) {
     throw new AppError(400, "Country parameter is required");
   }
-  const event = simulateAPIGatewayEvent(
-    "/api/getVolcanoData",
-    req.query as { [key: string]: string },
-    req.headers as { [key: string]: string }
-  );
-  try {
-    const result = await getVolcanoServiceHandler(event, context);
 
-    res.status(result.statusCode).send(result.body);
+  try {
+    const volcanoService = new VolcanoService();
+    const volcanoesByCountry = await volcanoService.getVolcanoByCountry(
+      country
+    );
+
+    res.status(200).json({
+      message: "Volcano data fetched successfully",
+      data: volcanoesByCountry,
+    });
   } catch (error) {
     throw new AppError(500, "Internal Server Error");
   }

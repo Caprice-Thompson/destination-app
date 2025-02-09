@@ -3,22 +3,8 @@ import Button from "../components/Button";
 import Dropdown from "../components/Dropdown";
 import Input from "../components/Input";
 import { useNavigate } from 'react-router-dom';
-import { getCountryAndTourismData } from "../api";
-
-const monthOptions = [
-    { value: '1', label: 'January' },
-    { value: '2', label: 'February' },
-    { value: '3', label: 'March' },
-    { value: '4', label: 'April' },
-    { value: '5', label: 'May' },
-    { value: '6', label: 'June' },
-    { value: '7', label: 'July' },
-    { value: '8', label: 'August' },
-    { value: '9', label: 'September' },
-    { value: '10', label: 'October' },
-    { value: '11', label: 'November' },
-    { value: '12', label: 'December' },
-];
+import { getCountryAndTourismData, getVolcanoAndEarthquakeData } from "../api";
+import { monthOptions } from "../utils";
         
 const HomePage = () => {
     const [countryName, setCountryName] = useState('');
@@ -35,21 +21,16 @@ const HomePage = () => {
         try {
             
             const { countryData, tourismData } = await getCountryAndTourismData(countryName, selectedMonth);
+            const { volcanoData, earthquakeData } = await getVolcanoAndEarthquakeData(countryName, selectedMonth);
 
-            // if (!response.ok) {
-            //     throw new Error('Failed to fetch data');
-            // }
-
-            // const data = await tourismData.json();
-            // console.log('Success:', data);
-            
-            // Navigate after successful data fetch
             navigate('/results', { 
                 state: { 
                     countryName,
                     data: {
                         countryData,
-                        tourismData
+                        tourismData,
+                        volcanoData,
+                        earthquakeData
                     }
                 } 
             });
@@ -62,6 +43,7 @@ const HomePage = () => {
     return (
         <>
         <h1>The Destination Station</h1>
+        <div className="home-page-container">
         <h3>Prepare for your next adventure</h3>
         <div className="form-container">
           <Input id="country-name-input"
@@ -83,6 +65,7 @@ const HomePage = () => {
           onChange={(e) => setSelectedMonth(e.target.value)}
           />
           <Button id="submit-button" className="submit-button" type="submit" onClick={handleSubmit}>Go</Button>
+        </div>
         </div>
     </>
     )

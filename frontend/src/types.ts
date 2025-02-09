@@ -19,3 +19,17 @@ export type UNESCOSite = {
     country: string;
     description: string;
 }
+
+export type Volcano = {
+    name: string;
+    region: string;
+    country: string;
+};
+
+export type Earthquake = {
+    name: string;
+    magnitude: number;
+    date: string;
+    type: string;
+    tsunami: number;
+};

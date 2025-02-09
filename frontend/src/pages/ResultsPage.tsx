@@ -1,12 +1,22 @@
 import { useLocation } from "react-router-dom";
-import { CityPopulation, LanguageDetail, ThingsToDo, UNESCOSite } from "../types";
+import { CityPopulation, LanguageDetail } from "../types";
+import FactCard from "../components/FactCard";
+import DisplayCard, { DisplayCardItem } from "../components/DisplayCard";
+import { mockData } from "../mockData";
+import DisplayCardWithExtraValues from "../components/DisplayCardWithExtraValues";
 
 const ResultsPage = () => {
     const location = useLocation();
-    const { countryName, data } = location.state || {};
+    const useMockData = true;
+    
+    const { countryName, data } = useMockData 
+        ? { countryName: "France", data: mockData }
+        : location.state || {};
     const countryData = data.countryData.data;
     const tourismData = data.tourismData.data;
-    console.log(tourismData);
+    const volcanoData = data.volcanoData.data;
+    const earthquakeData = data.earthquakeData[0].data;
+
     return (
         <div className="results-page">
             <div className="hero-section">
@@ -19,63 +29,104 @@ const ResultsPage = () => {
             </div>
             
             <div className="dashboard-grid">
-                <div className="info-card">
-                    <h2>Quick Facts</h2>
-                    <div className="fact-item">
-                        <span className="fact-label">Capital City</span>
-                        <span className="fact-value">{countryData.countryDetails.capitalCity[0]}</span>
-                    </div>
-                    <div className="fact-item">
-                        <span className="fact-label">Currency</span>
-                        <span className="fact-value">
-                            {countryData.countryDetails.currencies.EUR.name} 
-                            <span className="currency-symbol">({countryData.countryDetails.currencies.EUR.symbol})</span>
-                        </span>
-                    </div>
-                    <div className="fact-item">
-                        <span className="fact-label">Languages</span>
-                        <span className="fact-value">
-                            {countryData.countryDetails.languages.map((language: LanguageDetail) => language.name).join(', ')}
-                        </span>
-                    </div>
-                </div>
+                <FactCard 
+                    title="Quick Facts"
+                    facts={[
+                        { 
+                            label: "Capital City", 
+                            value: countryData.countryDetails.capitalCity[0], 
+                            className: "capital-city" 
+                        },
+                        { 
+                            label: "Currency", 
+                            value: (
+                                <>
+                                    {countryData.countryDetails.currencies.EUR.name} 
+                                    <span className="currency-symbol">
+                                        ({countryData.countryDetails.currencies.EUR.symbol})
+                                    </span>
+                                </>
+                            )
+                        },
+                        { 
+                            label: "Languages", 
+                            value: countryData.countryDetails.languages
+                                .map((lang: LanguageDetail) => lang.name)
+                                .join(', '),
+                            className: "languages"
+                        }
+                    ]}
+                    className="info-card"
+                />
 
-                <div className="info-card">
-                    <h2>Popular Cities</h2>
-                    <div className="cities-grid">
-                        {countryData.cityPopulations.map((city: CityPopulation) => (
-                            <div key={city.city} className="city-card">
-                                {city.city}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <FactCard 
+                    title="Popular Cities"
+                    facts={countryData.cityPopulations.map((city: CityPopulation) => ({
+                        label: city.city,
+                        value: city.population 
+                            ? `Population: ${city.population.toLocaleString()}` 
+                            : [],
+                        className: "city-card"
+                    }))}
+                    className="info-card"
+                />
 
-                <div className="info-card">
-                    <h2>Things to do</h2>
-                    <div className="things-to-do-grid">
-                        {tourismData.thingsToDoList.map((thing: ThingsToDo, index: number) => (
-                            <div key={index} className="thing-to-do-card">
-                                {thing.location}
-                                {thing.item.map((item: string, index: number) => (
-                                    <div key={index}>{item}</div>
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <FactCard 
+                    title="Earthquakes Statistics"
+                    facts={[
+                        { 
+                            label: "Total Earthquakes", 
+                            value: earthquakeData.earthquakeStatistics.totalEarthquakes, 
+                            className: "capital-city" 
+                        },
+                        { 
+                            label: "Average Tsunami Count", 
+                            value: earthquakeData.earthquakeStatistics.avgTsunamiCount
+                        },
+                        { 
+                            label: "Average Magnitude", 
+                            value: earthquakeData.earthquakeStatistics.avgMagnitude,
+                            className: "languages"
+                        },
+                        { 
+                            label: "Average Earthquakes in a Month", 
+                            value: earthquakeData.earthquakeStatistics.avgEarthquakesInMonth,
+                            className: "languages"
+                        }
+                    ]}  
+                    className="info-card"
+                />
 
-                <div className="info-card">
-                    <h2>UNESCO World Heritage Sites</h2>
-                    <div className="unesco-sites-grid">
-                        {tourismData.unescoSitesList.map((site: UNESCOSite) => (
-                            <div key={site.site} className="unesco-site-card">
-                                <h3>{site.site}</h3>
-                                <p>{site.area}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <DisplayCard 
+                    title="Things to Do" 
+                    data={tourismData.thingsToDoList[0].item.map((item: string) => ({ 
+                        name: item 
+                    }))} 
+                    className="thing-to-do-card"
+                    nameField="name"
+                />
+
+                <DisplayCardWithExtraValues 
+                    title="UNESCO World Heritage Sites" 
+                    data={tourismData.unescoSitesList} 
+                    className="unesco-site-card"
+                    nameField="site"
+                    extraFields={['area', 'description']}
+                />
+
+                <DisplayCard 
+                    title="Volcanoes" 
+                    data={volcanoData} 
+                    className="volcano-card"
+                />
+
+                <DisplayCardWithExtraValues 
+                    title="Earthquakes" 
+                    data={earthquakeData.earthquakeData} 
+                    className="earthquake-card"
+                    extraFields={['magnitude', 'date', 'type']}
+                    keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
+                />
             </div>
         </div>
     );
