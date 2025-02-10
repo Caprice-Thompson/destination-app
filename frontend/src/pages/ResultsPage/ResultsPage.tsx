@@ -8,7 +8,7 @@ import "./ResultsPage.css";
 
 const ResultsPage = () => {
     const location = useLocation();
-    const useMockData = true;
+    const useMockData = false;
     
     const { countryName, data } = useMockData 
         ? { countryName: "France", data: mockData }
