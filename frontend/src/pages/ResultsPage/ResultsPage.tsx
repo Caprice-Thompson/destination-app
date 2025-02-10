@@ -1,9 +1,10 @@
 import { useLocation } from "react-router-dom";
-import { CityPopulation, LanguageDetail } from "../types";
-import FactCard from "../components/FactCard";
-import DisplayCard, { DisplayCardItem } from "../components/DisplayCard";
-import { mockData } from "../mockData";
-import DisplayCardWithExtraValues from "../components/DisplayCardWithExtraValues";
+import { CityPopulation, LanguageDetail } from "../../types";
+import FactCard from "../../components/FactCard";
+import DisplayCard, { DisplayCardItem } from "../../components/DisplayCard";
+import { mockData } from "../../mockData";
+import DisplayCardWithExtraValues from "../../components/DisplayCardWithExtraValues";
+import "./ResultsPage.css";
 
 const ResultsPage = () => {
     const location = useLocation();
@@ -102,16 +103,16 @@ const ResultsPage = () => {
                     data={tourismData.thingsToDoList[0].item.map((item: string) => ({ 
                         name: item 
                     }))} 
-                    className="thing-to-do-card"
+                    className="things-to-do-card"
                     nameField="name"
                 />
 
                 <DisplayCardWithExtraValues 
                     title="UNESCO World Heritage Sites" 
                     data={tourismData.unescoSitesList} 
-                    className="unesco-site-card"
+                    className="unesco-sites-card"
                     nameField="site"
-                    extraFields={['area', 'description']}
+                    extraFields={[ 'description']}
                 />
 
                 <DisplayCard 
@@ -119,7 +120,8 @@ const ResultsPage = () => {
                     data={volcanoData} 
                     className="volcano-card"
                 />
-
+                 </div>
+                <div className="earthquake-card-container">
                 <DisplayCardWithExtraValues 
                     title="Earthquakes" 
                     data={earthquakeData.earthquakeData} 
@@ -127,7 +129,8 @@ const ResultsPage = () => {
                     extraFields={['magnitude', 'date', 'type']}
                     keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
                 />
-            </div>
+                </div>
+           
         </div>
     );
 };

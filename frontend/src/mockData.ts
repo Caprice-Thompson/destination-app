@@ -25,7 +25,7 @@ export const mockData = {
     tourismData: {
         data: {
             thingsToDoList: [
-                { item: ["Visit the Eiffel Tower", "Explore the Louvre", "Wine tasting in Bordeaux", "Visit Palace of Versailles", "Wine tasting in Bordeaux", "Visit Palace of Versailles", "Wine tasting in Bordeaux", "Visit Palace of Versailles", "Wine tasting in Bordeaux", "Visit Palace of Versailles", "Wine tasting in Bordeaux", "Visit Palace of Versailles", "Wine tasting in Bordeaux", "Visit Palace of Versailles", "Wine tasting in Bordeaux", "Visit Palace of Versailles"] },
+                { item: ["Visit the Eiffel Tower", "Explore the Louvre", "Wine tasting in Bordeaux", "Wine tasting in Bordeaux", "Wine tasting in Bordeaux"] },
             ],
             unescoSitesList: [
                 { site: "Palace and Park of Versailles" },

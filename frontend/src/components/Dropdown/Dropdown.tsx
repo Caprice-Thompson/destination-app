@@ -15,6 +15,7 @@ interface DropdownProps {
     label: string;
     value:string;
     onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+    icon?: React.ReactNode;
 }
 
 const Dropdown = ({
@@ -27,14 +28,17 @@ const Dropdown = ({
     label,
     value,
     onChange,
+    icon,
 }: DropdownProps) => {
     return (
-        <select
-            id={id}
-            className={className}
-            name={name}
-            required={required}
-            aria-label={label}
+        <div className="dropdown-container">
+            {icon && <span className="select-icon">{icon}</span>}
+            <select
+                id={id}
+                className={className}
+                name={name}
+                required={required}
+                aria-label={label}
             onChange={onChange}
             value={value}
         >
@@ -45,6 +49,7 @@ const Dropdown = ({
                 </option>
             ))}
         </select>
+        </div>
     );
 };
 

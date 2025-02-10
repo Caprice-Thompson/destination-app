@@ -6,8 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import { getCountryAndTourismData, getVolcanoAndEarthquakeData } from "../../api";
 import { monthOptions } from "../../utils";
 import "./HomePage.css";
-import { BiSolidPlaneAlt } from "react-icons/bi";
-
+import { FaPlane } from "react-icons/fa";
+import { MdArrowDropDown } from "react-icons/md";
 
 const HomePage = () => {
     const [countryName, setCountryName] = useState('');
@@ -46,7 +46,7 @@ const HomePage = () => {
     return (
         <div className="home-page-wrapper">
             <div className="home-page-container">
-                <h3>Prepare for your next adventure</h3>
+                <h3>Prepare for your next adventure...</h3>
                 <div className="form-row">
                     <Input 
                         id="country-name-input"
@@ -67,13 +67,14 @@ const HomePage = () => {
                         label="Month"
                         value={selectedMonth}
                         onChange={(e) => setSelectedMonth(e.target.value)}
+                        icon={<MdArrowDropDown />}
                     />
                     <Button 
                         id="submit-button" 
                         className="submit-button" 
                         type="submit" 
                         onClick={handleSubmit} 
-                        icon={<BiSolidPlaneAlt />}
+                        icon={<FaPlane />}
                     />
                 </div>
             </div>

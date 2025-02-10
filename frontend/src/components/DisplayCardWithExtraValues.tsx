@@ -36,7 +36,7 @@ const DisplayCardWithExtraValues = ({
     };
 
     return (
-        <div className="info-card">
+<div className="display-card-extra-values">
             <h2>{title}</h2>
             {data.map((item, index) => (
                 <div 
