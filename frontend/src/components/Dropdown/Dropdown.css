@@ -1,0 +1,21 @@
+select {
+  margin: 0;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  width: 250px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: white;
+}
+
+.select-icon {
+  position: absolute;
+  right: 210px; 
+  top: 68%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 32px; 
+  color: rgb(98, 98, 98);
+}

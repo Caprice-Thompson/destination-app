@@ -1,0 +1,148 @@
+.results-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.hero-section {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 4rem 0;
+  background: linear-gradient(to right, #f6f9fc, #edf2f7);
+  border-radius: 1rem;
+}
+.country-flag {
+  width: 120px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+  margin-bottom: 1rem;
+}
+
+.hero-section h1 {
+  font-size: 2.5rem;
+  color: #2d3748;
+  margin: 0;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.info-card,
+.things-to-do-card,
+.display-card-extra-values {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.info-card h2 {
+  color: #2d3748;
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.fact-item,
+.extra-field-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid rgb(226, 232, 239);
+}
+
+.fact-item:last-child,
+.extra-field-container:last-child {
+  border-bottom: none;
+}
+
+.fact-label {
+  color: rgb(122, 139, 164);
+  font-weight: 500;
+}
+
+.fact-value {
+  color: #2d3748;
+  font-weight: 600;
+}
+
+.currency-symbol {
+  color: #718096;
+  margin-left: 0.5rem;
+}
+
+.volcano-card,
+.unesco-sites-card,
+.things-to-do-card {
+  background: linear-gradient(to right, #f6f9fc, #edf2f7);
+  padding: 1rem;
+  border-radius: 15px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  margin-bottom: 20px;
+  height: 40px;
+}
+
+.volcano-card:hover,
+.unesco-sites-card:hover,
+.things-to-do-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  background: #edf2f7;
+}
+
+@media (max-width: 768px) {
+  .results-page {
+    padding: 1rem;
+  }
+
+  .hero-section {
+    padding: 2rem 0;
+  }
+
+  .hero-section h1 {
+    font-size: 2rem;
+  }
+}
+
+.things-to-do-card h3,
+.unesco-sites-card h3,
+.volcano-card h3 {
+  font-size: 1rem;
+}
+
+.earthquake-card {
+  display: grid;
+  flex-direction: inline-block;
+  grid-template-columns: 1fr;
+  border: 1px solid #e2e8ef;
+  padding: 1rem;
+  margin-top: 20px;
+  border-radius: 15px;
+}
+.display-card-extra-values{
+  
+}
+.earthquake-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+}
+
+.earthquake-card h4 {
+  color: rgb(122, 139, 164);
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0.25rem 0;
+}
+
+.earthquake-card p {
+  color: #2d3748;
+  margin: 0;
+}
+
+

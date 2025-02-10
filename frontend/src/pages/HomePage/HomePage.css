@@ -1,0 +1,67 @@
+.home-page-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  max-width: 800px;
+  width: 90%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 200px;
+  transform: translate(-50%, -50%);
+  padding: 2rem;
+  border-radius: 12px;
+  background-color: rgba(251, 252, 252, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.82);
+}
+
+.home-page-wrapper {
+  background-image: url("../../assets/beach.jpg");
+  background-size: 145%;
+  background-color: #cccccc;
+  background-position: right 85%;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+button {
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  width: 60px;
+  height: 30px;
+  cursor: pointer;
+  color: rgb(67, 106, 247);
+  background: none;
+}
+
+button:hover {
+  background: none;
+  color: rgb(6, 46, 91);
+}
+
+button span {
+  display: inline-flex;
+  align-items: center;
+  font-size: 2rem;
+}
+
+.home-page-container select {
+  color: rgb(116, 115, 115);
+}

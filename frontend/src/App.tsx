@@ -1,11 +1,26 @@
 import React from "react";
+import HomePage from "./pages/HomePage/HomePage";
+import { BrowserRouter, Route } from "react-router-dom";
+import { Routes } from "react-router-dom";
+import ResultsPage from "./pages/ResultsPage/ResultsPage";
 
 const App: React.FC = () => {
+
   return (
-    <div className="App">
-      <h1>Travel Destination</h1>
-      
-    </div>
+    <>
+    <BrowserRouter>
+        <Routes>
+            <Route
+                path="/"
+                element={<HomePage />}
+            />
+            <Route
+                path="/results"
+                element={<ResultsPage />}
+            />
+        </Routes>
+    </BrowserRouter>
+</>
   );
 };
 
