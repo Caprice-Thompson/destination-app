@@ -9,8 +9,10 @@
   margin-bottom: 3rem;
   padding: 4rem 0;
   background: linear-gradient(to right, #f6f9fc, #edf2f7);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   border-radius: 1rem;
 }
+
 .country-flag {
   width: 120px;
   height: auto;
@@ -29,11 +31,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 2rem;
+  margin-bottom: 2rem;
 }
 
 .info-card,
-.things-to-do-card,
-.display-card-extra-values {
+.display-card-extra-values,
+.volcano-info-info-card,
+.things-to-do-list-info-card {
   background: white;
   border-radius: 1rem;
   padding: 1.5rem;
@@ -45,6 +49,21 @@
   margin-top: 0;
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
+}
+
+.things-to-do-list h3,
+.unesco-sites-card h3,
+.volcano-info h3,
+.earthquake-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  color: #2d3748;
+}
+
+.earthquake-card h4 {
+  color: rgb(122, 139, 164);
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0.25rem 0;
 }
 
 .fact-item,
@@ -75,10 +94,11 @@
   margin-left: 0.5rem;
 }
 
-.volcano-card,
+.volcano-info,
 .unesco-sites-card,
-.things-to-do-card {
+.things-to-do-list {
   background: linear-gradient(to right, #f6f9fc, #edf2f7);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   padding: 1rem;
   border-radius: 15px;
   justify-content: center;
@@ -88,9 +108,9 @@
   height: 40px;
 }
 
-.volcano-card:hover,
+.volcano-info:hover,
 .unesco-sites-card:hover,
-.things-to-do-card:hover {
+.things-to-do-list:hover {
   transform: translateY(-2px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   background: #edf2f7;
@@ -110,39 +130,11 @@
   }
 }
 
-.things-to-do-card h3,
-.unesco-sites-card h3,
-.volcano-card h3 {
-  font-size: 1rem;
-}
-
 .earthquake-card {
   display: grid;
-  flex-direction: inline-block;
   grid-template-columns: 1fr;
   border: 1px solid #e2e8ef;
   padding: 1rem;
-  margin-top: 20px;
-  border-radius: 15px;
+  margin-top: 1.25rem;
+  border-radius: 0.938rem;
 }
-.display-card-extra-values{
-  
-}
-.earthquake-card h3 {
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  color: #2d3748;
-}
-
-.earthquake-card h4 {
-  color: rgb(122, 139, 164);
-  font-size: 0.9rem;
-  margin: 0.5rem 0 0.25rem 0;
-}
-
-.earthquake-card p {
-  color: #2d3748;
-  margin: 0;
-}
-
-

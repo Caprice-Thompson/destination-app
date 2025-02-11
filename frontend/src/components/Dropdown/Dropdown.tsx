@@ -31,7 +31,7 @@ const Dropdown = ({
     icon,
 }: DropdownProps) => {
     return (
-        <div className="dropdown-container">
+<>
             {icon && <span className="select-icon">{icon}</span>}
             <select
                 id={id}
@@ -49,7 +49,7 @@ const Dropdown = ({
                 </option>
             ))}
         </select>
-        </div>
+        </>
     );
 };
 

@@ -16,7 +16,7 @@ const DisplayCard = ({
     nameField = 'name'
 }: DisplayCardProps) => {
     return (
-        <div className="info-card">
+        <div className={`${className}-info-card`}>
             <h2>{title}</h2>
             {data.map((item, index) => (
                 <div 

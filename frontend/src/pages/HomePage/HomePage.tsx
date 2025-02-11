@@ -9,12 +9,40 @@ import "./HomePage.css";
 import { FaPlane } from "react-icons/fa";
 import { MdArrowDropDown } from "react-icons/md";
 
+export const countries = [
+    "Spain", "France", "Japan", 
+];
+
+//Find better way to implement autocomplete
 const HomePage = () => {
     const [countryName, setCountryName] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
+    const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const navigate = useNavigate();
 
+    const handleCountryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        setCountryName(value);
+        
+        if (value.length > 0) {
+            const filtered = countries.filter(country =>
+                country.toLowerCase().includes(value.toLowerCase())
+            );
+            setFilteredCountries(filtered);
+            setShowSuggestions(true);
+        } else {
+            setFilteredCountries([]);
+            setShowSuggestions(false);
+        }
+    };
 
+    const handleCountrySelect = (country: string) => {
+        setCountryName(country);
+        setShowSuggestions(false);
+    };
+
+    //modal for error handling
     const handleSubmit = async () => {
         if (!countryName || !selectedMonth) {
             alert('Please fill in all fields');
@@ -48,16 +76,30 @@ const HomePage = () => {
             <div className="home-page-container">
                 <h3>Prepare for your next adventure...</h3>
                 <div className="form-row">
-                    <Input 
-                        id="country-name-input"
-                        name="country-name"
-                        className="country-name-field"
-                        type="text"
-                        placeholder="Enter country name..."
-                        required={true}
-                        value={countryName}
-                        onChange={(e) => setCountryName(e.target.value)}
-                    />
+                    <div className="autocomplete-container">
+                        <Input 
+                            id="country-name-input"
+                            name="country-name"
+                            className="country-name-field"
+                            type="text"
+                            placeholder="Enter country name..."
+                            required={true}
+                            value={countryName}
+                            onChange={handleCountryInputChange}
+                        />
+                        {showSuggestions && filteredCountries.length > 0 && (
+                            <ul className="country-suggestions">
+                                {filteredCountries.map((country, index) => (
+                                    <li 
+                                        key={index}
+                                        onClick={() => handleCountrySelect(country)}
+                                    >
+                                        {country}
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
                     <Dropdown 
                         id="month-select"
                         name="month"

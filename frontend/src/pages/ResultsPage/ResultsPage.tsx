@@ -40,14 +40,19 @@ const ResultsPage = () => {
                         },
                         { 
                             label: "Currency", 
-                            value: (
-                                <>
-                                    {countryData.countryDetails.currencies.EUR.name} 
-                                    <span className="currency-symbol">
-                                        ({countryData.countryDetails.currencies.EUR.symbol})
-                                    </span>
-                                </>
-                            )
+                            value: (() => {
+                                const currencies = countryData.countryDetails.currencies;
+                                const currencyCode = Object.keys(currencies)[0];
+                                const currency = currencies[currencyCode];
+                                return currency ? (
+                                    <>
+                                        {currency.name}
+                                        <span className="currency-symbol">
+                                            ({currency.symbol})
+                                        </span>
+                                    </>
+                                ) : 'N/A';
+                            })()
                         },
                         { 
                             label: "Languages", 
@@ -100,16 +105,16 @@ const ResultsPage = () => {
 
                 <DisplayCard 
                     title="Things to Do" 
-                    data={tourismData.thingsToDoList[0].item.map((item: string) => ({ 
-                        name: item 
+                    data={(tourismData.thingsToDoList?.[0]?.item || []).map((item: string) => ({ 
+                        name: item ? item : []
                     }))} 
-                    className="things-to-do-card"
+                    className="things-to-do-list"
                     nameField="name"
                 />
 
                 <DisplayCardWithExtraValues 
                     title="UNESCO World Heritage Sites" 
-                    data={tourismData.unescoSitesList} 
+                    data={tourismData.unescoSitesList || []} 
                     className="unesco-sites-card"
                     nameField="site"
                     extraFields={[ 'description']}
@@ -118,7 +123,7 @@ const ResultsPage = () => {
                 <DisplayCard 
                     title="Volcanoes" 
                     data={volcanoData} 
-                    className="volcano-card"
+                    className="volcano-info"
                 />
                  </div>
                 <div className="earthquake-card-container">
