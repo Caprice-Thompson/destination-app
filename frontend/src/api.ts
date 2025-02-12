@@ -21,12 +21,17 @@ export interface VolcanoData {
 export interface EarthquakeData {
     earthquakeData: Earthquake[];
 }
-
+export const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Content-Type': 'application/json'
+};
 export const fetchCountryData = async (countryName: string): Promise<CountryData> => {
     try {
         const response = await fetch(`${endpoints.country}/getCountryData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
         });
 
         if (!response.ok) throw new Error('Failed to fetch country data');
@@ -42,7 +47,7 @@ export const fetchTourismData = async (countryName: string): Promise<TourismData
     try {
         const response = await fetch(`${endpoints.tourism}/getTourismData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
         });
 
         if (!response.ok) throw new Error('Failed to fetch tourism data');
@@ -58,7 +63,7 @@ export const fetchVolcanoData = async (countryName: string): Promise<Volcano> =>
     try {
         const response = await fetch(`${endpoints.volcano}/getVolcanoData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
         });
 
         if (!response.ok) throw new Error('Failed to fetch volcano data');
@@ -74,7 +79,7 @@ export const fetchEarthquakeData = async (countryName: string, selectedMonth: st
     try {
         const response = await fetch(`${endpoints.earthquake}/getEarthquakeData?country=${encodeURIComponent(countryName)}&month=${encodeURIComponent(selectedMonth)}`, {
             method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
+            headers: headers,
         });
 
         if (!response.ok) throw new Error('Failed to fetch earthquake data');
