@@ -4,6 +4,7 @@ type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
   body?: string | URLSearchParams;
+  mode?: string;
 };
 
 export async function getData<T>(
@@ -12,6 +13,8 @@ export async function getData<T>(
 ): Promise<T | void> {
   const defaultOptions: RequestOptions = {
     method: "GET",
+
+    mode: "cors",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -20,7 +23,7 @@ export async function getData<T>(
     ...options,
   };
   try {
-    const response = await fetch(url, defaultOptions);
+    const response = await fetch(url, defaultOptions as RequestInit);
     if (!response.ok) {
       throw new AppError(
         response.status,

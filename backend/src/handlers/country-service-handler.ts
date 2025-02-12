@@ -2,10 +2,27 @@ import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 import { CountryDomain, CountryRepo } from "../services/CountryService";
 import { AppError } from "../utils/errorHandler";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+};
+
 export const getCountryServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: {
+        ...corsHeaders,
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+      body: ''
+    };
+  }
+
   try {
     const country = event.queryStringParameters?.country;
     if (!country) {
@@ -18,11 +35,7 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*", 
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
+      headers: corsHeaders,
       body: JSON.stringify(
         {
           message: "Country service executed successfully!",
@@ -37,13 +50,13 @@ export const getCountryServiceHandler = async (
     const message = error instanceof AppError ? error.message : "Internal server error";
 
     return {
-      statusCode,
+      statusCode: statusCode,
       headers: {
-        "Access-Control-Allow-Origin": "*", 
-        "Access-Control-Allow-Methods": "GET, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
+        ...corsHeaders,
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
       },
       body: JSON.stringify({ message }),
     };
+
   }
 };
