@@ -25,7 +25,10 @@ jobs:
       - name: Install dependencies and Build
         run: |
           cd frontend
-          cp .env
+          echo "VITE_COUNTRY_API_URL=${{ secrets.VITE_COUNTRY_API_URL }}" >> .env
+          echo "VITE_TOURISM_API_URL=${{ secrets.VITE_TOURISM_API_URL }}" >> .env
+          echo "VITE_EARTHQUAKE_API_URL=${{ secrets.VITE_EARTHQUAKE_API_URL }}" >> .env
+          echo "VITE_VOLCANO_API_URL=${{ secrets.VITE_VOLCANO_API_URL }}" >> .env
           npm install
           npm run build
 
