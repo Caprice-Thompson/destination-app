@@ -4,8 +4,8 @@ import { AppError } from "../utils/errorHandler";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, Origin, X-Requested-With, Accept",
 };
 
 export const getCountryServiceHandler = async (
@@ -15,10 +15,7 @@ export const getCountryServiceHandler = async (
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
-      headers: {
-        ...corsHeaders,
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
+      headers: corsHeaders,
       body: ''
     };
   }
@@ -51,12 +48,8 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: statusCode,
-      headers: {
-        ...corsHeaders,
-        "Access-Control-Allow-Headers": "Content-Type, Authorization",
-      },
+      headers: corsHeaders,
       body: JSON.stringify({ message }),
     };
-
   }
 };
