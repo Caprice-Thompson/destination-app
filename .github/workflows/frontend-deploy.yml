@@ -25,6 +25,7 @@ jobs:
       - name: Install dependencies and Build
         run: |
           cd frontend
+          cp .env
           npm install
           npm run build
 
