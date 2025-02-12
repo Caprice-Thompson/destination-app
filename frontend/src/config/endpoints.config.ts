@@ -12,7 +12,7 @@ interface EndpointConfig {
 
 const endpoints: EndpointConfig = {
     prod: {
-        country: import.meta.env.VITE_COUNTRY_API_URL || '',
+        country: import.meta.env.VITE_COUNTRY_API_URL || 'h',
         tourism: import.meta.env.VITE_TOURISM_API_URL || '',
         earthquake: import.meta.env.VITE_EARTHQUAKE_API_URL || '',
         volcano: import.meta.env.VITE_VOLCANO_API_URL || ''
@@ -28,6 +28,9 @@ const endpoints: EndpointConfig = {
 export const getEndpoints = (): ServiceEndpoints => {
     if (!import.meta.env.VITE_COUNTRY_API_URL) {
         console.warn('Environment variables not loaded properly');
+        console.log(import.meta.env.VITE_COUNTRY_API_URL);
+        console.log(import.meta.env.PROD);
+        console.log(endpoints.prod);
     }
     return import.meta.env.PROD ? endpoints.prod : endpoints.dev;
 }; 
