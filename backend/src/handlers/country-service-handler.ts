@@ -18,6 +18,11 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: 200,
+      headers: {
+        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
       body: JSON.stringify(
         {
           message: "Country service executed successfully!",
@@ -28,20 +33,17 @@ export const getCountryServiceHandler = async (
       ),
     };
   } catch (error) {
-    if (error instanceof AppError) {
-      return {
-        statusCode: error.statusCode,
-        body: JSON.stringify({
-          message: error.message,
-          detail: error.detail,
-        }),
-      };
-    }
+    const statusCode = error instanceof AppError ? error.statusCode : 500;
+    const message = error instanceof AppError ? error.message : "Internal server error";
+
     return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Internal server error",
-      }),
+      statusCode,
+      headers: {
+        "Access-Control-Allow-Origin": "*", 
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: JSON.stringify({ message }),
     };
   }
 };
