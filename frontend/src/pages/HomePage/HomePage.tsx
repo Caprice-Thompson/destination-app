@@ -51,7 +51,7 @@ const HomePage = () => {
 
         try {
             
-            const { countryData, tourismData } = await getCountryAndTourismData(countryName, selectedMonth);
+            const { countryData, tourismData } = await getCountryAndTourismData(countryName);
             const { volcanoData, earthquakeData } = await getVolcanoAndEarthquakeData(countryName, selectedMonth);
 
             navigate('/results', { 
