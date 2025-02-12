@@ -23,14 +23,24 @@ jobs:
           cache-dependency-path: './frontend/package-lock.json'
 
       - name: Install dependencies and Build
+        env:
+          VITE_COUNTRY_API_URL: ${{ secrets.VITE_COUNTRY_API_URL }}
+          VITE_TOURISM_API_URL: ${{ secrets.VITE_TOURISM_API_URL }}
+          VITE_EARTHQUAKE_API_URL: ${{ secrets.VITE_EARTHQUAKE_API_URL }}
+          VITE_VOLCANO_API_URL: ${{ secrets.VITE_VOLCANO_API_URL }}
         run: |
           cd frontend
-          cat << EOF > .env.production
-          VITE_COUNTRY_API_URL=${{ secrets.VITE_COUNTRY_API_URL }}
-          VITE_TOURISM_API_URL=${{ secrets.VITE_TOURISM_API_URL }}
-          VITE_EARTHQUAKE_API_URL=${{ secrets.VITE_EARTHQUAKE_API_URL }}
-          VITE_VOLCANO_API_URL=${{ secrets.VITE_VOLCANO_API_URL }}
-          EOF
+    
+          echo "VITE_USE_MOCK_DATA=false" > .env.production
+          echo "VITE_COUNTRY_API_URL=$VITE_COUNTRY_API_URL" >> .env.production
+          echo "VITE_TOURISM_API_URL=$VITE_TOURISM_API_URL" >> .env.production
+          echo "VITE_EARTHQUAKE_API_URL=$VITE_EARTHQUAKE_API_URL" >> .env.production
+          echo "VITE_VOLCANO_API_URL=$VITE_VOLCANO_API_URL" >> .env.production
+          echo "VITE_LOCAL_API_URL=http://localhost:8080/api" >> .env.production
+
+          echo "Environment file contents:"
+          cat .env.production
+          
           npm install
           npm run build
 
