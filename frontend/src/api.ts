@@ -1,6 +1,7 @@
 import { Earthquake, ThingsToDo, UNESCOSite, Volcano } from "./types";
+import { apiConfig } from './config/api.config';
 
-const BASE_URL = "http://localhost:8080/api";
+const { endpoints } = apiConfig;
 
 export interface CountryData {
     name: string;
@@ -21,9 +22,9 @@ export interface EarthquakeData {
     earthquakeData: Earthquake[];
 }
 
-export const fetchCountryData = async (countryName: string, selectedMonth: string): Promise<CountryData> => {
+export const fetchCountryData = async (countryName: string): Promise<CountryData> => {
     try {
-        const response = await fetch(`${BASE_URL}/getCountryData?country=${encodeURIComponent(countryName)}&month=${encodeURIComponent(selectedMonth)}`, {
+        const response = await fetch(`${endpoints.country}/getCountryData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -39,7 +40,7 @@ export const fetchCountryData = async (countryName: string, selectedMonth: strin
 
 export const fetchTourismData = async (countryName: string): Promise<TourismData> => {
     try {
-        const response = await fetch(`${BASE_URL}/getTourismData?country=${encodeURIComponent(countryName)}`, {
+        const response = await fetch(`${endpoints.tourism}/getTourismData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -55,7 +56,7 @@ export const fetchTourismData = async (countryName: string): Promise<TourismData
 
 export const fetchVolcanoData = async (countryName: string): Promise<Volcano> => {
     try {
-        const response = await fetch(`${BASE_URL}/getVolcanoData?country=${encodeURIComponent(countryName)}`, {
+        const response = await fetch(`${endpoints.volcano}/getVolcanoData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -68,9 +69,10 @@ export const fetchVolcanoData = async (countryName: string): Promise<Volcano> =>
         throw error;
     }
 };
+
 export const fetchEarthquakeData = async (countryName: string, selectedMonth: string): Promise<EarthquakeData> => {
     try {
-        const response = await fetch(`${BASE_URL}/getEarthquakeData?country=${encodeURIComponent(countryName)}&month=${encodeURIComponent(selectedMonth)}`, {
+        const response = await fetch(`${endpoints.earthquake}/getEarthquakeData?country=${encodeURIComponent(countryName)}&month=${encodeURIComponent(selectedMonth)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' },
         });
@@ -95,10 +97,10 @@ export interface CombinedVolcanoAndEarthquakeData {
     earthquakeData: EarthquakeData[];
 }
 
-export const getCountryAndTourismData = async (countryName: string, selectedMonth: string): Promise<CombinedCountryAndTourismData> => {
+export const getCountryAndTourismData = async (countryName: string): Promise<CombinedCountryAndTourismData> => {
     try {
         const [countryData, tourismData] = await Promise.all([
-            fetchCountryData(countryName, selectedMonth),
+            fetchCountryData(countryName),
             fetchTourismData(countryName),
         ]);
 
