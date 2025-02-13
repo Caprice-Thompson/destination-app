@@ -28,6 +28,7 @@ jobs:
           VITE_TOURISM_API_URL: ${{ secrets.VITE_TOURISM_API_URL }}
           VITE_EARTHQUAKE_API_URL: ${{ secrets.VITE_EARTHQUAKE_API_URL }}
           VITE_VOLCANO_API_URL: ${{ secrets.VITE_VOLCANO_API_URL }}
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run: |
           cd frontend
     
@@ -50,6 +51,8 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Deploy to S3
+        env:
+          FRONTEND_URL: ${{ secrets.FRONTEND_URL }}
         run: |
           aws s3 sync frontend/dist/ s3://${{ secrets.S3_BUCKET }} --delete
 

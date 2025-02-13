@@ -27,6 +27,7 @@ type RequestOptions = {
     headers?: Record<string, string>;
     body?: string | URLSearchParams;
     mode?: string;
+    credentials?: string;
 };
 
 export async function getData<T>(
@@ -35,7 +36,7 @@ export async function getData<T>(
 ): Promise<T | void> {
     const defaultOptions: RequestOptions = {
         method: "GET",
-
+        credentials: "include",
         mode: "cors",
         headers: {
             Accept: "application/json",
