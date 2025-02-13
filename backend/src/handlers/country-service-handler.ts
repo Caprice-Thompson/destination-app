@@ -3,9 +3,10 @@ import { CountryDomain, CountryRepo } from "../services/CountryService";
 import { AppError } from "../utils/errorHandler";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "",
+  "Access-Control-Allow-Origin": "https://d1c44nd79uod1i.cloudfront.net/",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, Origin, X-Requested-With, Accept",
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, Origin, X-Requested-With, Accept",
   "Access-Control-Allow-Credentials": "true",
 };
 
@@ -13,11 +14,11 @@ export const getCountryServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
-  if (event.httpMethod === 'OPTIONS') {
+  if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
       headers: corsHeaders,
-      body: ''
+      body: "",
     };
   }
 
@@ -45,7 +46,8 @@ export const getCountryServiceHandler = async (
     };
   } catch (error) {
     const statusCode = error instanceof AppError ? error.statusCode : 500;
-    const message = error instanceof AppError ? error.message : "Internal server error";
+    const message =
+      error instanceof AppError ? error.message : "Internal server error";
 
     return {
       statusCode: statusCode,
