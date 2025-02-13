@@ -1,13 +1,22 @@
 import { Earthquake, ThingsToDo, UNESCOSite, Volcano } from "./types";
 import { apiConfig } from './config/api.config';
-
+import { getData } from "../../shared/utils";
 const { endpoints } = apiConfig;
-
 export interface CountryData {
     name: string;
-    population: number;
-    gdp: number;
+    capitalCity: string[];
+    languages: { name: string }[];
+    currencies: { [key: string]: { name: string; symbol: string } };
+    flag: string;
 }
+
+export type CountryResponse = {
+    name: { common: string };
+    capital: string[];
+    languages: Record<string, string>;
+    currencies: { [key: string]: { name: string; symbol: string } };
+    flags: { svg: string };
+};
 
 export interface TourismData {
     thingsToDoList: ThingsToDo[];
@@ -21,21 +30,34 @@ export interface VolcanoData {
 export interface EarthquakeData {
     earthquakeData: Earthquake[];
 }
+
 export const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
 };
+
 export const fetchCountryData = async (countryName: string): Promise<CountryData> => {
     try {
-        const response = await fetch(`${endpoints.country}/getCountryData?country=${encodeURIComponent(countryName)}`, {
+        const response = await getData<CountryResponse[]>(`${endpoints.country}/getCountryData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: headers,
         });
 
-        if (!response.ok) throw new Error('Failed to fetch country data');
+        if (!response || response.length === 0) {
+            throw new Error('Failed to fetch country data');
+        }
 
-        return await response.json();
+        const [data] = response;
+        return {
+            name: data.name.common,
+            capitalCity: data.capital,
+            languages: Object.values(data.languages).map(lang => ({
+                name: lang
+            })),
+            currencies: data.currencies,
+            flag: data.flags.svg
+        };
     } catch (error) {
         console.error('Error fetching country data:', error);
         throw error;

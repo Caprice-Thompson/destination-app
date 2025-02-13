@@ -6,7 +6,7 @@ type RequestOptions = {
   body?: string | URLSearchParams;
   mode?: string;
 };
-
+//Cross-Origin Resource Sharing (CORS)
 export async function getData<T>(
   url: string,
   options?: RequestOptions
