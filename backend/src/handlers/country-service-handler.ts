@@ -2,6 +2,14 @@ import { APIGatewayEvent, Context, APIGatewayProxyResult } from "aws-lambda";
 import { CountryDomain, CountryRepo } from "../services/CountryService";
 import { AppError } from "../utils/errorHandler";
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "https://d1c44nd79uod1i.cloudfront.net/",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "Content-Type, Authorization, Origin, X-Requested-With, Accept",
+  "Access-Control-Allow-Credentials": "true",
+};
+
 export const getCountryServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
@@ -9,6 +17,7 @@ export const getCountryServiceHandler = async (
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
+      headers: corsHeaders,
       body: "",
     };
   }
@@ -25,6 +34,7 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: 200,
+      headers: corsHeaders,
       body: JSON.stringify(
         {
           message: "Country service executed successfully!",
@@ -41,6 +51,7 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: statusCode,
+      headers: corsHeaders,
       body: JSON.stringify({ message }),
     };
   }

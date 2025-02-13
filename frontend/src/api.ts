@@ -32,25 +32,33 @@ export interface EarthquakeData {
 }
 
 export const headers = {
-    // 'Access-Control-Allow-Origin': '*',
-    // 'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
-    // 'Access-Control-Allow-Credentials': 'true'
+    'Access-Control-Allow-Credentials': 'true'
 };
 
 export const fetchCountryData = async (countryName: string): Promise<CountryData> => {
     try {
-        const response = await fetch(`${endpoints.country}/getCountryData?country=${encodeURIComponent(countryName)}`, {
+        const response = await getData<CountryResponse[]>(`${endpoints.country}/getCountryData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: headers,
-            credentials: 'include',
         });
 
+        if (!response || response.length === 0) {
+            throw new Error('Failed to fetch country data');
+        }
 
-
-        if (!response.ok) throw new Error('Failed to fetch country data');
-
-        return await response.json();
+        const [data] = response;
+        return {
+            name: data.name.common,
+            capitalCity: data.capital,
+            languages: Object.values(data.languages).map(lang => ({
+                name: lang
+            })),
+            currencies: data.currencies,
+            flag: data.flags.svg
+        };
     } catch (error) {
         console.error('Error fetching country data:', error);
         throw error;
@@ -62,7 +70,6 @@ export const fetchTourismData = async (countryName: string): Promise<TourismData
         const response = await fetch(`${endpoints.tourism}/getTourismData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: headers,
-            credentials: 'include',
         });
 
         if (!response.ok) throw new Error('Failed to fetch tourism data');
@@ -79,7 +86,6 @@ export const fetchVolcanoData = async (countryName: string): Promise<Volcano> =>
         const response = await fetch(`${endpoints.volcano}/getVolcanoData?country=${encodeURIComponent(countryName)}`, {
             method: 'GET',
             headers: headers,
-            credentials: 'include',
         });
 
         if (!response.ok) throw new Error('Failed to fetch volcano data');
@@ -96,7 +102,6 @@ export const fetchEarthquakeData = async (countryName: string, selectedMonth: st
         const response = await fetch(`${endpoints.earthquake}/getEarthquakeData?country=${encodeURIComponent(countryName)}&month=${encodeURIComponent(selectedMonth)}`, {
             method: 'GET',
             headers: headers,
-            credentials: 'include',
         });
 
         if (!response.ok) throw new Error('Failed to fetch earthquake data');
