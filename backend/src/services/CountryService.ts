@@ -42,7 +42,7 @@ interface CountryRepoInterface {
   getCityPopulation: () => Promise<CityPopulation[]>;
 }
 export class CountryDomain {
-  constructor(private readonly countryRepo: CountryRepoInterface) {}
+  constructor(private readonly countryRepo: CountryRepoInterface) { }
 
   async getCountryData(
     country: string | undefined
@@ -69,23 +69,23 @@ export class CountryRepo implements CountryRepoInterface {
     const countryUrl = `${countryBaseUrl}/${this.country}`;
 
     try {
-      const response = await getData<CountryResponse[]>(countryUrl);
+      const response = await fetch(countryUrl);
 
-      if (!response || response.length === 0) {
+      if (!response) {
         console.error(`No data returned from API for URL: ${countryUrl}`);
         throw new AppError(404, "No country data found");
       }
 
-      const [data] = response;
+      const data = await response.json();
 
       const mappedCountry: Country = {
         name: data.name.common,
         capitalCity: data.capital,
-        languages: Object.values(data.languages).map((lang) => ({
+        languages: Object.values(data.languages).map((lang: any) => ({
           name: lang,
         })),
         currencies: Object.entries(data.currencies).reduce(
-          (acc, [key, details]) => ({
+          (acc: Currencies, [key, details]: [string, any]) => ({
             ...acc,
             [key]: { name: details.name, symbol: details.symbol },
           }),
