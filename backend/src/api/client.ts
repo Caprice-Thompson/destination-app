@@ -7,25 +7,22 @@ type RequestOptions = {
 };
 
 const headers: Record<string, string> = {
-  "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
-  "Access-Control-Max-Age": "3600",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
 };
 
 //Cross-Origin Resource Sharing (CORS)
 export async function getData<T>(
   url: string,
   options?: RequestOptions
-): Promise<T | void> {
+): Promise<T> {
   const defaultOptions: RequestOptions = {
     method: "GET",
     headers: {
       ...headers,
       ...(options?.headers || {})
     },
-    mode: 'cors',
     ...options,
   };
   try {
@@ -38,8 +35,7 @@ export async function getData<T>(
         )}`
       );
     }
-    const data: T = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
     if (error instanceof Error) {
       throw new AppError(500, error.message);

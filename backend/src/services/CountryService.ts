@@ -68,8 +68,13 @@ export class CountryRepo implements CountryRepoInterface {
     const countryBaseUrl = process.env.COUNTRY_BASE_URL ?? "";
     const countryUrl = `${countryBaseUrl}/${this.country}`;
 
+    const headers: Record<string, string> = {};
+    if (process.env.FRONTEND_URL) {
+      headers["Access-Control-Allow-Origin"] = process.env.FRONTEND_URL;
+    }
+
     try {
-      const response = await getData<CountryResponse[]>(countryUrl);
+      const response = await getData<CountryResponse[]>(countryUrl, { headers });
 
       if (!response || response.length === 0) {
         console.error(`No data returned from API for URL: ${countryUrl}`);
