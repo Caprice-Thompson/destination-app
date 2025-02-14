@@ -1,11 +1,19 @@
 import { AppError } from "../utils/errorHandler";
-
 type RequestOptions = {
   method?: string;
   headers?: Record<string, string>;
   body?: string | URLSearchParams;
   mode?: string;
 };
+
+const headers: Record<string, string> = {
+  "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+  "Content-Type": "application/json",
+  "Accept": "application/json"
+};
+
 //Cross-Origin Resource Sharing (CORS)
 export async function getData<T>(
   url: string,
@@ -13,12 +21,9 @@ export async function getData<T>(
 ): Promise<T | void> {
   const defaultOptions: RequestOptions = {
     method: "GET",
-
-    // mode: "cors",
     headers: {
-      Accept: "application/json",
-      "Content-Type": "application/json",
-      ...options?.headers,
+      ...headers,
+      ...(options?.headers || {})
     },
     ...options,
   };

@@ -1,50 +1,62 @@
-# React + TypeScript + Vite
+# Destination App Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React application that provides travel information, including country details, tourism data, and natural hazard information.
 
-Currently, two official plugins are available:
+## Prerequisites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Node.js (v18 or higher)
+- npm or yarn
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+- Country information lookup
+- Tourism data including UNESCO sites and things to do
+- Natural hazard information (volcanoes and earthquakes)
+- Responsive design
+- TypeScript support
+- Environment-based configuration
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+## API Integration
+
+The application integrates with four AWS API Gateway endpoints:
+- Country API: Basic country information
+- Tourism API: Tourism-related data
+- Earthquake API: Historical earthquake data
+- Volcano API: Volcano information
+
+## Development Notes
+
+- The development server includes a proxy configuration for local API development
+- CORS headers are handled by the backend API Gateway configuration
+- Environment variables are managed through Vite's import.meta.env
+
+## Start development
+
+### Local Development
+- Development server runs on `http://localhost:5173`
+- API proxy is configured to forward requests to `http://localhost:8000`
+- Set `VITE_USE_MOCK_DATA=true` to use mock data instead of API calls
+
+### Production Mode
+- Uses AWS API Gateway endpoints
+- CORS is configured for CloudFront distribution
+- Set `VITE_USE_MOCK_DATA=false` to use real API endpoints
+
+
+## Available Scripts
+
+Start development server
+```
+npm run dev
+```
+Build for production
+```
+npm run build
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
+Deploy to AWS CloudFront
 ```
+npm run deploy
+```
+
