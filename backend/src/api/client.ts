@@ -8,6 +8,7 @@ type RequestOptions = {
 
 const headers: Record<string, string> = {
   "Access-Control-Allow-Methods": "GET",
+  "Access-Control-Allow-Headers": "Apigw-Requestid",
   "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
 };
 
