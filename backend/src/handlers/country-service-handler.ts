@@ -18,6 +18,11 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: 200,
+      headers: {
+        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
       body: JSON.stringify(
         {
           message: "Country service executed successfully!",
@@ -34,6 +39,11 @@ export const getCountryServiceHandler = async (
 
     return {
       statusCode: statusCode,
+      headers: {
+        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
       body: JSON.stringify({ message }),
     };
   }
