@@ -21,7 +21,6 @@ export const getCountryServiceHandler = async (
       headers: {
         'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
       },
       body: JSON.stringify(
         {
@@ -42,7 +41,6 @@ export const getCountryServiceHandler = async (
       headers: {
         'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
       },
       body: JSON.stringify({ message }),
     };
