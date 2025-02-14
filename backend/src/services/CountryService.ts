@@ -69,23 +69,23 @@ export class CountryRepo implements CountryRepoInterface {
     const countryUrl = `${countryBaseUrl}/${this.country}`;
 
     try {
-      const response = await fetch(countryUrl);
+      const response = await getData<CountryResponse[]>(countryUrl);
 
-      if (!response) {
+      if (!response || response.length === 0) {
         console.error(`No data returned from API for URL: ${countryUrl}`);
         throw new AppError(404, "No country data found");
       }
 
-      const data = await response.json();
+      const [data] = response;
 
       const mappedCountry: Country = {
         name: data.name.common,
         capitalCity: data.capital,
-        languages: Object.values(data.languages).map((lang: any) => ({
+        languages: Object.values(data.languages).map((lang) => ({
           name: lang,
         })),
         currencies: Object.entries(data.currencies).reduce(
-          (acc: Currencies, [key, details]: [string, any]) => ({
+          (acc, [key, details]) => ({
             ...acc,
             [key]: { name: details.name, symbol: details.symbol },
           }),
