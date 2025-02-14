@@ -34,7 +34,7 @@ export const getEndpoints = (): ServiceEndpoints => {
             VITE_EARTHQUAKE_API_URL: import.meta.env.VITE_EARTHQUAKE_API_URL,
             VITE_VOLCANO_API_URL: import.meta.env.VITE_VOLCANO_API_URL,
         };
-        console.log(requiredVars);
+
         const missingVars = Object.entries(requiredVars)
             .filter(([_, value]) => !value)
             .map(([key]) => key);

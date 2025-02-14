@@ -9,7 +9,6 @@ type RequestOptions = {
 const headers: Record<string, string> = {
   "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  'Access-Control-Allow-Headers': 'content-type,authorization',
   'Access-Control-Max-Age': '3000',
 };
 
