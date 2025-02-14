@@ -9,9 +9,8 @@ type RequestOptions = {
 const headers: Record<string, string> = {
   "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
-  "Content-Type": "application/json",
-  "Accept": "application/json"
+  'Access-Control-Allow-Headers': 'content-type,authorization',
+  'Access-Control-Max-Age': '3000',
 };
 
 //Cross-Origin Resource Sharing (CORS)
@@ -25,6 +24,7 @@ export async function getData<T>(
       ...headers,
       ...(options?.headers || {})
     },
+    mode: 'cors',
     ...options,
   };
   try {
