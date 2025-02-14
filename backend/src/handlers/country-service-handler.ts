@@ -6,6 +6,20 @@ export const getCountryServiceHandler = async (
   event: APIGatewayEvent,
   context: Context
 ): Promise<APIGatewayProxyResult> => {
+
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 204,
+      headers: {
+        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
+        'Access-Control-Max-Age': '3600',
+      },
+      body: '',
+    };
+  }
+
   try {
     const country = event.queryStringParameters?.country;
     if (!country) {
@@ -21,6 +35,7 @@ export const getCountryServiceHandler = async (
       headers: {
         'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(
         {
@@ -41,6 +56,7 @@ export const getCountryServiceHandler = async (
       headers: {
         'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ message }),
     };

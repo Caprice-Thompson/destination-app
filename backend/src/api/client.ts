@@ -7,9 +7,11 @@ type RequestOptions = {
 };
 
 const headers: Record<string, string> = {
+  "Content-Type": "application/json",
   "Access-Control-Allow-Origin": process.env.FRONTEND_URL || "*",
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-  'Access-Control-Max-Age': '3000',
+  "Access-Control-Allow-Headers": "Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token",
+  "Access-Control-Max-Age": "3600",
 };
 
 //Cross-Origin Resource Sharing (CORS)
