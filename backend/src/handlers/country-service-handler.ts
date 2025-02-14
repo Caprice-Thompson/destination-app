@@ -11,7 +11,7 @@ export const getCountryServiceHandler = async (
     return {
       statusCode: 204,
       headers: {
-        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Access-Control-Allow-Headers': 'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token',
         'Access-Control-Max-Age': '3600',
@@ -33,7 +33,7 @@ export const getCountryServiceHandler = async (
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Content-Type': 'application/json',
       },
@@ -54,7 +54,7 @@ export const getCountryServiceHandler = async (
     return {
       statusCode: statusCode,
       headers: {
-        'Access-Control-Allow-Origin': process.env.FRONTEND_URL || '*',
+        'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, OPTIONS',
         'Content-Type': 'application/json',
       },
