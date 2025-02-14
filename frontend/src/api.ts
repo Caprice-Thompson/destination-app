@@ -1,6 +1,6 @@
 import { Earthquake, ThingsToDo, UNESCOSite, Volcano } from "./types";
 import { apiConfig } from "./config/api.config";
-import { getData } from "../../shared/utils";
+
 const { endpoints } = apiConfig;
 export interface CountryData {
   name: string;
@@ -32,17 +32,16 @@ export interface EarthquakeData {
 }
 
 export const headers = {
-  "Access-Control-Allow-Origin": "no-cors",
+  "Access-Control-Allow-Origin": import.meta.env.VITE_FRONTEND_URL,
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
-  "Access-Control-Allow-Credentials": "true",
 };
 
 export const fetchCountryData = async (
   countryName: string
 ): Promise<CountryData> => {
   try {
-    const response = await getData<CountryResponse[]>(
+    const response = await fetch(
       `${endpoints.country}/getCountryData?country=${encodeURIComponent(
         countryName
       )}`,
@@ -52,20 +51,11 @@ export const fetchCountryData = async (
       }
     );
 
-    if (!response || response.length === 0) {
+    if (!response.ok) {
       throw new Error("Failed to fetch country data");
     }
 
-    const [data] = response;
-    return {
-      name: data.name.common,
-      capitalCity: data.capital,
-      languages: Object.values(data.languages).map((lang) => ({
-        name: lang,
-      })),
-      currencies: data.currencies,
-      flag: data.flags.svg,
-    };
+    return await response.json();
   } catch (error) {
     console.error("Error fetching country data:", error);
     throw error;

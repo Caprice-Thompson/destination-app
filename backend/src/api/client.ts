@@ -14,7 +14,7 @@ export async function getData<T>(
   const defaultOptions: RequestOptions = {
     method: "GET",
 
-    mode: "cors",
+    // mode: "cors",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
@@ -38,7 +38,7 @@ export async function getData<T>(
     if (error instanceof Error) {
       throw new AppError(500, error.message);
     } else {
-      throw new AppError(500, 'Unexpected error occurred');
+      throw new AppError(500, "Unexpected error occurred");
     }
   }
 }
