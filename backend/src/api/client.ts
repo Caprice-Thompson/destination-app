@@ -7,9 +7,10 @@ type RequestOptions = {
 };
 
 const headers: Record<string, string> = {
-  "Access-Control-Allow-Methods": "GET, OPTIONS, POST",
-  "Access-Control-Allow-Headers": "Content-Type, Apigw-Requestid",
-  "Access-Control-Allow-Origin": "https://d1c44nd79uod1i.cloudfront.net",
+  // "Access-Control-Allow-Methods": "GET, OPTIONS, POST",
+  // "Access-Control-Allow-Headers": "Content-Type, Apigw-Requestid",
+  // "Access-Control-Allow-Origin": "https://d1c44nd79uod1i.cloudfront.net",
+  "Content-Type": "application/json",
 };
 
 //Cross-Origin Resource Sharing (CORS)
