@@ -47,3 +47,40 @@ export const getTourismServiceHandler = async (
     };
   }
 };
+
+export const getAvailableCountriesHandler = async (
+  event: APIGatewayEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
+  try {
+    const countries = await tourismAppLayer.getAvailableCountries();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify(
+        {
+          message: "Available countries retrieved successfully!",
+          data: countries,
+        },
+        null,
+        2
+      ),
+    };
+  } catch (error) {
+    if (error instanceof AppError) {
+      return {
+        statusCode: error.statusCode,
+        body: JSON.stringify({
+          message: error.message,
+          detail: error.detail,
+        }),
+      };
+    }
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Internal server error",
+      }),
+    };
+  }
+};

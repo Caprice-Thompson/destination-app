@@ -149,7 +149,7 @@ describe("Earthquake Domain and Repository", () => {
 
       const expectedStats: EarthquakeStatistics = {
         totalEarthquakes: 4,
-        avgEarthquakesInMonth: 0.75,
+        monthlyEarthquakePercentage: 0.75,
         avgTsunamiCount: 0.5,
         avgMagnitude: 6.2,
       };
@@ -164,7 +164,7 @@ describe("Earthquake Domain and Repository", () => {
 
       const expectedStats: EarthquakeStatistics = {
         totalEarthquakes: 4,
-        avgEarthquakesInMonth: 0,
+        monthlyEarthquakePercentage: 0,
         avgTsunamiCount: 0,
         avgMagnitude: 0,
       };

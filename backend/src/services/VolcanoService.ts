@@ -44,7 +44,8 @@ export class VolcanoService {
 
   public async getVolcanoByCountry(country: string): Promise<Volcano[]> {
     const volcanoList = await this.getVolcanoList();
-    return volcanoList.filter((volcano) => volcano.country === country);
+    const volcanoesByCountry = volcanoList.filter((volcano) => volcano.country === country);
+    return volcanoesByCountry.slice(0, 5);
   }
 
   private async getPage(page: number): Promise<VolcanoApiResponse> {

@@ -32,8 +32,8 @@ export interface EarthquakeData {
 }
 
 export const headers = {
-  "Access-Control-Allow-Origin": import.meta.env.VITE_FRONTEND_URL,
-  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  // "Access-Control-Allow-Origin": import.meta.env.VITE_FRONTEND_URL,
+  // "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
@@ -171,5 +171,25 @@ export const getVolcanoAndEarthquakeData = async (
     return { volcanoData, earthquakeData: [earthquakeData] };
   } catch (error) {
     throw new Error("Error fetching data: " + (error as Error).message);
+  }
+};
+
+export const fetchAvailableCountries = async (): Promise<string[]> => {
+  try {
+    const response = await fetch(
+      `${endpoints.tourism}/getAvailableCountries`,
+      {
+        method: "GET",
+        headers: headers,
+      }
+    );
+
+    if (!response.ok) throw new Error("Failed to fetch available countries");
+
+    const { data } = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching available countries:", error);
+    throw error;
   }
 };

@@ -1,5 +1,5 @@
 import { getData } from "../api/client";
-import { getPopulation } from "../db/dbQueries";
+import db from "../db/db";
 import { AppError } from "../utils/errorHandler";
 
 export interface CityPopulation {
@@ -68,11 +68,6 @@ export class CountryRepo implements CountryRepoInterface {
     const countryBaseUrl = process.env.COUNTRY_BASE_URL ?? "";
     const countryUrl = `${countryBaseUrl}/${this.country}`;
 
-    // const headers: Record<string, string> = {};
-    // if (process.env.FRONTEND_URL) {
-    //   headers["Access-Control-Allow-Origin"] = process.env.FRONTEND_URL;
-    // }
-
     try {
       const response = await getData<CountryResponse[]>(countryUrl);
 
@@ -107,7 +102,11 @@ export class CountryRepo implements CountryRepoInterface {
   }
 
   async getCityPopulation(): Promise<CityPopulation[]> {
-    const cityPopulations = await getPopulation(this.country);
+    const cityPopulations = await db.any(`
+      SELECT * FROM population 
+      WHERE country = '${this.country}' 
+      ORDER BY CAST(REPLACE(population, ',', '') AS NUMERIC) DESC LIMIT 4;
+    `);
     return cityPopulations;
   }
 }

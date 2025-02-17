@@ -5,13 +5,14 @@ import DisplayCard, { DisplayCardItem } from "../../components/DisplayCard";
 import { mockData } from "../../mockData";
 import DisplayCardWithExtraValues from "../../components/DisplayCardWithExtraValues";
 import "./ResultsPage.css";
+import { monthOptions } from "../../utils";
 
 const ResultsPage = () => {
     const location = useLocation();
     const useMockData = false;
     
-    const { countryName, data } = useMockData 
-        ? { countryName: "France", data: mockData }
+    const { countryName, selectedMonth, data } = useMockData 
+        ? { countryName: "France", selectedMonth: 5, data: mockData }
         : location.state || {};
     const countryData = data.countryData.data;
     const tourismData = data.tourismData.data;
@@ -83,7 +84,6 @@ const ResultsPage = () => {
                         { 
                             label: "Total Earthquakes", 
                             value: earthquakeData.earthquakeStatistics.totalEarthquakes, 
-                            className: "capital-city" 
                         },
                         { 
                             label: "Average Tsunami Count", 
@@ -92,12 +92,10 @@ const ResultsPage = () => {
                         { 
                             label: "Average Magnitude", 
                             value: earthquakeData.earthquakeStatistics.avgMagnitude,
-                            className: "languages"
                         },
                         { 
-                            label: "Average Earthquakes in a Month", 
-                            value: earthquakeData.earthquakeStatistics.avgEarthquakesInMonth,
-                            className: "languages"
+                            label: `Average Percentage for ${monthOptions.find((month: { value: string }) => month.value === selectedMonth)?.label}`, 
+                            value: `${earthquakeData.earthquakeStatistics.monthlyEarthquakePercentage}%`,
                         }
                     ]}  
                     className="info-card"
