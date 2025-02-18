@@ -115,7 +115,8 @@ const ResultsPage = () => {
                     data={tourismData.unescoSitesList || []} 
                     className="unesco-sites-card"
                     nameField="site"
-                    extraFields={[ 'description']}
+                    extraFields={['description']}
+                    useFlipCard={true}
                 />
 
                 <DisplayCard 
@@ -131,6 +132,7 @@ const ResultsPage = () => {
                     className="earthquake-card"
                     extraFields={['magnitude', 'date', 'type']}
                     keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
+                    useFlipCard={false}
                 />
             </section>
         </main>

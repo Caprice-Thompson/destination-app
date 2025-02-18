@@ -75,16 +75,19 @@
 }
 
 .fact-item:last-child,
+.field-label:last-child,
 .extra-field-container:last-child {
   border-bottom: none;
 }
 
-.fact-label {
+.fact-label,
+.field-label {
   color: rgb(122, 139, 164);
   font-weight: 500;
 }
 
-.fact-value {
+.fact-value,
+.field-value {
   color: #2d3748;
   font-weight: 600;
 }
