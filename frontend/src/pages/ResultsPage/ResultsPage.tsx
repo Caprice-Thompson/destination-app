@@ -20,17 +20,17 @@ const ResultsPage = () => {
     const earthquakeData = data.earthquakeData[0].data;
 
     return (
-        <div className="results-page">
-            <div className="hero-section">
+        <main className="results-page">
+            <header className="hero-section">
                 <img 
                     src={countryData.countryDetails.flag} 
                     alt={`${countryName} flag`} 
                     className="country-flag"
                 />
                 <h1>Discover {countryName}</h1>
-            </div>
+            </header>
             
-            <div className="dashboard-grid">
+            <section className="dashboard-grid">
                 <FactCard 
                     title="Quick Facts"
                     facts={[
@@ -86,7 +86,7 @@ const ResultsPage = () => {
                             value: earthquakeData.earthquakeStatistics.totalEarthquakes, 
                         },
                         { 
-                            label: "Average Tsunami Count", 
+                            label: "Tsunami Count", 
                             value: earthquakeData.earthquakeStatistics.avgTsunamiCount
                         },
                         { 
@@ -123,18 +123,17 @@ const ResultsPage = () => {
                     data={volcanoData} 
                     className="volcano-info"
                 />
-                 </div>
-                <div className="earthquake-card-container">
+            </section>
+            <section className="earthquake-card-container">
                 <DisplayCardWithExtraValues 
-                    title="Earthquakes" 
+                    title="Most Recent Earthquakes" 
                     data={earthquakeData.earthquakeData} 
                     className="earthquake-card"
                     extraFields={['magnitude', 'date', 'type']}
                     keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
                 />
-                </div>
-           
-        </div>
+            </section>
+        </main>
     );
 };
 

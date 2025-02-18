@@ -77,6 +77,7 @@ const HomePage = () => {
             navigate('/results', { 
                 state: { 
                     countryName,
+                    selectedMonth,
                     data: {
                         countryData,
                         tourismData,
@@ -92,10 +93,10 @@ const HomePage = () => {
         } 
     };
     return (
-        <div className="home-page-wrapper">
-            <div className="home-page-container">
+        <main className="home-page-wrapper">
+            <section className="home-page-container">
                 <h3>Prepare for your next adventure...</h3>
-                <div className="form-row">
+                <form className="form-row" onSubmit={(e) => e.preventDefault()}>
                     <div className="autocomplete-container">
                         <Input 
                             id="country-name-input"
@@ -109,7 +110,7 @@ const HomePage = () => {
                             onFocus={handleInputFocus}
                         />
                         {showSuggestions && filteredCountries.length > 0 && (
-                            <ul className="country-suggestions">
+                            <nav className="country-suggestions">
                                 {filteredCountries.map((country, index) => (
                                     <li 
                                         key={index}
@@ -118,7 +119,7 @@ const HomePage = () => {
                                         {country}
                                     </li>
                                 ))}
-                            </ul>
+                            </nav>
                         )}
                     </div>
                     <Dropdown 
@@ -139,9 +140,9 @@ const HomePage = () => {
                         onClick={handleSubmit} 
                         icon={<FaPlane />}
                     />
-                </div>
-            </div>
-        </div>
+                </form>
+            </section>
+        </main>
     )
 }
 
