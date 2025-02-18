@@ -110,22 +110,26 @@ const ResultsPage = () => {
                     nameField="name"
                 />
 
-                <DisplayCardWithExtraValues 
-                    title="UNESCO World Heritage Sites" 
-                    data={tourismData.unescoSitesList || []} 
-                    className="unesco-sites-card"
-                    nameField="site"
-                    extraFields={['description']}
-                    useFlipCard={true}
-                />
+                {tourismData.unescoSitesList && tourismData.unescoSitesList.length > 0 && (
+                    <DisplayCardWithExtraValues 
+                        title="UNESCO World Heritage Sites" 
+                        data={tourismData.unescoSitesList} 
+                        className="unesco-sites-card"
+                        nameField="site"
+                        extraFields={['description']}
+                        useFlipCard={true}
+                    />
+                )}
 
-                <DisplayCard 
-                    title="Volcanoes" 
-                    data={volcanoData} 
-                    className="volcano-info"
-                />
+                {volcanoData && volcanoData.length > 0 && (
+                    <DisplayCard 
+                        title="Volcanoes" 
+                        data={volcanoData} 
+                        className="volcano-info"
+                    />
+                )}
             </section>
-            <section className="earthquake-card-container">
+      
                 <DisplayCardWithExtraValues 
                     title="Most Recent Earthquakes" 
                     data={earthquakeData.earthquakeData} 
@@ -134,7 +138,7 @@ const ResultsPage = () => {
                     keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
                     useFlipCard={false}
                 />
-            </section>
+           
         </main>
     );
 };

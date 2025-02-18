@@ -21,7 +21,7 @@ const Input = ({
   type = 'text',
   value,
   onChange,
-  autoComplete = 'on',
+  autoComplete = 'off',
   required,
   onFocus,
 }: InputProps) => {

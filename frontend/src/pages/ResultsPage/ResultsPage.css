@@ -28,10 +28,17 @@
 }
 
 .dashboard-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  justify-content: center;
+}
+
+.dashboard-grid > * {
+  flex: 1 1 300px; 
+  max-width: 550px; 
+  min-width: 300px; 
 }
 
 .info-card,
