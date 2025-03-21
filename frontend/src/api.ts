@@ -174,7 +174,7 @@ export const getVolcanoAndEarthquakeData = async (
   }
 };
 
-export const fetchAvailableCountries = async (): Promise<string[]> => {
+export const fetchAvailableCountries = async (): Promise<{country: string}[]> => {
   try {
     const response = await fetch(
       `${endpoints.tourism}/getAvailableCountries`,
