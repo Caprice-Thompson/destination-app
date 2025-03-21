@@ -10,6 +10,7 @@ interface InputProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   autoComplete?: string;
   required: boolean;
+  onFocus?: () => void;
 }
 
 const Input = ({
@@ -20,8 +21,9 @@ const Input = ({
   type = 'text',
   value,
   onChange,
-  autoComplete = 'on',
+  autoComplete = 'off',
   required,
+  onFocus,
 }: InputProps) => {
   return (
     <input
@@ -34,6 +36,7 @@ const Input = ({
       onChange={onChange}
       autoComplete={autoComplete}
       required={required}
+      onFocus={onFocus}
     />
   );
 };

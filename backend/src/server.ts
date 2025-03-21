@@ -115,6 +115,24 @@ app.get("/api/getVolcanoData", async (req: Request, res: Response) => {
   }
 });
 
+// getAvailableCountries Endpoint
+app.get("/api/getAvailableCountries", async (req: Request, res: Response) => {
+  const tourismDatabaseRepo = new TourismDatabaseRepository();
+  const tourismAppLayer = new TourismApplicationService(tourismDatabaseRepo);
+
+
+  try {
+    const availableCountries = await tourismAppLayer.getAvailableCountries();
+
+    res.status(200).json({
+      message: "Available countries fetched successfully",
+      data: availableCountries,
+    });
+  } catch (error) {
+    throw new AppError(500, "Internal Server Error");
+  }
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

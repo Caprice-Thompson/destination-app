@@ -5,13 +5,14 @@ import DisplayCard, { DisplayCardItem } from "../../components/DisplayCard";
 import { mockData } from "../../mockData";
 import DisplayCardWithExtraValues from "../../components/DisplayCardWithExtraValues";
 import "./ResultsPage.css";
+import { monthOptions } from "../../utils";
 
 const ResultsPage = () => {
     const location = useLocation();
     const useMockData = false;
     
-    const { countryName, data } = useMockData 
-        ? { countryName: "France", data: mockData }
+    const { countryName, selectedMonth, data } = useMockData 
+        ? { countryName: "France", selectedMonth: 5, data: mockData }
         : location.state || {};
     const countryData = data.countryData.data;
     const tourismData = data.tourismData.data;
@@ -19,17 +20,17 @@ const ResultsPage = () => {
     const earthquakeData = data.earthquakeData[0].data;
 
     return (
-        <div className="results-page">
-            <div className="hero-section">
+        <main className="results-page">
+            <header className="hero-section">
                 <img 
                     src={countryData.countryDetails.flag} 
                     alt={`${countryName} flag`} 
                     className="country-flag"
                 />
                 <h1>Discover {countryName}</h1>
-            </div>
+            </header>
             
-            <div className="dashboard-grid">
+            <section className="dashboard-grid">
                 <FactCard 
                     title="Quick Facts"
                     facts={[
@@ -83,21 +84,18 @@ const ResultsPage = () => {
                         { 
                             label: "Total Earthquakes", 
                             value: earthquakeData.earthquakeStatistics.totalEarthquakes, 
-                            className: "capital-city" 
                         },
                         { 
-                            label: "Average Tsunami Count", 
+                            label: "Tsunami Count", 
                             value: earthquakeData.earthquakeStatistics.avgTsunamiCount
                         },
                         { 
                             label: "Average Magnitude", 
                             value: earthquakeData.earthquakeStatistics.avgMagnitude,
-                            className: "languages"
                         },
                         { 
-                            label: "Average Earthquakes in a Month", 
-                            value: earthquakeData.earthquakeStatistics.avgEarthquakesInMonth,
-                            className: "languages"
+                            label: `Average Percentage for ${monthOptions.find((month: { value: string }) => month.value === selectedMonth)?.label}`, 
+                            value: `${earthquakeData.earthquakeStatistics.monthlyEarthquakePercentage}%`,
                         }
                     ]}  
                     className="info-card"
@@ -112,31 +110,36 @@ const ResultsPage = () => {
                     nameField="name"
                 />
 
-                <DisplayCardWithExtraValues 
-                    title="UNESCO World Heritage Sites" 
-                    data={tourismData.unescoSitesList || []} 
-                    className="unesco-sites-card"
-                    nameField="site"
-                    extraFields={[ 'description']}
-                />
+                {tourismData.unescoSitesList && tourismData.unescoSitesList.length > 0 && (
+                    <DisplayCardWithExtraValues 
+                        title="UNESCO World Heritage Sites" 
+                        data={tourismData.unescoSitesList} 
+                        className="unesco-sites-card"
+                        nameField="site"
+                        extraFields={['description']}
+                        useFlipCard={true}
+                    />
+                )}
 
-                <DisplayCard 
-                    title="Volcanoes" 
-                    data={volcanoData} 
-                    className="volcano-info"
-                />
-                 </div>
-                <div className="earthquake-card-container">
+                {volcanoData && volcanoData.length > 0 && (
+                    <DisplayCard 
+                        title="Volcanoes" 
+                        data={volcanoData} 
+                        className="volcano-info"
+                    />
+                )}
+            </section>
+      
                 <DisplayCardWithExtraValues 
-                    title="Earthquakes" 
+                    title="Most Recent Earthquakes" 
                     data={earthquakeData.earthquakeData} 
                     className="earthquake-card"
                     extraFields={['magnitude', 'date', 'type']}
                     keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
+                    useFlipCard={false}
                 />
-                </div>
            
-        </div>
+        </main>
     );
 };
 

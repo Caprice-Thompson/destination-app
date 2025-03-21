@@ -43,7 +43,7 @@ describe("Earthquake Domain and Repository", () => {
     {
       magnitude: 5.2,
       name: "100km SSW of XYZ",
-      date: new Date(1625247600000).toISOString(),
+      date: new Date(1625247600000).toISOString().split('T')[0],
       type: "earthquake",
       tsunami: 1,
     },
@@ -149,7 +149,7 @@ describe("Earthquake Domain and Repository", () => {
 
       const expectedStats: EarthquakeStatistics = {
         totalEarthquakes: 4,
-        avgEarthquakesInMonth: 0.75,
+        monthlyEarthquakePercentage: 75,
         avgTsunamiCount: 0.5,
         avgMagnitude: 6.2,
       };
@@ -164,7 +164,7 @@ describe("Earthquake Domain and Repository", () => {
 
       const expectedStats: EarthquakeStatistics = {
         totalEarthquakes: 4,
-        avgEarthquakesInMonth: 0,
+        monthlyEarthquakePercentage: 0,
         avgTsunamiCount: 0,
         avgMagnitude: 0,
       };

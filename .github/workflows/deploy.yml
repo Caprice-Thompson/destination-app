@@ -40,3 +40,4 @@ jobs:
           aws lambda update-function-code --function-name=getEarthquakeService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
           aws lambda update-function-code --function-name=getTourismService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
           aws lambda update-function-code --function-name=getVolcanoService --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip
+          aws lambda update-function-code --function-name=getAvailableCountries --s3-bucket destination-lambda-deploy-storage --s3-key lambda-function.zip

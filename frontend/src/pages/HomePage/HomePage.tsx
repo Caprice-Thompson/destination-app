@@ -1,17 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "../../components/Button/Button";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Input from "../../components/Input/Input";
 import { useNavigate } from 'react-router-dom';
-import { getCountryAndTourismData, getVolcanoAndEarthquakeData } from "../../api";
+import { fetchAvailableCountries, getCountryAndTourismData, getVolcanoAndEarthquakeData } from "../../api";
 import { monthOptions } from "../../utils";
 import "./HomePage.css";
 import { FaPlane } from "react-icons/fa";
 import { MdArrowDropDown } from "react-icons/md";
 
-export const countries = [
-    "Spain", "France", "Japan", 
-];
 
 //Find better way to implement autocomplete
 const HomePage = () => {
@@ -19,22 +16,45 @@ const HomePage = () => {
     const [selectedMonth, setSelectedMonth] = useState('');
     const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
+    const [countriesList, setCountriesList] = useState<string[]>([]);
     const navigate = useNavigate();
+ 
+    
+    useEffect(() => {
+        const loadCountries = async () => {
+            try {
+                const availableCountries = await fetchAvailableCountries();
+                const getCountryList = availableCountries.reduce((acc: string[], country) => {
+                    acc.push(country.country);
+                    return acc;
+                }, []);
+                setCountriesList(getCountryList);
+            } catch (error) {
+                console.error('Error loading countries:', error);
+                alert('Failed to load available countries');
+            }
+        };
+
+        loadCountries();
+    }, []);
 
     const handleCountryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setCountryName(value);
         
-        if (value.length > 0) {
-            const filtered = countries.filter(country =>
+        const filtered = value.length > 0
+            ? countriesList.filter(country =>
                 country.toLowerCase().includes(value.toLowerCase())
-            );
-            setFilteredCountries(filtered);
-            setShowSuggestions(true);
-        } else {
-            setFilteredCountries([]);
-            setShowSuggestions(false);
-        }
+            )
+            : countriesList; 
+        
+        setFilteredCountries(filtered);
+        setShowSuggestions(true);
+    };
+
+    const handleInputFocus = () => {
+        setFilteredCountries(countriesList);
+        setShowSuggestions(true);
     };
 
     const handleCountrySelect = (country: string) => {
@@ -57,6 +77,7 @@ const HomePage = () => {
             navigate('/results', { 
                 state: { 
                     countryName,
+                    selectedMonth,
                     data: {
                         countryData,
                         tourismData,
@@ -72,10 +93,10 @@ const HomePage = () => {
         } 
     };
     return (
-        <div className="home-page-wrapper">
-            <div className="home-page-container">
+        <main className="home-page-wrapper">
+            <section className="home-page-container">
                 <h3>Prepare for your next adventure...</h3>
-                <div className="form-row">
+                <form className="form-row" onSubmit={(e) => e.preventDefault()}>
                     <div className="autocomplete-container">
                         <Input 
                             id="country-name-input"
@@ -86,9 +107,10 @@ const HomePage = () => {
                             required={true}
                             value={countryName}
                             onChange={handleCountryInputChange}
+                            onFocus={handleInputFocus}
                         />
                         {showSuggestions && filteredCountries.length > 0 && (
-                            <ul className="country-suggestions">
+                            <nav className="country-suggestions">
                                 {filteredCountries.map((country, index) => (
                                     <li 
                                         key={index}
@@ -97,7 +119,7 @@ const HomePage = () => {
                                         {country}
                                     </li>
                                 ))}
-                            </ul>
+                            </nav>
                         )}
                     </div>
                     <Dropdown 
@@ -118,9 +140,9 @@ const HomePage = () => {
                         onClick={handleSubmit} 
                         icon={<FaPlane />}
                     />
-                </div>
-            </div>
-        </div>
+                </form>
+            </section>
+        </main>
     )
 }
 

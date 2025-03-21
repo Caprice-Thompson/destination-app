@@ -15,7 +15,7 @@ export type EarthquakeDataParams = {
 
 export type EarthquakeStatistics = {
   totalEarthquakes: number;
-  avgEarthquakesInMonth: number;
+  monthlyEarthquakePercentage: number;
   avgTsunamiCount: number;
   avgMagnitude: number;
 };
@@ -80,7 +80,7 @@ export class EarthquakeService implements EarthquakeRepository {
     return {
       name: feature.properties.place,
       magnitude: feature.properties.mag,
-      date: new Date(feature.properties.time).toISOString(),
+      date: new Date(feature.properties.time).toISOString().split('T')[0],
       type: feature.properties.type,
       tsunami: feature.properties.tsunami,
     };
@@ -100,7 +100,12 @@ export class EarthquakeDomain {
 
     const earthquakeData = await this.earthquakeRepo.fetchEarthquakes();
     const earthquakeStatistics = this.calculateEarthquakeStatistics(earthquakeData, targetMonth);
-    return { earthquakeData, earthquakeStatistics };
+
+    const sortedEarthquakes = earthquakeData
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      .slice(0, 5);
+
+    return { earthquakeData: sortedEarthquakes, earthquakeStatistics };
   }
 
   private calculateEarthquakeStatistics(
@@ -131,7 +136,7 @@ export class EarthquakeDomain {
 
     const avgEarthquakesInAMonth =
       totalEarthquakes > 0
-        ? parseFloat((totalEarthquakesInMonth / totalEarthquakes).toFixed(2))
+        ? parseFloat(Math.round((totalEarthquakesInMonth / totalEarthquakes) * 100).toFixed(2))
         : 0;
 
     const avgTsunamis =
@@ -141,7 +146,7 @@ export class EarthquakeDomain {
 
     return {
       totalEarthquakes: totalEarthquakes,
-      avgEarthquakesInMonth: avgEarthquakesInAMonth,
+      monthlyEarthquakePercentage: avgEarthquakesInAMonth,
       avgTsunamiCount: avgTsunamis,
       avgMagnitude: averageMagnitude,
     };
