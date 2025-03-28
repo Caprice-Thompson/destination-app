@@ -26,7 +26,7 @@ const endpoints: EndpointConfig = {
 };
 
 export const getEndpoints = (): ServiceEndpoints => {
-    // Check if we're in production and validate all required env vars
+
     if (import.meta.env.PROD) {
         const requiredVars = {
             VITE_COUNTRY_API_URL: import.meta.env.VITE_COUNTRY_API_URL,

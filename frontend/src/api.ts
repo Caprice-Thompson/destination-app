@@ -1,4 +1,4 @@
-import { Earthquake, ThingsToDo, UNESCOSite, Volcano } from "./types";
+import { Earthquake, ThingsToDo, UNESCOSite, Volcano, EarthquakeStatistics } from "./types";
 import { apiConfig } from "./config/api.config";
 
 const { endpoints } = apiConfig;
@@ -29,11 +29,10 @@ export interface VolcanoData {
 
 export interface EarthquakeData {
   earthquakeData: Earthquake[];
+  earthquakeStatistics: EarthquakeStatistics;
 }
 
 export const headers = {
-  // "Access-Control-Allow-Origin": import.meta.env.VITE_FRONTEND_URL,
-  // "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
@@ -174,7 +173,7 @@ export const getVolcanoAndEarthquakeData = async (
   }
 };
 
-export const fetchAvailableCountries = async (): Promise<{country: string}[]> => {
+export const fetchAvailableCountries = async (): Promise<{ country: string }[]> => {
   try {
     const response = await fetch(
       `${endpoints.tourism}/getAvailableCountries`,

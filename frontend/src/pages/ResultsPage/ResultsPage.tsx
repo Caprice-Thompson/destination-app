@@ -1,19 +1,73 @@
-import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { CityPopulation, LanguageDetail } from "../../types";
 import FactCard from "../../components/FactCard";
 import DisplayCard, { DisplayCardItem } from "../../components/DisplayCard";
-import { mockData } from "../../mockData";
 import DisplayCardWithExtraValues from "../../components/DisplayCardWithExtraValues";
 import "./ResultsPage.css";
 import { monthOptions } from "../../utils";
+import { getCountryAndTourismData, getVolcanoAndEarthquakeData } from "../../api";
+import { mockData } from "../../mockData";
 
 const ResultsPage = () => {
-    const location = useLocation();
-    const useMockData = false;
-    
-    const { countryName, selectedMonth, data } = useMockData 
-        ? { countryName: "France", selectedMonth: 5, data: mockData }
-        : location.state || {};
+    const { countryName, month } = useParams();
+    const navigate = useNavigate();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [data, setData] = useState<any | null>(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const useMockData = true;
+    useEffect(() => {
+        const fetchData = async () => {
+            if (!countryName || !month) {
+                setError("Missing required parameters");
+                setLoading(false);
+                return;
+            }
+
+            try {
+                if(useMockData){
+                    setData(mockData);
+                }else{
+                    setLoading(true);
+                    const { countryData, tourismData } = await getCountryAndTourismData(countryName);
+                    const { volcanoData, earthquakeData } = await getVolcanoAndEarthquakeData(countryName, month);
+                    
+                    setData({
+                        countryData,
+                        tourismData,
+                        volcanoData,
+                        earthquakeData
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                setError("Failed to load data. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [countryName, month, useMockData]);
+
+    if (loading) {
+        return <div className="loading">Loading...</div>;
+    }
+
+    if (error) {
+        return (
+            <div className="error">
+                <p>{error}</p>
+                <button onClick={() => navigate('/')}>Return</button>
+            </div>
+        );
+    }
+
+    if (!data) {
+        return null;
+    }
+
     const countryData = data.countryData.data;
     const tourismData = data.tourismData.data;
     const volcanoData = data.volcanoData.data;
@@ -94,7 +148,7 @@ const ResultsPage = () => {
                             value: earthquakeData.earthquakeStatistics.avgMagnitude,
                         },
                         { 
-                            label: `Average Percentage for ${monthOptions.find((month: { value: string }) => month.value === selectedMonth)?.label}`, 
+                            label: `Average Percentage for ${monthOptions.find((m: { value: string }) => m.value === month)?.label}`, 
                             value: `${earthquakeData.earthquakeStatistics.monthlyEarthquakePercentage}%`,
                         }
                     ]}  

@@ -33,3 +33,21 @@ export type Earthquake = {
     type: string;
     tsunami: number;
 };
+
+export type EarthquakeDataParams = {
+    format: string;
+    longitude: string | undefined;
+    latitude: string | undefined;
+    startTime: string;
+    endTime: string;
+    maxRadius: number;
+    limit?: number;
+    minMagnitude?: number;
+  };
+  
+  export type EarthquakeStatistics = {
+    totalEarthquakes: number;
+    monthlyEarthquakePercentage: number;
+    avgTsunamiCount: number;
+    avgMagnitude: number;
+  };

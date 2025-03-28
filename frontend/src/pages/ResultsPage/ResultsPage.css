@@ -36,9 +36,9 @@
 }
 
 .dashboard-grid > * {
-  flex: 1 1 300px; 
-  max-width: 550px; 
-  min-width: 300px; 
+  flex: 1 1 300px;
+  max-width: 550px;
+  min-width: 300px;
 }
 
 .info-card,
@@ -147,4 +147,18 @@
   padding: 1rem;
   margin-top: 1.25rem;
   border-radius: 0.938rem;
+}
+
+.loading,
+.error {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }

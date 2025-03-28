@@ -3,14 +3,12 @@ import Button from "../../components/Button/Button";
 import Dropdown from "../../components/Dropdown/Dropdown";
 import Input from "../../components/Input/Input";
 import { useNavigate } from 'react-router-dom';
-import { fetchAvailableCountries, getCountryAndTourismData, getVolcanoAndEarthquakeData } from "../../api";
+import { fetchAvailableCountries } from "../../api";
 import { monthOptions } from "../../utils";
 import "./HomePage.css";
 import { FaPlane } from "react-icons/fa";
 import { MdArrowDropDown } from "react-icons/md";
 
-
-//Find better way to implement autocomplete
 const HomePage = () => {
     const [countryName, setCountryName] = useState('');
     const [selectedMonth, setSelectedMonth] = useState('');
@@ -70,26 +68,10 @@ const HomePage = () => {
         }
 
         try {
-            
-            const { countryData, tourismData } = await getCountryAndTourismData(countryName);
-            const { volcanoData, earthquakeData } = await getVolcanoAndEarthquakeData(countryName, selectedMonth);
-
-            navigate('/results', { 
-                state: { 
-                    countryName,
-                    selectedMonth,
-                    data: {
-                        countryData,
-                        tourismData,
-                        volcanoData,
-                        earthquakeData
-                    }
-                } 
-            });
-
+            navigate(`/results/${encodeURIComponent(countryName)}/${selectedMonth}`);
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to fetch data. Please try again.');
+            alert('Failed to navigate. Please try again.');
         } 
     };
     return (

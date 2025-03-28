@@ -15,7 +15,7 @@ const App: React.FC = () => {
                 element={<HomePage />}
             />
             <Route
-                path="/results"
+                path="/results/:countryName/:month"
                 element={<ResultsPage />}
             />
         </Routes>
