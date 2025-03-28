@@ -16,7 +16,7 @@ const ResultsPage = () => {
     const [data, setData] = useState<any | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const useMockData = true;
+    const useMockData = false;
     useEffect(() => {
         const fetchData = async () => {
             if (!countryName || !month) {
