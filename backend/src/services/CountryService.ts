@@ -39,7 +39,8 @@ export type CountryResponse = {
 
 interface CountryRepoInterface {
   getCountryDetails: () => Promise<Country>;
-  getCityPopulation: () => Promise<CityPopulation[]>;
+  getCityPopulationFromDB: () => Promise<CityPopulation[]>;
+  getCityPopulationFromAPI: () => Promise<CityPopulation[]>;
 }
 export class CountryDomain {
   constructor(private readonly countryRepo: CountryRepoInterface) { }
@@ -52,9 +53,37 @@ export class CountryDomain {
     }
 
     const countryDetails = await this.countryRepo.getCountryDetails();
-    const cityPopulations = await this.countryRepo.getCityPopulation();
+    let cityPopulations: CityPopulation[];
+
+    try {
+      cityPopulations = await this.countryRepo.getCityPopulationFromAPI();
+    } catch (error) {
+      console.log('API call failed, falling back to database:', error);
+      cityPopulations = await this.countryRepo.getCityPopulationFromDB();
+    }
+
     return { countryDetails, cityPopulations };
   }
+}
+
+interface PopulationAPIResponse {
+  total_count: number;
+  results: Array<{
+    geoname_id: string;
+    name: string;
+    ascii_name: string;
+    alternate_names: string[];
+    feature_class: string;
+    feature_code: string;
+    country_code: string;
+    cou_name_en: string;
+    population: number;
+    timezone: string;
+    coordinates: {
+      lon: number;
+      lat: number;
+    };
+  }>;
 }
 
 export class CountryRepo implements CountryRepoInterface {
@@ -101,7 +130,34 @@ export class CountryRepo implements CountryRepoInterface {
     }
   }
 
-  async getCityPopulation(): Promise<CityPopulation[]> {
+  async getCityPopulationFromAPI(): Promise<CityPopulation[]> {
+    const baseUrl = 'https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records';
+    const params = new URLSearchParams({
+      order_by: 'population DESC',
+      limit: '5',
+      refine: 'timezone:"Europe"',
+      where: `cou_name_en='${this.country.replace(/'/g, "\\'")}'`
+    });
+
+    try {
+      const response = await getData<PopulationAPIResponse>(`${baseUrl}?${params.toString()}`);
+
+      if (!response || !response.results) {
+        throw new AppError(404, "No city population data found");
+      }
+
+      return response.results.map(city => ({
+        city: city.name,
+        country: city.cou_name_en,
+        population: city.population.toLocaleString()
+      }));
+    } catch (error) {
+      console.error(`Error fetching city population data: ${error}`);
+      throw error;
+    }
+  }
+
+  async getCityPopulationFromDB(): Promise<CityPopulation[]> {
     const cityPopulations = await db.any(`
       SELECT * FROM population 
       WHERE country = '${this.country}' 
