@@ -1,6 +1,5 @@
 import { getData } from "../src/api/client";
 import {
-  Country,
   CountryResponse,
   CountryRepo,
   CountryDomain,
@@ -17,67 +16,20 @@ const mockDb = {
 };
 
 describe("Country Service", () => {
-  // describe("getCountryDetails", () => {
-  //   const originalEnv = process.env;
-  //   const country = "Spain";
-  //   const mockUrl = `https://mocked-api.com/${country}`;
+  const originalEnv = process.env;
+  const geonames_base_url = "https://public-mocked-api.com";
 
-  //   const mockCountryResponse: CountryResponse[] = [
-  //     {
-  //       name: { common: "Spain" },
-  //       capital: ["Madrid"],
-  //       languages: { name: "Spanish" },
-  //       currencies: { EUR: { name: "Euro", symbol: "€" } },
-  //       flags: { svg: "https://example.com/es.svg" },
-  //     },
-  //   ];
+  beforeAll(() => {
+    process.env = {
+      ...originalEnv,
+      GEONAMES_API_URL: geonames_base_url
+    };
+  });
 
-  //   const expectedCountryDetails: Country = {
-  //     name: "Spain",
-  //     capitalCity: ["Madrid"],
-  //     languages: [{ name: "Spanish" }],
-  //     currencies: { EUR: { name: "Euro", symbol: "€" } },
-  //     flag: "https://example.com/es.svg",
-  //   };
+  afterAll(() => {
+    process.env = originalEnv;
+  });
 
-  //   beforeAll(async () => {
-  //     process.env = {
-  //       ...originalEnv,
-  //       COUNTRY_BASE_URL: "https://mocked-api.com",
-  //     };
-  //   });
-
-  //   afterAll(() => {
-  //     process.env = originalEnv;
-  //   });
-
-  //   it("should return country details if the request is successful", async () => {
-  //     (getData as jest.Mock).mockResolvedValue(mockCountryResponse);
-
-  //     const countryService = new CountryRepo(country);
-  //     const result = await countryService.getCountryDetails();
-
-  //     expect(result).toStrictEqual(expectedCountryDetails);
-  //     expect(getData).toHaveBeenCalledWith(mockUrl);
-  //   });
-
-  //   it("should throw an error if no data is returned", async () => {
-  //     (getData as jest.Mock).mockResolvedValue([]);
-  //     const consoleErrorSpy = jest.spyOn(console, "error").mockImplementation();
-  //     const countryService = new CountryRepo(country);
-
-  //     await expect(countryService.getCountryDetails()).rejects.toThrow(
-  //       "No country data found"
-  //     );
-  //     await expect(countryService.getCountryDetails()).rejects.toHaveProperty(
-  //       "statusCode",
-  //       404
-  //     );
-
-  //     expect(consoleErrorSpy).toHaveBeenCalledWith(
-  //       expect.stringContaining("No data returned from API for URL:")
-  //     );
-  //   });
   describe("getCityPopulation", () => {
     const populationAPIResponse = {
       total_count: 2,
@@ -132,7 +84,7 @@ describe("Country Service", () => {
 
       expect(result).toStrictEqual(expectedCityPopulations);
       expect(getData).toHaveBeenCalledWith(
-        expect.stringContaining("https://public.opendatasoft.com/api/explore/v2.1/catalog/datasets/geonames-all-cities-with-a-population-1000/records")
+        expect.stringContaining(geonames_base_url)
       );
       expect(getData).toHaveBeenCalledWith(
         expect.stringContaining("where=cou_name_en%3D%27Spain%27")
@@ -227,11 +179,10 @@ describe("Country Service", () => {
       const countryRepo = new CountryRepo("United Kingdom");
       const countryDomain = new CountryDomain(countryRepo);
       await countryDomain.getCountryData("United Kingdom");
-
+      // TODO: remove queries here
       expect(mockDb.any).toHaveBeenCalledWith(
         expect.stringContaining("SELECT * FROM population")
       );
     });
   });
 });
-//});
