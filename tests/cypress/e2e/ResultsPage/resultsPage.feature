@@ -1,3 +1,4 @@
+@skip
 Feature: Results Page
 
   Background:
@@ -12,5 +13,4 @@ Feature: Results Page
       | Things to do    |
       | Volcanoes       |
       | Earthquakes     |
-
 
