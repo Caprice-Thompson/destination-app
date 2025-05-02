@@ -21,14 +21,17 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
+        working-directory: ./tests
         run: npm ci
 
       - name: Install Cypress
+        working-directory: ./tests
         run: npm install cypress --save-dev
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
         with:
+          working-directory: ./tests
           config: baseUrl=${{ secrets.FRONTEND_URL }}
           browser: chrome
           record: false
