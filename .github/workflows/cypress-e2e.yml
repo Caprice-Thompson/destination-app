@@ -34,7 +34,4 @@ jobs:
           working-directory: ./tests
           config: baseUrl=${{ secrets.FRONTEND_URL }}
           browser: chrome
-          record: false
-          parallel: false
-          group: 'E2E Tests'
           spec: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}'
