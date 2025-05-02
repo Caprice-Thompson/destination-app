@@ -22,7 +22,9 @@ jobs:
 
       - name: Install dependencies
         working-directory: ./tests
-        run: npm ci
+        run: |
+          npm ci
+          npm install @badeball/cypress-cucumber-preprocessor @bahmutov/cypress-esbuild-preprocessor esbuild --save-dev
 
       - name: Install Cypress
         working-directory: ./tests
@@ -34,4 +36,6 @@ jobs:
           working-directory: ./tests
           config: baseUrl=${{ secrets.FRONTEND_URL }}
           browser: chrome
-          spec: 'cypress/e2e/**/*.cy.{js,jsx,ts,tsx}'
+          spec: 'cypress/e2e/**/*.feature'
+        env:
+          CYPRESS_BASE_URL: ${{ secrets.FRONTEND_URL }}
