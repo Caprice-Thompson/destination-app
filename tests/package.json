@@ -1,0 +1,22 @@
+{
+  "name": "tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "cypress:open": "cypress open",
+    "cypress:run": "cypress run"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "End-to-end tests for the frontend application",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^22.0.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.4",
+    "@types/cucumber": "^6.0.1",
+    "@types/cypress": "^0.1.6",
+    "@types/node": "^22.15.3",
+    "cypress": "^14.3.2",
+    "ts-node": "^10.9.2"
+  }
+}

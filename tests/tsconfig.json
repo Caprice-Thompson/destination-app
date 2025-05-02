@@ -1,0 +1,10 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": "./",
+    "lib": ["es5", "dom"],
+    "types": ["cypress", "@types/cucumber", "@types/node"]
+  },
+  "include": ["./cypress/**/*.ts", "cypress/support/step_definitions/**/*.ts", "cypress/support/e2e.js"]
+}
