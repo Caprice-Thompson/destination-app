@@ -9,11 +9,11 @@ Then('I should see the main heading {string}', (headingText: string) => {
 });
 
 Then('I should see a search input field', () => {
-  cy.get('input[type="search"]').should('exist');
+  cy.get('input[type="text"]').should('exist');
 });
 
 When('I enter {string} in the search field', (searchText: string) => {
-  cy.get('input[type="search"]').type(searchText);
+  cy.get('input[type="text"]').type(searchText);
 });
 
 When('I click the submit button', () => {

@@ -1,4 +1,4 @@
-import './Input.css';
+import "./Input.css";
 
 interface InputProps {
   id?: string;
@@ -11,19 +11,21 @@ interface InputProps {
   autoComplete?: string;
   required: boolean;
   onFocus?: () => void;
+  onBlur?: () => void;
 }
 
 const Input = ({
   id,
-  className = '',
-  placeholder = '',
+  className = "",
+  placeholder = "",
   name,
-  type = 'text',
+  type = "text",
   value,
   onChange,
-  autoComplete = 'off',
+  autoComplete = "off",
   required,
   onFocus,
+  onBlur,
 }: InputProps) => {
   return (
     <input
@@ -37,6 +39,7 @@ const Input = ({
       autoComplete={autoComplete}
       required={required}
       onFocus={onFocus}
+      onBlur={onBlur}
     />
   );
 };

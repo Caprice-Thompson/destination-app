@@ -84,7 +84,7 @@ const HomePage = () => {
                             id="country-name-input"
                             name="country-name"
                             className="country-name-field"
-                            type="search"
+                            type="text"
                             placeholder="Enter country name..."
                             required={true}
                             value={countryName}
