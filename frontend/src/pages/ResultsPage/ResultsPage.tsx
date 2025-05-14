@@ -11,6 +11,8 @@ import {
   getVolcanoAndEarthquakeData,
 } from "../../api";
 import { mockData } from "../../mockData";
+import Button from "../../components/Button/Button";
+import { FaPlane } from "react-icons/fa";
 
 const ResultsPage = () => {
   const { countryName, month } = useParams();
@@ -79,120 +81,134 @@ const ResultsPage = () => {
   const volcanoData = data.volcanoData.data;
   const earthquakeData = data.earthquakeData[0].data;
 
+  const handleClick = () => {
+    navigate("/");
+  };
+
   return (
-    <main className="results-page">
-      <header className="hero-section">
-        <img
-          src={countryData.countryDetails.flag}
-          alt={`${countryName} flag`}
-          className="country-flag"
-        />
-        <h1>Discover {countryName}</h1>
-      </header>
-
-      <section className="dashboard-grid">
-        <FactCard
-          title="Quick Facts"
-          facts={[
-            {
-              label: "Capital City",
-              value: countryData.countryDetails.capitalCity[0],
-              className: "capital-city",
-            },
-            {
-              label: "Currency",
-              value: (() => {
-                const currencies = countryData.countryDetails.currencies;
-                const currencyCode = Object.keys(currencies)[0];
-                const currency = currencies[currencyCode];
-                return currency ? (
-                  <>
-                    {currency.name}
-                    <span className="currency-symbol">({currency.symbol})</span>
-                  </>
-                ) : (
-                  "N/A"
-                );
-              })(),
-            },
-            {
-              label: "Languages",
-              value: countryData.countryDetails.languages
-                .map((lang: LanguageDetail) => lang.name)
-                .join(", "),
-              className: "languages",
-            },
-          ]}
-          className="info-card"
-        />
-
-        <FactCard
-          title="Popular Cities"
-          facts={countryData.cityPopulations.map((city: CityPopulation) => ({
-            label: city.city,
-            value: city.population
-              ? `Population: ${city.population.toLocaleString()}`
-              : [],
-            className: "city-card",
-          }))}
-          className="info-card"
-        />
-
-        <FactCard
-          title="Earthquakes Statistics"
-          facts={[
-            {
-              label: "Total Earthquakes",
-              value: earthquakeData.earthquakeStatistics.totalEarthquakes,
-            },
-            {
-              label: "Tsunami Count",
-              value: earthquakeData.earthquakeStatistics.avgTsunamiCount,
-            },
-            {
-              label: "Average Magnitude",
-              value: earthquakeData.earthquakeStatistics.avgMagnitude,
-            },
-            {
-              label: `Average Percentage for ${
-                monthOptions.find((m: { value: string }) => m.value === month)
-                  ?.label
-              }`,
-              value: `${earthquakeData.earthquakeStatistics.monthlyEarthquakePercentage}%`,
-            },
-          ]}
-          className="info-card"
-        />
-
-        <DisplayCard
-          title="Things to Do"
-          data={(tourismData.thingsToDoList?.[0]?.item || []).map(
-            (item: string) => ({
-              name: item ? item : [],
-            })
-          )}
-          className="things-to-do-list"
-          nameField="name"
-        />
-
-        {volcanoData && volcanoData.length > 0 && (
-          <DisplayCard
-            title="Volcanoes"
-            data={volcanoData}
-            className="volcano-info"
+    <div>
+      <main className="results-page">
+        <header className="hero-section">
+          <img
+            src={countryData.countryDetails.flag}
+            alt={`${countryName} flag`}
+            className="country-flag"
           />
-        )}
-      </section>
+          <h1>Discover {countryName}</h1>
+        </header>
+        <section className="dashboard-grid">
+          <FactCard
+            title="Quick Facts"
+            facts={[
+              {
+                label: "Capital City",
+                value: countryData.countryDetails.capitalCity[0],
+                className: "capital-city",
+              },
+              {
+                label: "Currency",
+                value: (() => {
+                  const currencies = countryData.countryDetails.currencies;
+                  const currencyCode = Object.keys(currencies)[0];
+                  const currency = currencies[currencyCode];
+                  return currency ? (
+                    <>
+                      {currency.name}
+                      <span className="currency-symbol">
+                        ({currency.symbol})
+                      </span>
+                    </>
+                  ) : (
+                    "N/A"
+                  );
+                })(),
+              },
+              {
+                label: "Languages",
+                value: countryData.countryDetails.languages
+                  .map((lang: LanguageDetail) => lang.name)
+                  .join(", "),
+                className: "languages",
+              },
+            ]}
+            className="info-card"
+          />
 
-      <DisplayCardWithExtraValues
-        title="Most Recent Earthquakes"
-        data={earthquakeData.earthquakeData}
-        className="earthquake-card"
-        extraFields={["magnitude", "date", "type"]}
-        keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
-        useFlipCard={false}
+          <FactCard
+            title="Popular Cities"
+            facts={countryData.cityPopulations.map((city: CityPopulation) => ({
+              label: city.city,
+              value: city.population
+                ? `Population: ${city.population.toLocaleString()}`
+                : [],
+              className: "city-card",
+            }))}
+            className="info-card"
+          />
+
+          <FactCard
+            title="Earthquakes Statistics"
+            facts={[
+              {
+                label: "Total Earthquakes",
+                value: earthquakeData.earthquakeStatistics.totalEarthquakes,
+              },
+              {
+                label: "Tsunami Count",
+                value: earthquakeData.earthquakeStatistics.avgTsunamiCount,
+              },
+              {
+                label: "Average Magnitude",
+                value: earthquakeData.earthquakeStatistics.avgMagnitude,
+              },
+              {
+                label: `Average Percentage for ${
+                  monthOptions.find((m: { value: string }) => m.value === month)
+                    ?.label
+                }`,
+                value: `${earthquakeData.earthquakeStatistics.monthlyEarthquakePercentage}%`,
+              },
+            ]}
+            className="info-card"
+          />
+
+          <DisplayCard
+            title="Things to Do"
+            data={(tourismData.thingsToDoList?.[0]?.item || []).map(
+              (item: string) => ({
+                name: item ? item : [],
+              })
+            )}
+            className="things-to-do-list"
+            nameField="name"
+          />
+
+          {volcanoData && volcanoData.length > 0 && (
+            <DisplayCard
+              title="Volcanoes"
+              data={volcanoData}
+              className="volcano-info"
+            />
+          )}
+        </section>
+
+        <DisplayCardWithExtraValues
+          title="Most Recent Earthquakes"
+          data={earthquakeData.earthquakeData}
+          className="earthquake-card"
+          extraFields={["magnitude", "date", "type"]}
+          keyField={(item: DisplayCardItem) => `${item.name}-${item.date}`}
+          useFlipCard={false}
+        />
+      </main>
+      <Button
+        id="reset-button"
+        className="reset-button"
+        type="reset"
+        onClick={handleClick}
+        icon={<FaPlane />}
       />
-    </main>
+    </div>
   );
 };
 

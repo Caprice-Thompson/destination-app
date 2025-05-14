@@ -3,7 +3,7 @@ import "./Button.css";
 interface ButtonProps {
     id: string;
     className: string;
-    type: 'submit';
+    type: 'submit' | 'reset';
     onClick: () => void;
     children?: React.ReactNode;
     icon?: React.ReactNode;
