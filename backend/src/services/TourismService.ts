@@ -49,15 +49,50 @@ export class TourismApplicationService {
   }
 
   async getTourismData(country: string | undefined): Promise<TourismData> {
+    console.log('[TourismApplicationService] Getting tourism data', { country });
+
     if (!country) {
+      console.error('[TourismApplicationService] Country parameter missing');
       throw new AppError(400, "Country parameter is required");
     }
 
-    return this.tourismDomain.getTourismData(country);
+    try {
+      const result = await this.tourismDomain.getTourismData(country);
+      console.log('[TourismApplicationService] Successfully retrieved tourism data', {
+        country,
+        thingsToDoCount: result.thingsToDoList.length,
+        unescoSitesCount: result.unescoSitesList.length
+      });
+      return result;
+    } catch (error) {
+      console.error('[TourismApplicationService] Error getting tourism data', {
+        country,
+        error: error instanceof Error ? {
+          message: error.message,
+          stack: error.stack
+        } : error
+      });
+      throw error;
+    }
   }
 
   async getAvailableCountries(): Promise<string[]> {
-    return this.tourismDomain.getAvailableCountries();
+    console.log('[TourismApplicationService] Getting available countries');
+    try {
+      const countries = await this.tourismDomain.getAvailableCountries();
+      console.log('[TourismApplicationService] Successfully retrieved available countries', {
+        count: countries.length
+      });
+      return countries;
+    } catch (error) {
+      console.error('[TourismApplicationService] Error getting available countries', {
+        error: error instanceof Error ? {
+          message: error.message,
+          stack: error.stack
+        } : error
+      });
+      throw error;
+    }
   }
 }
 
@@ -79,7 +114,7 @@ export class TourismDatabaseRepository implements TourismInterface {
   async getAvailableCountries(): Promise<string[]> {
     return db.any(
       `SELECT DISTINCT country 
-       FROM unesco_sites 
+       FROM national_dish 
        WHERE country IN (
          SELECT DISTINCT location 
          FROM things_to_do
