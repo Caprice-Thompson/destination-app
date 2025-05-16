@@ -11,14 +11,7 @@ export const getAvailableCountriesHandler = async (
     event: APIGatewayEvent,
     context: Context
 ): Promise<APIGatewayProxyResult> => {
-    console.log('[getAvailableCountriesHandler] Starting execution', {
-        requestId: context.awsRequestId,
-        event: {
-            path: event.path,
-            httpMethod: event.httpMethod,
-            requestTimeEpoch: event.requestContext.requestTimeEpoch
-        }
-    });
+    console.log('[getAvailableCountriesHandler] Starting execution');
 
     try {
         console.log('[getAvailableCountriesHandler] Fetching available countries');
