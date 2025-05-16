@@ -4,10 +4,11 @@ import pgPromise from "pg-promise";
 const pgp = pgPromise();
 
 const db = pgp({
-  connectionString: process.env.LOCAL_DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  connectionString: process.env.DATABASE_URL,
+  ssl:
+    process.env.NODE_ENV === "production"
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 export default db;
