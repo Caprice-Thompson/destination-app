@@ -46,3 +46,23 @@ To start the main application script:
 ```bash
 npm test
 ```
+
+## Environment Setup
+
+### Local Development
+1. Create a `.env` file in the `backend` directory with your database credentials:
+   ```env
+   DB_USER=your_db_user
+   DB_PASSWORD=your_db_password
+   DB_NAME=your_db_name
+   DB_HOST=localhost
+   DB_PORT=5432
+   ```
+
+2. Load environment variables:
+   ```bash
+   source ./loadEnvVars.sh
+   ```
+
+### Production
+The application uses GitHub Secrets for production environment variables. These are automatically loaded during deployment.

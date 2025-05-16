@@ -114,3 +114,62 @@ The backend uses **Jest** for unit testing. Tests are located in the `tests` dir
   ```bash
   jest --coverage
   ```
+
+# Database Migrations
+
+This project uses a custom migration system to manage database schema changes. Migrations are versioned using the format `V1__description.sql`, `V2__description.sql`, etc.
+
+## Migration Files
+
+- All migration files should be placed in the `backend/migrations` directory
+- Files must follow the naming convention: `V{number}__{description}.sql`
+- Example: `V1__create_users_table.sql`, `V2__add_email_column.sql`
+- The `prisma_migrations` directory is automatically excluded
+
+## Running Migrations Locally
+
+### Prerequisites
+- Docker and Docker Compose installed
+- `.env` file in the `backend` directory with database credentials:
+  ```
+  DB_USER=your_db_user
+  DB_PASSWORD=your_db_password
+  DB_NAME=your_db_name
+  ```
+
+### Steps
+
+1. Run migrations:
+   ```bash
+   docker-compose up migrations
+   ```
+
+The migrations will run against your local database using the credentials from your `.env` file.
+
+## Running Migrations in Production
+
+Migrations are automatically run in production when code is pushed to the `main` branch through GitHub Actions.
+
+## Migration Script Features
+
+The migration script (`runMigrations.sh`) includes:
+- Version tracking to prevent duplicate migrations
+- Transaction support for safe rollbacks
+- Validation of migration file format
+- Proper ordering of migrations
+- Detailed logging
+- Error handling and reporting
+
+## Troubleshooting
+
+1. **Migration Already Applied**
+   - The script will skip migrations that have already been applied
+   - Check the `schema_migrations` table to see applied migrations
+
+2. **Connection Issues**
+   - Local: Verify your `.env` file has correct credentials
+   - Production: Verify GitHub Secrets are correctly set
+
+3. **Version Format Errors**
+   - Ensure migration files follow the `V{number}__{description}.sql` format
+   - Version numbers must be sequential

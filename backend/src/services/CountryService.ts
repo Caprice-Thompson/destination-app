@@ -8,6 +8,12 @@ export interface CityPopulation {
   population: string;
 }
 
+export interface NationalDish {
+  dishName: string;
+  country: string;
+  imageUrl: string[];
+}
+
 type Currency = {
   name: string;
   symbol: string;
@@ -41,18 +47,20 @@ interface CountryRepoInterface {
   getCountryDetails: () => Promise<Country>;
   getCityPopulationFromDB: () => Promise<CityPopulation[]>;
   getCityPopulationFromAPI: () => Promise<CityPopulation[]>;
+  getNationalDishFromDB: () => Promise<NationalDish[]>;
 }
 export class CountryDomain {
   constructor(private readonly countryRepo: CountryRepoInterface) { }
 
   async getCountryData(
     country: string | undefined
-  ): Promise<{ countryDetails: Country; cityPopulations: CityPopulation[] }> {
+  ): Promise<{ countryDetails: Country; cityPopulations: CityPopulation[]; nationalDishes: NationalDish[] }> {
     if (!country) {
       throw new AppError(400, "Country parameter is required");
     }
 
     const countryDetails = await this.countryRepo.getCountryDetails();
+    const nationalDishes = await this.countryRepo.getNationalDishFromDB();
     let cityPopulations: CityPopulation[];
 
     try {
@@ -62,7 +70,7 @@ export class CountryDomain {
       cityPopulations = await this.countryRepo.getCityPopulationFromDB();
     }
 
-    return { countryDetails, cityPopulations };
+    return { countryDetails, cityPopulations, nationalDishes };
   }
 }
 
@@ -164,5 +172,13 @@ export class CountryRepo implements CountryRepoInterface {
       ORDER BY CAST(REPLACE(population, ',', '') AS NUMERIC) DESC LIMIT 4;
     `);
     return cityPopulations;
+  }
+
+  async getNationalDishFromDB(): Promise<NationalDish[]> {
+    const nationalDish = await db.any(`
+      SELECT dish_name, country, image_url FROM national_dish 
+      WHERE country = '${this.country}' 
+    `);
+    return nationalDish;
   }
 }

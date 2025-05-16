@@ -46,9 +46,13 @@ services:
       - ./.env
     depends_on:
       - db
-      - backend
-    command: sh -c "apt-get update && apt-get install -y postgresql-client && npm install && ./runMigrations.sh"
+    command: sh -c "apt-get update && apt-get install -y postgresql-client && npm install && chmod +x runMigrations.sh && ./runMigrations.sh"
     working_dir: /destination-app/backend
+    environment:
+      - DB_HOST=db
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
     volumes:
       - .:/destination-app/backend
       - /destination-app/backend/node_modules
