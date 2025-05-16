@@ -21,7 +21,7 @@ const ResultsPage = () => {
   const [data, setData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const useMockData = true;
+  const useMockData = false;
   useEffect(() => {
     const fetchData = async () => {
       if (!countryName || !month) {
@@ -80,6 +80,8 @@ const ResultsPage = () => {
   const tourismData = data.tourismData.data;
   const volcanoData = data.volcanoData.data;
   const earthquakeData = data.earthquakeData[0].data;
+  console.log(countryData.countryDetails.nationalDishes);
+  console.log(countryData);
 
   const handleClick = () => {
     navigate("/");
@@ -190,8 +192,34 @@ const ResultsPage = () => {
               className="volcano-info"
             />
           )}
+          <FactCard
+            title="National Dish"
+            facts={[
+              {
+                label: "National Dish",
+                value:
+                  countryData.nationalDishes &&
+                  countryData.nationalDishes.length > 0 ? (
+                    <div className="national-dish-container">
+                      <div className="dish-name">
+                        {countryData.nationalDishes[0].dish_name}
+                      </div>
+                      {countryData.nationalDishes[0].image_url && (
+                        <img
+                          src={countryData.nationalDishes[0].image_url}
+                          alt={`${countryData.nationalDishes[0].dish_name}`}
+                          className="national-dish-image"
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    "No national dish information available"
+                  ),
+              },
+            ]}
+            className="info-card national-dish-card"
+          />
         </section>
-
         <DisplayCardWithExtraValues
           title="Most Recent Earthquakes"
           data={earthquakeData.earthquakeData}
