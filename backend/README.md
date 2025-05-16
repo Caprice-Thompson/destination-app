@@ -173,3 +173,25 @@ The migration script (`runMigrations.sh`) includes:
 3. **Version Format Errors**
    - Ensure migration files follow the `V{number}__{description}.sql` format
    - Version numbers must be sequential
+
+## API Endpoints
+
+### Earthquake Service
+
+The earthquake service endpoint provides earthquake data for a specific country and month.
+
+#### Event Format
+When calling the earthquake service Lambda function, provide the following event JSON structure:
+
+```json
+{
+  "queryStringParameters": {
+    "country": "Japan",  // Required: Country name as a string
+    "month": "3"        // Required: Month as a string (1-12)
+  }
+}
+```
+
+#### Parameters
+- `country` (required): A string representing the country name (e.g., "Japan", "United States", "Italy")
+- `month` (required): A string representing the month number (1-12, where 1 is January and 12 is December)

@@ -1,7 +1,7 @@
 import { APIGatewayEvent, Context } from 'aws-lambda';
 import { getAvailableCountriesHandler } from '../../src/handlers/get-available-countries-handler';
 import { AppError } from '../../src/utils/errorHandler';
-
+// TODO: tests were passing even though db connection failed for this handler
 jest.mock('../../src/services/TourismService', () => {
     const mockGetAvailableCountries = jest.fn();
     return {

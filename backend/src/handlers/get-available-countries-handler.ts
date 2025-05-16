@@ -53,14 +53,6 @@ export const getAvailableCountriesHandler = async (
             };
         }
 
-        console.error('[getAvailableCountriesHandler] Unexpected error occurred', {
-            error: error instanceof Error ? {
-                message: error.message,
-                stack: error.stack
-            } : error,
-            requestId: context.awsRequestId
-        });
-
         return {
             statusCode: 500,
             body: JSON.stringify({
